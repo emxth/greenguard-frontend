@@ -1,6 +1,6 @@
 import React from 'react';
 import theme from './theme';
-import { Container, Grid, TextField, Typography } from '@mui/material';
+import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 
 export function PickupForm() {
     return (
@@ -19,7 +19,7 @@ export function PickupForm() {
             </Typography>
 
             <Grid container spacing={2} sx={{ width: "80%", margin: "auto", pb: 4, }}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         id="name"
@@ -35,6 +35,17 @@ export function PickupForm() {
                         required
                         id="phone"
                         label="Phone Number"
+                        fullWidth
+                        InputProps={{
+                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="date"
+                        label="Pickup Date"
                         fullWidth
                         InputProps={{
                             sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
@@ -58,22 +69,12 @@ export function PickupForm() {
                         label="Message"
                         fullWidth
                         InputProps={{
-                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="date"
-                        label="Pickup Date"
-                        fullWidth
-                        InputProps={{
-                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
+                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1, mb: 4, },
                         }}
                     />
                 </Grid>
 
+                <Button variant="contained" sx={{ bgcolor: theme.palette.orange.main, m: 'auto', }}>Order Pickup</Button>
             </Grid>
         </Container>
     );

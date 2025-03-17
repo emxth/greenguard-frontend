@@ -32,7 +32,7 @@ export function Services() {
                 variant='h4' 
                 align='center' 
                 fontWeight={'bold'}
-                sx={{ marginTop: 7, marginBottom: 2, color: theme.palette.lightgreen.main }}
+                sx={{ marginTop: 7, marginBottom: 2, color: theme.palette.lightgreen.main, }}
             >
                 Green Guard Services
             </Typography>
