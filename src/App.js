@@ -9,6 +9,18 @@ import Footer from "./components/Footer";
 import Finance from "./pages/Finance";
 import Payment from "./utils/PaymentGateway";
 
+
+// import AddTrucks from './TruckManagement/AddTrucks';
+// import AddMaintenanceCost from './TruckManagement/AddMaintenanceCost';
+// import NavBar from './TruckManagement/Components/SideNav';
+// import ReadAllTrucks from './TruckManagement/ReadAllTrucks';
+// import ViewOneTruck from './TruckManagement/ViewOneTruck';
+// import ViewTruckCosts from './TruckManagement/ViewTruckCosts';
+// import AddFuelCost from "./TruckManagement/AddFuelCost";
+// import ViewFuelCost from "./TruckManagement/ViewFuelCost";
+// import TruckDashBoard from "./TruckManagement/TruckDashBoard";
+
+
 function Navigation() {
     const [value, setValue] = React.useState(0);
 
@@ -17,9 +29,9 @@ function Navigation() {
             <Header />
 
             <Toolbar sx={{ marginRight: 3, marginLeft: 3, marginBottom: 2, }}>
-                <Tabs 
-                    value={value} 
-                    onChange={(e, newValue) => setValue(newValue)} 
+                <Tabs
+                    value={value}
+                    onChange={(e, newValue) => setValue(newValue)}
                     centered
                     textColor="secondary"
                     indicatorColor="secondary"

@@ -1,0 +1,151 @@
+/* === General Layout === */
+.col1Div {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.outerDiv {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+}
+
+/* === Navbar Section === */
+.innerDiv1 {
+    width: auto;
+    background-color: #D5ED9F; /* Light Green */
+    padding: 20px;
+    border-right: 2px solid #004D1E;
+    border-radius: 10px 0 0 10px;
+}
+
+/* === Content Section === */
+.innerDivR {
+    flex-grow: 1;
+    background-color: #F5F5F5; /* Light Grey */
+    padding: 30px;
+    border-radius: 0 10px 10px 0;
+}
+
+/* === Heading === */
+h2 {
+    color: #007B3D; /* Green */
+    margin-bottom: 20px;
+}
+
+/* === Search Bar Section === */
+input[type="text"] {
+    height: 35px;
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007B3D;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 5px;
+}
+
+button:hover {
+    background-color: #005F2D;
+}
+
+/* === Table Styling === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    /* border-bottom: 1px solid #ddd; */
+}
+
+th {
+    background-color: #007B3D;
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+td {
+    color: #333;
+}
+
+/* === Status Styling === */
+td:nth-child(8) {
+    font-weight: bold;
+    color: #007B3D;
+}
+
+/* === Actions Buttons (View, Delete) === */
+td button {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+td button:nth-child(2) {
+    background-color: #D9534F;
+}
+
+td button:nth-child(2):hover {
+    background-color: #C9302C;
+}
+
+/* === Costs Buttons === */
+button[type="submit"] {
+    margin-top: 20px;
+    background-color: #007B3D;
+}
+
+button[type="submit"]:hover {
+    color: #333;
+    background-color: #D5ED9F;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .outerDiv {
+        flex-direction: column;
+    }
+
+    .innerDiv1 {
+        width: 100%;
+    }
+
+    .innerDivR {
+        padding: 20px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+

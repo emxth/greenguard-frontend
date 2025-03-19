@@ -1,0 +1,43 @@
+.btnPadding{
+    margin-top: 1%;
+    margin-left: 130px;
+}
+
+/* --- Buttons Container --- */
+.MaintainBtn,
+.FuelBtn {
+    width: 250px;         /* Fixed width for uniform size */
+    padding: 12px;        /* Comfortable padding */
+    font-size: 16px;      /* Readable font size */
+    font-weight: bold;    /* Bold text for emphasis */
+    border: none;         /* Remove default border */
+    border-radius: 6px;   /* Smooth rounded corners */
+    cursor: pointer;      /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* --- Maintenance Button Styling (Blue) --- */
+.MaintainBtn {
+    background-color: #17a2b8; /* Bootstrap 'info' color */
+    color: white;
+}
+
+.MaintainBtn:hover {
+    background-color: #117a8b; /* Darker blue on hover */
+    transform: scale(1.05);    /* Slight zoom effect */
+}
+
+/* --- Fuel Button Styling (Green) --- */
+.FuelBtn {
+    background-color: #28a745; /* Bootstrap 'success' color */
+    color: white;
+}
+
+.FuelBtn:hover {
+    background-color: #1e7e34; /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+.colBtn{
+
+}
