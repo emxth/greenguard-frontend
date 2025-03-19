@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import theme from './theme';
+import theme from '../components/theme';
 import Payment from "./PaymentGateway";
 import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 

@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { AppBar, Toolbar, Tabs, Tab, Box, Container } from "@mui/material";
-import { Home, About, Services, Pickups, Contact } from './PublicPage';
+import { Home, About, Services, Pickups, Contact } from './pages/PublicPage';
 import { Link as ScrollLink } from "react-scroll";
-import ScrollToTop from "./ScrollToTop";
-import Header from "./Header";
-import Footer from "./Footer";
-import Finance from "./Finance";
-import Payment from "./PaymentGateway";
+import ScrollToTop from "./components/ScrollToTop";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Finance from "./pages/Finance";
+import Payment from "./utils/PaymentGateway";
 
 function Navigation() {
     const [value, setValue] = React.useState(0);

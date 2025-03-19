@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import theme from './theme';
+import theme from '../components/theme';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Paper, Toolbar, Divider, TableContainer, TableHead, TableRow, TableCell, Table, TableBody } from "@mui/material";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import Payments from "../utils/Payments";
 
 const drawerWidth = 240;
 
@@ -67,14 +68,6 @@ export default function FinanceDrawer() {
 
 
 // Column Definitions
-const columnsPayments = [
-    { id: "payment_id", label: "Payment ID", minWidth: 70, align: "left" },
-    { id: "user_id", label: "User ID", minWidth: 70, align: "left" },
-    { id: "payment_method", label: "Payment Method", minWidth: 170, align: "left" },
-    { id: "created_at", label: "Payment Date", minWidth: 100, align: "left" },
-    { id: "ammount", label: "Ammount", minWidth: 100, align: "right" },
-];
-
 const columns = [
     { id: "column1", label: "Column 1", minWidth: 170, align: "left" },
     { id: "column2", label: "Column 2", minWidth: 170, align: "left" },
@@ -101,45 +94,10 @@ function createData(column1, column2, column3) {
     return { column1, column2, column3 };
 }
 
-
 // Content for Citizen Payments
 export function CitizenPayments() {
     return (
-        <Box>
-            <Typography variant="h4" sx={{ color: theme.palette.darkgreen.main }}>Citizen Payments</Typography>
-            <Divider sx={{ mt: 2, mb: 1, }} />
-
-            {/* Citizen Payments */}
-            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Pickup Request Payments</Typography>
-            {/* Sticky Header Table */}
-            <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    {/* Table Head */}
-                    <TableHead>
-                        <TableRow>
-                            {columnsPayments.map((column) => (
-                                <TableCell key={column.id} align={column.align} sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-
-                    {/* Table Body */}
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index} hover>
-                                {columnsPayments.map((column) => (
-                                    <TableCell key={column.id} align={column.align}>
-                                        {row[column.id]}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
+        <Payments />
     );
 }
 
@@ -234,11 +192,9 @@ export function TruckExpenses() {
                     {/* Table Head */}
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => (
-                                <TableCell key={column.id} align={column.align} sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                                    {column.label}
-                                </TableCell>
-                            ))}
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>ID</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Name</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
 

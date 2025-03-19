@@ -1,6 +1,6 @@
 import React from "react";
 import theme from './theme';
-import logo from './logo2.png'; 
+import logo from '../logo2.png'; 
 import { Box, Container, Grid, Typography, IconButton } from "@mui/material";
 import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 import { Element } from "react-scroll";

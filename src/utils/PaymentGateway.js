@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import theme from './theme';
+import theme from '../components/theme';
 import { Box, TextField, Button, MenuItem, Typography, Alert } from "@mui/material";
 import { CardElement, Elements, useStripe, useElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
