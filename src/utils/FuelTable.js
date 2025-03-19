@@ -2,15 +2,15 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import axios from "axios";
 import { useState } from "react";
 
-const API_BASE_URL = "http://localhost:8081/Maintenance";
+const API_BASE_URL = "http://localhost:8081/truckFuelCost";
 
-const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
+const FuelTable = ({ rows, fetchTruckFuel }) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
     // Function to update status
     const handleApprove = async (maintainID) => {
-        const isConfirmed = window.confirm("Are you sure you want to approve this maintenance cost?");
+        const isConfirmed = window.confirm("Are you sure you want to approve this truck fuel cost?");
         
         if (isConfirmed) {
             try {
@@ -20,15 +20,15 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
                 });
 
                 // Show success message
-                setSnackbarMessage("Truck Maintenance Approved Successfully!");
+                setSnackbarMessage("Truck Fuel Cost Approved Successfully!");
                 setOpenSnackbar(true);
 
                 // Refresh table data
-                fetchMaintanences();
+                fetchTruckFuel();
 
             } catch (error) {
                 console.error("Error updating status:", error);
-                setSnackbarMessage("Error approving maintenance cost.");
+                setSnackbarMessage("Error approving fuel cost.");
                 setOpenSnackbar(true);
             }
         }
@@ -36,18 +36,17 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
 
     return (
         <Box>
-            {/* Truck Maintanence */}
-            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Truck Maintanence</Typography>
+            {/* Fuel Expenses */}
+            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Fuel Expenses</Typography>
 
             <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
                 <Table stickyHeader size="small" aria-label="sticky table">
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Truck No</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Date</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Type</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Expenses</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Description</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Fuel Date</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Cost</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Liters</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Status</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Action</TableCell>
                         </TableRow>
@@ -57,10 +56,9 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
                         {rows.length > 0 ? rows.map(row => (
                             <TableRow key={row._id} hover>
                                 <TableCell>{row.Truck_RegNum}</TableCell>
-                                <TableCell>{row.Maintenance_Date}</TableCell>
-                                <TableCell>{row.maintenance_type}</TableCell>
-                                <TableCell>{row.Cost}</TableCell>
-                                <TableCell>{row.Description}</TableCell>
+                                <TableCell>{row.Fuel_Date}</TableCell>
+                                <TableCell>{row.FuelCost}</TableCell>
+                                <TableCell>{row.Litres}</TableCell>
                                 <TableCell>{row.Status}</TableCell>
                                 <TableCell>
                                     <Button 
@@ -96,4 +94,4 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
     );
 }
 
-export default TruckMaintanenceTable;
+export default FuelTable;

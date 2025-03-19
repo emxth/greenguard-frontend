@@ -32,7 +32,7 @@ const PaymentTable = ({ rows, fetchPayments }) => {
             <Divider sx={{ mt: 2, mb: 1 }} />
 
             {/* Citizen Payments */}
-            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Pickup Request Payments</Typography>
+            <Typography variant="body1" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>Pickup Request Payments</Typography>
 
             <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
                 <Table stickyHeader size="small" aria-label="sticky table">

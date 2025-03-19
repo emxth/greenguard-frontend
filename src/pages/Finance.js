@@ -5,6 +5,8 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import Payments from "../utils/Payments";
+import TruckMaintanence from "../utils/TruckMaintanence";
+import TruckFuel from "../utils/Fuel";
 
 const drawerWidth = 240;
 
@@ -66,15 +68,7 @@ export default function FinanceDrawer() {
     );
 }
 
-
 // Column Definitions
-const columns = [
-    { id: "column1", label: "Column 1", minWidth: 170, align: "left" },
-    { id: "column2", label: "Column 2", minWidth: 170, align: "left" },
-    { id: "column3", label: "Column 3", minWidth: 170, align: "left" },
-    { id: "actions", label: "Actions", minWidth: 100, align: "center" },
-];
-
 const columnsSummary = [
     { id: "column1", label: "Column 1", minWidth: 170, align: "left" },
     { id: "column2", label: "Column 2", minWidth: 170, align: "left" },
@@ -141,90 +135,10 @@ export function TruckExpenses() {
             </TableContainer>
             
             {/* Truck Maintanence */}
-            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Truck Maintaines</Typography>
-            {/* Sticky Header Table */}
-            <TableContainer component={Paper} sx={{ maxHeight: 200 }}>
-                <Table stickyHeader size="small" aria-label="sticky table">
-                    {/* Table Head */}
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell key={column.id} align={column.align} sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-
-                    {/* Table Body */}
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index} hover>
-                                {columns.map((column) => (
-                                    <TableCell key={column.id} align={column.align}>
-                                        {column.id === "actions" ? (
-                                            <button style={{ 
-                                                padding: "6px 12px", 
-                                                backgroundColor: "#2E7D32", 
-                                                color: "white", 
-                                                border: "none", 
-                                                borderRadius: "4px", 
-                                                cursor: "pointer" 
-                                            }}>
-                                                Approve
-                                            </button>
-                                        ) : (
-                                            row[column.id]
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <TruckMaintanence />
 
             {/* Truck Fuel Expenses */}
-            <Typography variant="body1" sx={{ mt: 4, mb: 1, fontWeight: 'bold' }}>Fuel Expenses</Typography>
-            {/* Sticky Header Table */}
-            <TableContainer component={Paper} sx={{ maxHeight: 200 }}>
-                <Table stickyHeader size="small" aria-label="sticky table">
-                    {/* Table Head */}
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>ID</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Name</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-
-                    {/* Table Body */}
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index} hover>
-                                {columns.map((column) => (
-                                    <TableCell key={column.id} align={column.align}>
-                                        {column.id === "actions" ? (
-                                            <button style={{ 
-                                                padding: "6px 12px", 
-                                                backgroundColor: "#2E7D32", 
-                                                color: "white", 
-                                                border: "none", 
-                                                borderRadius: "4px", 
-                                                cursor: "pointer" 
-                                            }}>
-                                                Approve
-                                            </button>
-                                        ) : (
-                                            row[column.id]
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <TruckFuel />
         </Box>
     );
 }
