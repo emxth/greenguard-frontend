@@ -7,6 +7,13 @@
     height: 100vh;
 }
 
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
 .fuel-form {
     width: 100%;
     max-width: 500px;

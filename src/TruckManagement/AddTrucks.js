@@ -41,32 +41,176 @@ function AddTrucks() {
         })
     }
 
-    const validatePastDate = (value) => {
-        const selectedDate = new Date(value);
+    // //Validate Insurance data
+    // const validateFutureDateWithinOneYear = (date) => {
+    //     const selectedDate = new Date(date);
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0); // Reset time to avoid comparison issues
+
+    //     const oneYearLater = new Date();
+    //     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+    //     if (selectedDate <= today) {
+    //         alert("Insurance expiry date must be in the future.");
+    //         return false;
+    //     } else if (selectedDate > oneYearLater) {
+    //         alert("Insurance expiry date cannot be more than 1 year from today.");
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+    // const handleDateChange = (e, setterFunction) => {
+    //     const value = e.target.value;
+
+    //     if (validateFutureDateWithinOneYear(value)) {
+    //         setterFunction(value);
+    //     }
+    // };
+
+    // //validate truck ID
+    // const validateTruckID = (value) => {
+    //     const regex = /^(?:[A-Za-z]{2}-\d{4}|\d{2,3}-\d{4})$/;
+
+    //     if (!regex.test(value)) {
+    //         alert("Invalid Truck ID format. Use XX-0000, 00-0000, or 000-0000.");
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+    // const handleTruckIDBlur = (e) => {
+    //     const value = e.target.value;
+    //     if (value && !validateTruckID(value)) {
+    //         setRegNum(""); // Clear the value if invalid
+    //     } else {
+    //         setRegNum(value); // Save value if valid
+    //     }
+    // }
+
+    // //validate capacity
+    // const validateCapacity = (value) => {
+    //     if (value < 1800 || value > 6000) {
+    //         alert("Capacity must be between 1800Kg and 6000Kg.");
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+    // const handleCapacityBlur = (e) => { 
+    //     let value = parseInt(e.target.value, 10);
+
+    //     if (isNaN(value)) {
+    //         setCapacity(""); // Clear invalid input
+    //         return;
+    //     }
+
+    //     if (!validateCapacity(value)) {
+    //         setCapacity(""); // Clear if out of range
+    //     } else {
+    //         // Round value to nearest 100 for consistency
+    //         let roundedValue = Math.round(value / 100) * 100;
+    //         setCapacity(roundedValue);
+    //     }
+    // };
+
+    const [truckIDError, setTruckIDError] = useState("");
+    const [capacityError, setCapacityError] = useState("");
+    const [inspectionDateError, setInspectionDateError] = useState("");
+    const [insuranceDateError, setInsuranceDateError] = useState("");
+
+    // Validate Future Date (Must be within 1 year from today)
+    const validateFutureDateWithinOneYear = (date, setError) => {
+        const selectedDate = new Date(date);
         const today = new Date();
-        return selectedDate <= today;
+        today.setHours(0, 0, 0, 0);
+
+        const oneYearLater = new Date();
+        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+        if (selectedDate <= today) {
+            setError("Date must be in the future.");
+            return false;
+        } else if (selectedDate > oneYearLater) {
+            setError("Date cannot be more than 1 year from today.");
+            return false;
+        }
+
+        setError(""); // Clear error if valid
+        return true;
     };
 
+    const handleDateChange = (e, setterFunction, setError) => {
+        const value = e.target.value;
+        setterFunction(value);
+        validateFutureDateWithinOneYear(value, setError);
+    };
+
+    // Validate Truck ID
+    const validateTruckID = (value) => {
+        const regex = /^(?:[A-Za-z]{2}-\d{4}|\d{2,3}-\d{4})$/;
+
+        if (!regex.test(value)) {
+            setTruckIDError("Invalid Truck ID format. Use XX-0000, 00-0000, or 000-0000.");
+            return false;
+        }
+
+        setTruckIDError(""); // Clear error if valid
+        return true;
+    };
+
+    const handleTruckIDBlur = (e) => {
+        const value = e.target.value;
+        if (!validateTruckID(value)) {
+            setRegNum(""); // Clear the value if invalid
+        } else {
+            setRegNum(value);
+        }
+    };
+
+    // Validate Capacity
+    const validateCapacity = (value) => {
+        let numValue = parseInt(value, 10);
+
+        if (isNaN(numValue) || numValue < 1800 || numValue > 6000) {
+            setCapacityError("Capacity must be between 1800Kg and 6000Kg.");
+            return false;
+        }
+
+        setCapacityError(""); // Clear error if valid
+        return true;
+    };
+
+    const handleCapacityBlur = (e) => {
+        let value = parseInt(e.target.value, 10);
+
+        if (!validateCapacity(value)) {
+            setCapacity(""); // Clear if invalid
+        } else {
+            let roundedValue = Math.round(value / 100) * 100;
+            setCapacity(roundedValue);
+        }
+    };
     return (
         <div className="col1Div">
             <div className="outerDiv">
                 <div className="innerDiv1">
                     <Navbar />
                 </div>
-                <div className="innerDivR"> 
+                <div className="innerDivR">
                     <h1>Add Trucks</h1>
                     <form className="formlayout" onSubmit={sendData}>
                         <table className="tableW">
                             <td className="tableLeft">
                                 <div className="formDiv">
-                                    <div class="mb-3">
-                                        <label for="regNum" class="form-label">Registration Number</label>
-                                        <input type="text" class="form-control" name="regNum" id="reg_number"
-                                            onChange={(e) => {
-                                                //get input feild value to useState
-                                                setRegNum(e.target.value);
-                                            }} required />
-                                        <div id="truckIDHelp" class="form-text">Truck ID must be 5 digit number</div>
+                                    <div className="mb-3">
+                                        <label htmlFor="regNum" className="form-label">Registration Number</label>
+                                        <input type="text" className="form-control" name="regNum" id="reg_number"
+                                            onChange={(e) => setRegNum(e.target.value)}
+                                            onBlur={handleTruckIDBlur}
+                                            required />
+                                        <div className="form-text">XX-0000/000-0000 format</div>
+                                        {truckIDError && <div className="error-message" style={{ color: 'red' }}>{truckIDError}</div>}
                                     </div>
                                     <div class="mb-3">
                                         <label for="selectModel" class="form-label">Select Model</label>
@@ -82,57 +226,50 @@ function AddTrucks() {
                                             <option value="Mitzubishi">Mitzubishi</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="capacity" class="form-label">Capacity</label>
-                                        <input type="Number" class="form-control" name="capacity" id="capacity" placeholder="CC "
-                                            onChange={(e) => {
-                                                //get input feild value to useState
-                                                setCapacity(e.target.value);
-                                            }} required />
+                                    <div className="mb-3">
+                                        <label htmlFor="capacity" className="form-label">Capacity</label>
+                                        <input type="Number" className="form-control" name="capacity" id="capacity" placeholder="Kg" min="1800" max="6000" step="100"
+                                            onChange={(e) => setCapacity(e.target.value)}
+                                            onBlur={handleCapacityBlur}
+                                            required />
+                                        <div className="form-text">Kg - 1800 to</div>
+                                        {capacityError && <div className="error-message" style={{ color: 'red' }}>{capacityError}</div>}
                                     </div>
                                     <div class="mb-3 w-55 labelMargin">
-                                    <label for="collectID" class="form-label">Collection center_id</label>
-                                    <input type="text" class="form-control" name="collectID" id="collectionID"
-                                        onChange={(e) => {
-                                            //get input feild value to useState
-                                            setCollectID(e.target.value);
-                                        }} required />
-                                </div>
+                                        <label for="collectID" class="form-label">Collection center_id</label>
+                                        <input type="text" class="form-control" name="collectID" id="collectionID"
+                                            onChange={(e) => {
+                                                //get input feild value to useState
+                                                setCollectID(e.target.value);
+                                            }} required />
+                                    </div>
                                 </div>
                             </td>
                             <td className="TableRight">
                                 <table className='tableSmall'>
                                     <td>
-                                        <div class="mb-3 w-48 leftInnerTab">
-                                            <label for="insureExpiry" class="form-label">Insurance Expiry</label>
-                                            <input type="date" class="form-control" name="insureExpiry" id="insurance"
-                                                onChange={(e) => {
-                                                    const value = e.target.value;
-                                                    if (validatePastDate(value)) {
-                                                        setInsurDate(value);
-                                                    } else {
-                                                        alert("Insurance expiry date cannot be a future date.");
-                                                    }
-                                                    //get input feild value to useState
-                                                    setInsurDate(e.target.value);
-                                                }} required />
+                                        <div className="mb-3 w-48 leftInnerTab">
+                                            <label htmlFor="insureExpiry" className="form-label ">Insurance Expiry</label>
+                                            <input type="date" className="form-control dateField" name="insureExpiry" id="insuranceDate"
+                                                onChange={(e) => handleDateChange(e, setInsurDate, setInsuranceDateError)}
+                                                required />
+                                            {insuranceDateError && <div className="error-message" style={{ color: 'red' }}>{insuranceDateError}</div>}
                                         </div>
                                     </td>
                                     <td className='tableSmallLeft'>
-                                        <div class="mb-3 w-48">
-                                            <label for="InspectEpiry" class="form-label">Insurance Expiry</label>
-                                            <input type="date" class="form-control" name="insureExpiry" id="insurance"
-                                                onChange={(e) => {
-                                                    //get input feild value to useState
-                                                    setInspectDate(e.target.value);
-                                                }} required />
+                                        <div className="mb-3 w-48">
+                                            <label htmlFor="InspectExpiry" className="form-label">Inspection Date</label>
+                                            <input type="date" className="form-control dateField" name="InspectExpiry" id="inspectionDate"
+                                                onChange={(e) => handleDateChange(e, setInspectDate, setInspectionDateError)}
+                                                required />
+                                            {inspectionDateError && <div className="error-message" style={{ color: 'red' }}>{inspectionDateError}</div>}
                                         </div>
                                     </td>
                                 </table>
-                                
+
                                 <div class="mb-4 w-50 labelMargin2">
                                     <label for="selectDriver" class="form-label">Driver</label>
-                                    <select class="form-control" id="driverID" name="selectDriver"
+                                    <select class="form-control AddStyle" id="driverID" name="selectDriver"
                                         onChange={(e) => {
                                             //get input feild value to useState
                                             setDriverID(e.target.value);
@@ -150,7 +287,7 @@ function AddTrucks() {
                                                 //get input feild value to useState
                                                 setStatus(e.target.checked);
                                             }} />
-                                            <label class="activeLabel" for="status">active</label>
+                                        <label class="activeLabel" for="status">active</label>
                                     </div>
                                 </div>
                             </td>

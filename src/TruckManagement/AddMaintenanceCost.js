@@ -38,88 +38,206 @@ function AddMaintenanceCost() {
         })
     }
 
+    // //Maintenance date validation
+    // const validateMaintenanceDate = (date) => {
+    //     const selectedDate = new Date(date);
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0); // Reset time to avoid comparison issues
+
+    //     const oneMonthAgo = new Date();
+    //     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    //     if (selectedDate < oneMonthAgo) {
+    //         alert("Maintenance date cannot be older than 1 month.");
+    //         return false;
+    //     } else if (selectedDate > today) {
+    //         alert("Maintenance date cannot be in the future.");
+    //         return false;
+    //     }
+    //     return true;
+    // };
+
+    // const handleMaintenanceDateChange = (e) => {
+    //     const value = e.target.value;
+
+    //     if (validateMaintenanceDate(value)) {
+    //         setMaintenance_Date(value);
+    //     }
+    // };
+
+    // //Expense validation
+    // const validateExpense = (value) => {
+    //     const expenseRegex = /^\d+(\.\d{1,2})?$/; // Allows only numbers with up to 2 decimal places
+
+    //     if (!expenseRegex.test(value)) {
+    //         alert("Invalid amount. Enter a valid number (e.g., 1000 or 250.50).");
+    //         return false;
+    //     }
+
+    //     if (parseFloat(value) <= 0) {
+    //         alert("Expense must be greater than 0.");
+    //         return false;
+    //     }
+
+    //     return true;
+    // };
+
+    // const handleExpenseBlur = (e) => {
+    //     const value = e.target.value.trim();
+
+    //     if (value && !validateExpense(value)) {
+    //         setTruckCost(""); // Clear input if invalid
+    //     } else {
+    //         setTruckCost(value);
+    //     }
+    // };
+
+    // const handleExpenseChange = (e) => {
+    //     setTruckCost(e.target.value);
+    // };
+
+    // //Description validation
+    // const validateDescription = (value) => {
+    //     const trimmedValue = value.trim();
+    //     const minLength = 10;
+    //     const maxLength = 500;
+
+    //     if (trimmedValue.length < minLength) {
+    //         alert(`Description must be at least ${minLength} characters.`);
+    //         return false;
+    //     }
+
+    //     if (trimmedValue.length > maxLength) {
+    //         alert(`Description cannot exceed ${maxLength} characters.`);
+    //         return false;
+    //     }
+
+    //     return true;
+    // };
+
+    // const handleDescriptionBlur = (e) => {
+    //     const value = e.target.value;
+
+    //     if (value.trim() && !validateDescription(value)) {
+    //         setDescription(""); // Clear if invalid
+    //     } else {
+    //         setDescription(value.trim()); // Save trimmed value
+    //     }
+    // };
+
+    // const handleDescriptionChange = (e) => {
+    //     setDescription(e.target.value); // Allow free typing
+    // };
+
+    const [maintenanceDateError, setMaintenanceDateError] = useState("");
+    const [expenseError, setExpenseError] = useState("");
+    const [descriptionError, setDescriptionError] = useState("");
+
+    // Maintenance Date Validation
+    const validateMaintenanceDate = (date) => {
+        const selectedDate = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        oneMonthAgo.setHours(0, 0, 0, 0);
+
+        if (selectedDate < oneMonthAgo) {
+            setMaintenanceDateError("Maintenance date cannot be older than 1 month.");
+            return false;
+        } else if (selectedDate > today) {
+            setMaintenanceDateError("Maintenance date cannot be in the future.");
+            return false;
+        }
+
+        setMaintenanceDateError(""); // Clear error if valid
+        return true;
+    };
+
+    const handleMaintenanceDateChange = (e) => {
+        const value = e.target.value;
+        setMaintenance_Date(value);
+        validateMaintenanceDate(value);
+    };
+
+    // Expense Validation
+    const validateExpense = (value) => {
+        const expenseRegex = /^\d+(\.\d{1,2})?$/;
+
+        if (!expenseRegex.test(value)) {
+            setExpenseError("Invalid amount. Enter a number (e.g., 1000 or 250.50).");
+            return false;
+        }
+
+        if (parseFloat(value) <= 0) {
+            setExpenseError("Expense must be greater than 0.");
+            return false;
+        }
+
+        setExpenseError(""); // Clear error if valid
+        return true;
+    };
+
+    const handleExpenseBlur = (e) => {
+        const value = e.target.value.trim();
+        if (value && !validateExpense(value)) {
+            setTruckCost("");
+        } else {
+            setTruckCost(value);
+        }
+    };
+
+    const handleExpenseChange = (e) => {
+        setTruckCost(e.target.value);
+    };
+
+    // Description Validation
+    const validateDescription = (value) => {
+        const trimmedValue = value.trim();
+        if (trimmedValue.length < 10) {
+            setDescriptionError("Description must be at least 10 characters.");
+            return false;
+        }
+        if (trimmedValue.length > 500) {
+            setDescriptionError("Description cannot exceed 500 characters.");
+            return false;
+        }
+        setDescriptionError("");
+        return true;
+    };
+
+    const handleDescriptionBlur = (e) => {
+        const value = e.target.value;
+        if (value.trim() && !validateDescription(value)) {
+            setDescription("");
+        } else {
+            setDescription(value.trim());
+        }
+    };
+
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    };
+
     return (
-        // <div className="col1Div">
-        //     <div className="outerDiv">
-        //         <div className="innerDiv1">
-        //             <Navbar />
-        //         </div>
-        //         <div className="innerDivR">
-        //             <div>
-        //                 <form className="formlayout" onSubmit={sendData}>
-        //                     <div className="formDiv2">
-        //                         <div class="mb-3">
-        //                             <label for="regNumber" class="form-label">Truck Number</label>
-        //                             <input type="text" class="form-control" name="regNumber" id="regNumber" value={regNum}
-        //                                 readOnly required />
-        //                             <div id="maintainIDHelp" class="form-text">Truck ID must be 3 digit number</div>
-        //                         </div>
-        //                         <div class="mb-3 w-48">
-        //                             <label for="MaintainDate" class="form-label">Maintenance Date</label>
-        //                             <input type="date" class="form-control" name="MaintainDate" id="MaintainDte"
-        //                                 onChange={(e) => {
-        //                                     //get input feild value to useState
-        //                                     setMaintenance_Date(e.target.value);
-        //                                 }} required />
-        //                         </div>
-        //                         <div class="mb-4 w-50 labelMargin2">
-        //                             <label for="maintainType" class="form-label">Type</label>
-        //                             <select class="form-control" id="maintainenceType" name="maintainType"
-        //                                 onChange={(e) => {
-        //                                     //get input feild value to useState
-        //                                     setMaintenanceType(e.target.value);
-        //                                 }} >
-        //                                 <option value="" disabled selected>Maintenance Type</option>
-        //                                 <option value="Interior">Interior</option>
-        //                                 <option value="exterior">Exterior</option>
-        //                             </select>
-        //                         </div>
-        //                         <div class="mb-3">
-        //                             <label for="cost" class="form-label">Total Expenses</label>
-        //                             <input type="text" class="form-control" name="cost" id="truckCost"
-        //                                 onChange={(e) => {
-        //                                     //get input feild value to useState
-        //                                     setTruckCost(e.target.value);
-        //                                 }} required />
-        //                         </div>
-        //                         <div class="mb-3">
-        //                             <label for="descriptCost" class="form-label">Description</label>
-        //                             <input type="textArea" class="form-control" name="descriptCost" id="description"
-        //                                 onChange={(e) => {
-        //                                     //get input feild value to useState
-        //                                     setDescription(e.target.value);
-        //                                 }} required />
-        //                         </div>
-        //                         <div class="mb-3">
-        //                             <label for="status" class="form-label">Status</label>
-        //                             <input type="text" class="form-control" name="status" value={status} id="status" readOnly />
-        //                         </div>
-        //                         <button type="submit" class="btn btn-primary btnPadding">Submit</button>
-        //                         <button type="cancel" class="btn btn-primary btnPadding">Cancel</button>
-
-        //                     </div>
-        //                 </form>
-
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
         <div className="container">
             <div className="left-navbar">
                 <Navbar />
             </div>
             <div className="right-form">
                 <form className="form-layout" onSubmit={sendData}>
-                <h2 className='topic'>Add maintenance cost</h2>
+                    <h2 className='topic'>Add maintenance cost</h2>
                     <div className="form-group">
                         <label htmlFor="regNumber" className="form-label">Truck Number</label>
                         <input type="text" className="form-control" name="regNumber" id="regNumber" value={regNum} readOnly required />
-                        <div className="form-text">Truck ID must be a 3-digit number</div>
+                        <div className="form-text">Truck ID is filled</div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="MaintainDate" className="form-label">Maintenance Date</label>
                         <input type="date" className="form-control1" name="MaintainDate" id="MaintainDate"
-                            onChange={(e) => setMaintenance_Date(e.target.value)} required />
+                            onChange={handleMaintenanceDateChange} required />
+                        {maintenanceDateError && <div className="error-message" style={{ color: 'red' }}>{maintenanceDateError}</div>}
                     </div>
                     <div className="form-group">
                         <label htmlFor="maintainType" className="form-label">Type</label>
@@ -133,12 +251,18 @@ function AddMaintenanceCost() {
                     <div className="form-group">
                         <label htmlFor="cost" className="form-label">Total Expenses</label>
                         <input type="text" className="form-control" name="cost" id="truckCost"
-                            onChange={(e) => setTruckCost(e.target.value)} required />
+                            onChange={handleExpenseChange}
+                            onBlur={handleExpenseBlur}
+                            required />
+                        {expenseError && <div className="error-message" style={{ color: 'red' }}>{expenseError}</div>}
                     </div>
                     <div className="form-group">
                         <label htmlFor="descriptCost" className="form-label">Description</label>
                         <textarea className="form-control2" name="descriptCost" id="description"
-                            onChange={(e) => setDescription(e.target.value)} required />
+                            onChange={handleDescriptionChange}
+                            onBlur={handleDescriptionBlur}
+                            required />
+                        {descriptionError && <div className="error-message" style={{ color: 'red' }}>{descriptionError}</div>}
                     </div>
                     <div className="form-group">
                         <label htmlFor="status" className="form-label">Status</label>

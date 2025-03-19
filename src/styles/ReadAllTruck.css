@@ -2,7 +2,7 @@
 .col1Div {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: auto;
 }
 
 .outerDiv {
@@ -36,7 +36,7 @@ h2 {
 
 /* === Search Bar Section === */
 input[type="text"] {
-    height: 30px;
+    height: 35px;
     padding: 8px;
     width: 250px;
     border: 1px solid #ccc;

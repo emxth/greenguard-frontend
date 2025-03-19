@@ -23,6 +23,10 @@ function TruckDetails() {
     const [truckStatus, setTruckStatus] = useState(null);
     const navigate = useNavigate();
 
+    const [capacityError, setCapacityError] = useState("");
+    const [insuranceDateError, setInsuranceDateError] = useState("");
+    const [inspectionDateError, setInspectionDateError] = useState("");
+
     useEffect(() => {
         axios.get(`http://localhost:8080/truck/get/${regNum}`)
             .then((response) => {
@@ -65,29 +69,64 @@ function TruckDetails() {
         navigate(`/FuelCost/${regNumber}`);
     }
 
-    function handleChange(e) {
-        console.log(e.target.value)
+    // Validate Capacity (1800 - 6000 Kg, rounded to nearest 100)
+    const validateCapacity = (value, setError) => {
+        let numValue = parseInt(value, 10);
+
+        if (isNaN(numValue) || numValue < 1800 || numValue > 6000) {
+            setError("Capacity must be between 1800Kg and 6000Kg.");
+            return false;
+        }
+
+        // Round value to nearest 100
+        let roundedValue = Math.round(numValue / 100) * 100;
+        setTruckCapacity(roundedValue);
+        setError("");
+        return true;
+    };
+
+    // Validate Future Date (Must be within 1 year from today)
+    const validateFutureDateWithinOneYear = (date, setError) => {
+        const selectedDate = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const oneYearLater = new Date();
+        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+        if (selectedDate <= today) {
+            setError("Date must be in the future.");
+            return false;
+        } else if (selectedDate > oneYearLater) {
+            setError("Date cannot be more than 1 year from today.");
+            return false;
+        }
+
+        setError("");
+        return true;
+    };
+
+    // Handle Input Changes & Validate
+    const handleChange = (e) => {
         let value = e.target.value;
-        if (e.target.name == "updCapacity") {
-            setTruckCapacity(value);
-        }
-        else if (e.target.name == "updInsurance") {
+
+        if (e.target.name === "updCapacity") {
+            validateCapacity(value, setCapacityError);
+        } else if (e.target.name === "updInsurance") {
             setTruckInsurance(value);
-        }
-        else if (e.target.name == "updInspection") {
+            validateFutureDateWithinOneYear(value, setInsuranceDateError);
+        } else if (e.target.name === "updInspection") {
             setTruckInspection(value);
-        }
-        else if (e.target.name == "updCollectID") {
+            validateFutureDateWithinOneYear(value, setInspectionDateError);
+        } else if (e.target.name === "updCollectID") {
             setTruckCollectID(value);
-        }
-        else if (e.target.name == "updDriverID") {
+        } else if (e.target.name === "updDriverID") {
             setTruckDriver(value);
+        } else if (e.target.name === "updStatus") {
+            setTruckStatus(e.target.checked);
         }
-        else if (e.target.name == "updStatus") {
-            let isChecked = e.target.checked;
-            setTruckStatus(isChecked)
-        }
-    }
+    };
+
 
 
     // Update Function
@@ -132,13 +171,20 @@ function TruckDetails() {
                                         <input type="text" value={truck.RegNumber} disabled style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
 
                                         <label>Capacity:</label>
-                                        <input type="text" onChange={handleChange} name="updCapacity" defaultValue={truckCapacity} disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        <input type="text" onChange={handleChange} name="updCapacity" defaultValue={truckCapacity}
+                                            disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        {capacityError && <div className="error-message" style={{ color: 'red' }}>{capacityError}</div>}
+
 
                                         <label>Insurance Expiry:</label>
-                                        <input type="date" onChange={handleChange} name="updInsurance" defaultValue={truckInsurance} disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        <input type="date" onChange={handleChange} name="updInsurance" defaultValue={truckInsurance}
+                                            disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        {insuranceDateError && <div className="error-message" style={{ color: 'red' }}>{insuranceDateError}</div>}
 
                                         <label>Inspection Date:</label>
-                                        <input type="date" onChange={handleChange} name="updInspection" defaultValue={truckInspection} disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        <input type="date" onChange={handleChange} name="updInspection" defaultValue={truckInspection}
+                                            disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
+                                        {inspectionDateError && <div className="error-message" style={{ color: 'red' }}>{inspectionDateError}</div>}
 
                                         <label>Collection Center ID:</label>
                                         <input type="text" onChange={handleChange} name="updCollectID" defaultValue={truckCollectID} disabled={disableElements} style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
