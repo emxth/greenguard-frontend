@@ -3,7 +3,7 @@ import react, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import "../styles/AddMaintainanceCost.css";
+import "./styles/AddMaintainanceCost.css";
 
 function AddMaintenanceCost() {
     //set input values to variables
@@ -37,97 +37,6 @@ function AddMaintenanceCost() {
             alert(err);
         })
     }
-
-    // //Maintenance date validation
-    // const validateMaintenanceDate = (date) => {
-    //     const selectedDate = new Date(date);
-    //     const today = new Date();
-    //     today.setHours(0, 0, 0, 0); // Reset time to avoid comparison issues
-
-    //     const oneMonthAgo = new Date();
-    //     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
-    //     if (selectedDate < oneMonthAgo) {
-    //         alert("Maintenance date cannot be older than 1 month.");
-    //         return false;
-    //     } else if (selectedDate > today) {
-    //         alert("Maintenance date cannot be in the future.");
-    //         return false;
-    //     }
-    //     return true;
-    // };
-
-    // const handleMaintenanceDateChange = (e) => {
-    //     const value = e.target.value;
-
-    //     if (validateMaintenanceDate(value)) {
-    //         setMaintenance_Date(value);
-    //     }
-    // };
-
-    // //Expense validation
-    // const validateExpense = (value) => {
-    //     const expenseRegex = /^\d+(\.\d{1,2})?$/; // Allows only numbers with up to 2 decimal places
-
-    //     if (!expenseRegex.test(value)) {
-    //         alert("Invalid amount. Enter a valid number (e.g., 1000 or 250.50).");
-    //         return false;
-    //     }
-
-    //     if (parseFloat(value) <= 0) {
-    //         alert("Expense must be greater than 0.");
-    //         return false;
-    //     }
-
-    //     return true;
-    // };
-
-    // const handleExpenseBlur = (e) => {
-    //     const value = e.target.value.trim();
-
-    //     if (value && !validateExpense(value)) {
-    //         setTruckCost(""); // Clear input if invalid
-    //     } else {
-    //         setTruckCost(value);
-    //     }
-    // };
-
-    // const handleExpenseChange = (e) => {
-    //     setTruckCost(e.target.value);
-    // };
-
-    // //Description validation
-    // const validateDescription = (value) => {
-    //     const trimmedValue = value.trim();
-    //     const minLength = 10;
-    //     const maxLength = 500;
-
-    //     if (trimmedValue.length < minLength) {
-    //         alert(`Description must be at least ${minLength} characters.`);
-    //         return false;
-    //     }
-
-    //     if (trimmedValue.length > maxLength) {
-    //         alert(`Description cannot exceed ${maxLength} characters.`);
-    //         return false;
-    //     }
-
-    //     return true;
-    // };
-
-    // const handleDescriptionBlur = (e) => {
-    //     const value = e.target.value;
-
-    //     if (value.trim() && !validateDescription(value)) {
-    //         setDescription(""); // Clear if invalid
-    //     } else {
-    //         setDescription(value.trim()); // Save trimmed value
-    //     }
-    // };
-
-    // const handleDescriptionChange = (e) => {
-    //     setDescription(e.target.value); // Allow free typing
-    // };
 
     const [maintenanceDateError, setMaintenanceDateError] = useState("");
     const [expenseError, setExpenseError] = useState("");

@@ -3,7 +3,7 @@ import react, { useState } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import "../styles/AddFuel.css";
+import "./styles/AddFuel.css";
 
 function AddFuelCost() {
     const { regNum } = useParams(); // Get RegNumber from URL

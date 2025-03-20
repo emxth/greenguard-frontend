@@ -2,7 +2,7 @@ import Navbar from './Components/SideNav';
 import react, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import "../styles/AddTrucks.css";
+import "./styles/AddTrucks.css";
 
 function AddTrucks() {
     //set input values to variables
@@ -46,14 +46,17 @@ function AddTrucks() {
     const [inspectionDateError, setInspectionDateError] = useState("");
     const [insuranceDateError, setInsuranceDateError] = useState("");
 
-    // Validate Future Date (Must be within 1 year from today)
+    //Validate inspection and insurance expiry date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = today.toISOString().split("T")[0];
+
+    const oneYearLater = new Date();
+    oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+    const maxDate = oneYearLater.toISOString().split("T")[0];
+
     const validateFutureDateWithinOneYear = (date, setError) => {
         const selectedDate = new Date(date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const oneYearLater = new Date();
-        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
 
         if (selectedDate <= today) {
             setError("Date must be in the future.");
@@ -72,6 +75,33 @@ function AddTrucks() {
         setterFunction(value);
         validateFutureDateWithinOneYear(value, setError);
     };
+
+    // // Validate Future Date (Must be within 1 year from today)
+    // const validateFutureDateWithinOneYear = (date, setError) => {
+    //     const selectedDate = new Date(date);
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0);
+
+    //     const oneYearLater = new Date();
+    //     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+    //     if (selectedDate <= today) {
+    //         setError("Date must be in the future.");
+    //         return false;
+    //     } else if (selectedDate > oneYearLater) {
+    //         setError("Date cannot be more than 1 year from today.");
+    //         return false;
+    //     }
+
+    //     setError(""); // Clear error if valid
+    //     return true;
+    // };
+
+    // const handleDateChange = (e, setterFunction, setError) => {
+    //     const value = e.target.value;
+    //     setterFunction(value);
+    //     validateFutureDateWithinOneYear(value, setError);
+    // };
 
     // Validate Truck ID
     const validateTruckID = (value) => {
@@ -178,6 +208,7 @@ function AddTrucks() {
                                         <div className="mb-3 w-48 leftInnerTab">
                                             <label htmlFor="insureExpiry" className="form-label ">Insurance Expiry</label>
                                             <input type="date" className="form-control dateField" name="insureExpiry" id="insuranceDate"
+                                                min={minDate} max={maxDate}
                                                 onChange={(e) => handleDateChange(e, setInsurDate, setInsuranceDateError)}
                                                 required />
                                             {insuranceDateError && <div className="error-message" style={{ color: 'red' }}>{insuranceDateError}</div>}
@@ -187,6 +218,7 @@ function AddTrucks() {
                                         <div className="mb-3 w-48">
                                             <label htmlFor="InspectExpiry" className="form-label">Inspection Date</label>
                                             <input type="date" className="form-control dateField" name="InspectExpiry" id="inspectionDate"
+                                                min={minDate} max={maxDate}
                                                 onChange={(e) => handleDateChange(e, setInspectDate, setInspectionDateError)}
                                                 required />
                                             {inspectionDateError && <div className="error-message" style={{ color: 'red' }}>{inspectionDateError}</div>}

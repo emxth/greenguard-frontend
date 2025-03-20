@@ -2,7 +2,7 @@ import Navbar from './Components/SideNav';
 import react, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import "../styles/AddMaintainanceCost.css";
+import "./styles/AddMaintainanceCost.css";
 
 function TruckDashBoard() {
     return (
@@ -12,7 +12,7 @@ function TruckDashBoard() {
                     <Navbar />
                 </div>
                 <div className="innerDivR">
-                    <h1>Hello</h1>
+                    <h1>DashBoard</h1>
                 </div>
             </div>
         </div>

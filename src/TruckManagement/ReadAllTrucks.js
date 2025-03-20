@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../src/styles/ReadAllTruck.css";
+import "./styles/ReadAllTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
 
 function ReadAllTrucks() {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Components/SideNav";
 import { useNavigate } from "react-router-dom";
-import "../styles/ViewOneTruck.css";
+import "./styles/ViewOneTruck.css";
 
 
 function TruckDetails() {
@@ -162,7 +162,6 @@ function TruckDetails() {
                 </div>
                 <div className="innerDivR">
                     <div>
-                        <>
                             <td>
                                 <div style={{ padding: "20px", maxWidth: "500px", margin: "auto" }}>
                                     <form>
@@ -210,7 +209,6 @@ function TruckDetails() {
                                     </div>
                                 </div>
                             </td>
-                        </>
                     </div>
                 </div>
             </div>
