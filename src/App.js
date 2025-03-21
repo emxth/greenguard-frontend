@@ -6,6 +6,10 @@ import { Link as ScrollLink } from "react-scroll";
 import ScrollToTop from "./ScrollToTop";
 import Header from "./Header";
 import Footer from "./Footer";
+import CreateTruckRequests from "./CollectionRequestManagement/CreateTruckRequest";
+import ReadAllTruckRequests from "./CollectionRequestManagement/ReadAllTruckRequets";
+import RequestManagerDashboard from "./CollectionRequestManagement/RequestManagerDashboard";
+import ViewPickUpRequests from "./CollectionRequestManagement/ViewPickUpRequests";
 
 function Navigation() {
     const [value, setValue] = React.useState(0);
@@ -15,18 +19,18 @@ function Navigation() {
             <Header />
 
             <Toolbar sx={{ marginRight: 3, marginLeft: 3, marginBottom: 2, }}>
-                <Tabs 
-                    value={value} 
-                    onChange={(e, newValue) => setValue(newValue)} 
+                <Tabs
+                    value={value}
+                    onChange={(e, newValue) => setValue(newValue)}
                     centered
                     textColor="secondary"
                     indicatorColor="secondary"
                 >
-                <Tab label="Home" component={Link} to="/" />
-                <Tab label="Our Services" component={ScrollLink} to="services" smooth={true} duration={500} />
-                <Tab label="About Us" component={ScrollLink} to="about" smooth={true} duration={500} />
-                <Tab label="Schedule Pickups" component={ScrollLink} to="pickups" smooth={true} duration={500} />
-                <Tab label="Contact us" component={ScrollLink} to="contact" smooth={true} duration={500} />
+                    <Tab label="Home" component={Link} to="/" />
+                    <Tab label="Our Services" component={ScrollLink} to="services" smooth={true} duration={500} />
+                    <Tab label="About Us" component={ScrollLink} to="about" smooth={true} duration={500} />
+                    <Tab label="Schedule Pickups" component={ScrollLink} to="pickups" smooth={true} duration={500} />
+                    <Tab label="Contact us" component={ScrollLink} to="contact" smooth={true} duration={500} />
                 </Tabs>
             </Toolbar>
         </AppBar>
@@ -39,13 +43,18 @@ export default function App() {
             <Navigation />
             <Container>
                 <Box my={4}>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/pickups" element={<Pickups />} />
-                    <Route path="/contact" element={<Contact />} />
-                </Routes>
+                    <Routes>
+                        {/* <Route path="/" element={<Home />} /> */}
+                        <Route path="/" element={<RequestManagerDashboard />} />
+                        <Route path="/ReadPickups" element={<ViewPickUpRequests />} />
+                        {/* <Route path="/CreateRequest" element={<CreateTruckRequests />} /> */}
+                        <Route path="/CreateTruckRequest/:pickID" element={<CreateTruckRequests />} />
+                        <Route path="/ReadAllTruckRequests" element={<ReadAllTruckRequests />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/services" element={<Services />} />
+                        <Route path="/pickups" element={<Pickups />} />
+                        <Route path="/contact" element={<Contact />} />
+                    </Routes>
                 </Box>
             </Container>
             <Footer />
