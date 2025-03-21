@@ -7,7 +7,10 @@ import ScrollToTop from "./components/ScrollToTop";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Finance from "./pages/Finance";
-import Payment from "./utils/PaymentGateway";
+import PublicProfile from "./pages/PublicProfile";
+import PickupRequests from "./pages/PickupRequests";
+import Admin from "./pages/Admin";
+// import Payment from "./utils/PaymentGateway";
 
 
 // import AddTrucks from './TruckManagement/AddTrucks';
@@ -37,13 +40,14 @@ function Navigation() {
                     indicatorColor="secondary"
                 >
                 <Tab label="Home" component={Link} to="/" />
-                <Tab label="Our Services" component={ScrollLink} to="services" smooth={true} duration={500} />
-                <Tab label="About Us" component={ScrollLink} to="about" smooth={true} duration={500} />
-                <Tab label="Schedule Pickups" component={ScrollLink} to="pickups" smooth={true} duration={500} />
-                <Tab label="Contact us" component={ScrollLink} to="contact" smooth={true} duration={500} />
+                <Tab label="Our Services" component={ScrollLink} to="services" smooth={true} duration={300} />
+                <Tab label="About Us" component={ScrollLink} to="about" smooth={true} duration={300} />
+                <Tab label="Schedule Pickups" component={ScrollLink} to="pickups" smooth={true} duration={300} />
+                <Tab label="Contact us" component={ScrollLink} to="contact" smooth={true} duration={300} />
 
                 <Tab label="Finance" component={Link} to="/finance" />
-                <Tab label="Payment" component={Link} to="/payment" />
+                <Tab label="Admin" component={Link} to="/admin" />
+                {/* <Tab label="Payment" component={Link} to="/payment" /> */}
                 </Tabs>
             </Toolbar>
         </AppBar>
@@ -62,9 +66,12 @@ export default function App() {
                     <Route path="/services" element={<Services />} />
                     <Route path="/pickups" element={<Pickups />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/publicprofile" element={<PublicProfile />} />
+                    <Route path="/publicpickuprequest" element={<PickupRequests />} />
 
                     <Route path="/finance" element={<Finance />} />
-                    <Route path="/payment" element={<Payment />} />
+                    <Route path="/admin" element={<Admin />} />
+                    {/* <Route path="/payment" element={<Payment />} /> */}
                 </Routes>
                 </Box>
             </Container>
