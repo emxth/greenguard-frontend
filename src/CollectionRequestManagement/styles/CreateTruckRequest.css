@@ -40,7 +40,8 @@ label {
     font-weight: bold;
 }
 
-input, textarea {
+input,
+textarea {
     padding: 8px;
     width: 100%;
     border: 1px solid #ccc;
@@ -79,8 +80,9 @@ button:hover {
 }
 
 .input-container input {
-    width: 100%;
-    padding-right: 35px; /* Make space for the unit label */
+    width: 470px;
+    padding-right: 35px;
+    /* Make space for the unit label */
 }
 
 .unit-label {
@@ -91,4 +93,14 @@ button:hover {
     font-size: 14px;
     font-weight: bold;
     color: #333;
+}
+
+.selectDiv {
+    width: 470px;
+    align-self: center;
+    font-weight: bolder;
+    text-align: center;
+    border-color: #bdc9d3;
+    height: 40px;
+    border-radius: 5px;
 }

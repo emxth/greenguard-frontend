@@ -7,23 +7,27 @@ import "./styles/CreateTruckRequest.css";
 function CreateTruckRequests() {
     const { pickID } = useParams();
     const navigate = useNavigate();
-    
+
     // State for fetched data
     const [pickupDate, setPickupDate] = useState("");
     const [capacity, setCapacity] = useState("");
     const [pickupLoc, setPickupLoc] = useState("");
-    
+
     // State for user inputs
     const [requestID, setRequestID] = useState("");
     const [truck_RegNumber, setTruck_RegNumber] = useState("");
     const [driver_id, setDriver_id] = useState("");
     const [RequestStatus, setRequestStatus] = useState("Pending");
+    const [priority, setPriority] = useState("");
+
 
     // Error states
     const [dateError, setDateError] = useState("");
     const [capacityError, setCapacityError] = useState("");
     const [pickupLocError, setPickupLocError] = useState("");
     const [errors, setErrors] = useState({});
+    const [priorityError, setPriorityError] = useState("");
+
 
     // Fetch the latest pickup ID when the component loads
     useEffect(() => {
@@ -49,6 +53,8 @@ function CreateTruckRequests() {
                 setErrors((prev) => ({ ...prev, pickup: "Error fetching pickup details." }));
             });
     }, [pickID]);
+
+    
 
     // Validate date (must be within the last 3 days)
     const validateDate = (date) => {
@@ -93,6 +99,7 @@ function CreateTruckRequests() {
             Request_Date: pickupDate,
             TruckCapacity: capacity,
             PickupLocation: pickupLoc,
+            Priority: priority,
             RequestStatus: RequestStatus
         };
 
@@ -117,7 +124,7 @@ function CreateTruckRequests() {
                         <h2>Create Truck Request</h2>
                         <form onSubmit={sendData}>
                             <label htmlFor="requestID">Request ID:</label>
-                            <input type="text" id="requestID" value={requestID || ""}  required readOnly/>
+                            <input type="text" id="requestID" value={requestID || ""} required readOnly />
                             <div className="hint-message">Check Request ID</div>
 
                             <label htmlFor="requestDate">Request Date:</label>
@@ -144,6 +151,15 @@ function CreateTruckRequests() {
                                 }} required></textarea>
                             {pickupLocError && <div className="error-message">{pickupLocError}</div>}
 
+                            <label htmlFor="priority">Select Priority *:</label>
+                            <select id="priority" className="selectDiv" onChange={(e) => {
+                                setPriority(e.target.value); // Clear error when user selects
+                            }} required>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                            {priorityError && <div className="error-message">{priorityError}</div>}
                             <label htmlFor="status">Status:</label>
                             <input type="text" id="status" value={RequestStatus} name="status" readOnly />
 
