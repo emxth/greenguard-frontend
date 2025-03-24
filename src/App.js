@@ -16,14 +16,13 @@ import Navigation from "./components/Navigation";
 
 import AddTrucks from './TruckManagement/AddTrucks';
 import AddMaintenanceCost from './TruckManagement/AddMaintenanceCost';
-import NavBar from './TruckManagement/Components/SideNav';
 import ReadAllTrucks from './TruckManagement/ReadAllTrucks';
 import ViewOneTruck from './TruckManagement/ViewOneTruck';
 import ViewTruckCosts from './TruckManagement/ViewTruckCosts';
 import AddFuelCost from "./TruckManagement/AddFuelCost";
 import ViewFuelCost from "./TruckManagement/ViewFuelCost";
 import TruckDashBoard from "./TruckManagement/TruckDashBoard";
-import ViewCollectTruckRequest from "./TruckManagement/ViewCollectTruckRequest";
+//import ViewCollectTruckRequest from "./TruckManagement/ViewCollectTruckRequest";
 import AllocateTruck from "./TruckManagement/AllocateTruck";
 
 function App() {
@@ -50,7 +49,9 @@ function App() {
                             <Route path="/about" element={<About />} />
                             <Route path="/services" element={<Services />} />
                             <Route path="/pickups" element={<Pickups />} />
-                            <Route path="/ViewCollectTruckReq" element={<ViewCollectTruckRequest />} />
+
+                            {/* <Route path="/ViewCollectTruckReq" element={<ViewCollectTruckRequest />} /> */}
+
                             <Route path="/contact" element={<Contact />} />
                             <Route path="/getAllTruck" element={<ReadAllTrucks />} />
                             <Route path="/truck/:regNum" element={<ViewOneTruck />} />

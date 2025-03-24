@@ -18,29 +18,25 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch("http://localhost:8081/api/login", {
+            const response = await fetch("http://localhost:8081/api/login", {  // Ensure this matches your backend
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({ email, password }),
             });
-
-            const data = await response.json();
+    
             if (!response.ok) {
-                throw new Error(data.error || "Login failed");
+                throw new Error("Login failed");
             }
-
-            // Save token & user info
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify({ role: data.role, user_id: data.user_id }));
-
-            setUser({ role: data.role, user_id: data.user_id });
-
-            return true; // Successful login
+    
+            const data = await response.json();
+            setUser({ email: data.email, role: data.role, token: data.token }); // Store user data properly
+            localStorage.setItem("token", data.token); // Save token for authentication
         } catch (error) {
             console.error("Login error:", error.message);
-            throw error;
         }
-    };
+    };    
 
     const logout = () => {
         localStorage.removeItem("token");
