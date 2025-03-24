@@ -49,7 +49,7 @@ export default function App() {
                 <Box my={4}>
                     <Routes>
                         {/* <Route path="/" element={<Home />} /> */}
-                        <Route path="/" element={<RequestManagerDashboard />} />
+                        <Route path="/requestDashboard" element={<RequestManagerDashboard />} />
                         <Route path="/ReadPickups" element={<ViewPickUpRequests />} />
                         {/* <Route path="/CreateRequest" element={<CreateTruckRequests />} /> */}
                         <Route path="/CreateTruckRequest/:pickID" element={<CreateTruckRequests />} />
