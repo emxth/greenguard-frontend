@@ -13,7 +13,7 @@ function NavBar() {
             <div className="nav flex-column nav-pills NavBar">
                 <Link 
                     className={`nav-link ${location.pathname === "/" ? "active" : ""}`}  
-                    to="/"
+                    to="/truck"
                 >
                     DashBoard
                 </Link>

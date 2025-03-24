@@ -55,7 +55,7 @@ export default function App() {
                 <Box my={4}>
                     <Routes>
                         {/* <Route path="/" element={<Home />} /> */}
-                        <Route path="/" element={<TruckDashBoard />} />
+                        <Route path="/truck" element={<TruckDashBoard />} />
                         <Route path="/addTruck" element={<AddTrucks />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/services" element={<Services />} />
