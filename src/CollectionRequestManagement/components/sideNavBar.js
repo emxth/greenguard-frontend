@@ -12,8 +12,8 @@ function NavBar() {
             {/* Navigation Menu */}
             <div className="nav flex-column nav-pills NavBar">
                 <Link 
-                    className={`nav-link ${location.pathname === "/" ? "" : ""}`}  
-                    to="/"
+                    className={`nav-link ${location.pathname === "/requestDashboard" ? "" : ""}`}  
+                    to="/requestDashboard"
                 >
                     DashBoard
                 </Link>
