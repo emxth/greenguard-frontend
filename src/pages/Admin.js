@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import User from "../utils/User";
+import User from "../UserManagement/User";
 
 function Admin() {
     return(

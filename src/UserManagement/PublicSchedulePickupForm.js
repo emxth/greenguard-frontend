@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import theme from '../components/theme';
-import Payment from "./PaymentGateway";
+import Payment from "../FinanceManagement/PaymentGateway";
 import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography } from '@mui/material';
 
 export function PickupForm() {

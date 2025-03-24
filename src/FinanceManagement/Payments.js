@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PaymentTable from "../utils/PaymentTable";
+import PaymentTable from "./PaymentTable";
 
 const API_BASE_URL = "http://localhost:8081/payment";
 

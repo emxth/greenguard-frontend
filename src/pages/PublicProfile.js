@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
-import UpdateUserForm from "../utils/AddUserForm";
+import UpdateUserForm from "../UserManagement/AddUserForm";
 
 function PublicProfile() {
     return (

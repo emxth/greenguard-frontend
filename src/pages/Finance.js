@@ -5,9 +5,9 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import Payments from "../utils/Payments";
-import TruckMaintanence from "../utils/TruckMaintanence";
-import TruckFuel from "../utils/Fuel";
+import Payments from "../FinanceManagement/Payments";
+import TruckMaintanence from "../FinanceManagement/TruckMaintanence";
+import TruckFuel from "../FinanceManagement/Fuel";
 
 const drawerWidth = 240;
 
