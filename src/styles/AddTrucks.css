@@ -1,0 +1,220 @@
+/* .formDiv{
+    margin-top: 10%;
+    margin-left: 25px;
+    width: 500px;
+    text-align:left;
+}
+
+.TableRight{
+    width:80%;
+    text-align: left;
+    padding-left: 30px;
+}
+.outerDiv{
+    margin-left:0%;
+    margin-right: 0%;
+}
+
+.divPadding{
+    margin-top: 3%;
+}
+
+.labelMargin{
+    padding-left: 8%;
+    margin-top: 4%;
+}
+
+.leftInnerTab{
+    padding-right:60px;
+}
+
+.btnPadding{
+    margin-top: 5%;
+    margin-right: 20px;
+}
+
+.labelMargin2{
+    padding-left: 8%;
+    margin-top: 2%;
+}
+
+.labelMargin3{
+    padding-left: 20%;
+    margin-top: 2%;
+}
+/* === Form Layout === */
+
+
+/* === General Layout === */
+.col1Div {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.outerDiv {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.labelChk{
+    padding-left: 5px;
+}
+
+/* === Navbar Section === */
+.innerDiv1 {
+    width: 220px;
+    background-color: #D5ED9F; /* Green background */
+    padding: 20px;
+    border-right: 2px solid #004D1E;
+    border-radius: 10px 0 0 10px;
+}
+
+/* === Content Section === */
+.innerDivR {
+    flex-grow: 1;
+    background-color: #ffffff; /* Light Yellow background */
+    padding: 30px;
+    border-radius: 0 10px 10px 0;
+}
+
+.tableSmall{
+    margin-bottom: 22px;
+}
+
+.activeLabel{
+    margin-left: 0%;
+    padding-left: 2px;
+}
+
+/* === Form Layout === */
+.formlayout {
+    background-color: #FFFFFF; /* White background */
+    padding: 40px;
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-width: 900px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+/* === Table Layout === */
+.tableW {
+    width: 100%;
+    border-spacing: 20px;
+}
+
+.tableLeft {
+    width: 40%;
+}
+
+.TableRight {
+    padding-left: 60px;
+    width: 60%;
+}
+
+.btnPadding2{
+    margin-top: auto;
+    margin-left: 50px;
+    width: 150px;
+    margin-right: 10px;
+}
+
+/* === Form Div === */
+.formDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+/* === Input Fields & Labels === */
+.mb-3 {
+    margin-bottom: 12px;
+}
+
+.form-label {
+    font-weight: bold;
+    text-align: left;
+    color: #007B3D; /* Green label color */
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Smaller Input Fields */
+.form-control {
+    width: 100%;
+    padding: 6px 10px; /* Reduced padding for smaller height */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    height: 32px; /* Adjusted height */
+}
+
+/* === Button Styles === */
+.btn {
+    margin-top: 15px;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.btnPadding {
+    width: 150px;
+    margin-right: 10px;
+}
+
+/* === Label and Input Adjustments === */
+.leftInnerTab,
+.w-50 {
+    width: 100%;
+}
+
+.tableSmallLeft{
+    padding-left: 30px;
+}
+
+.dateField{
+    width: auto;
+}
+
+.AddStyle{
+    width: 100%;
+}
+
+/* === Select Box Styles === */
+select.form-control {
+    width: 88%;
+    padding: 6px 10px; /* Same padding as input fields */
+    border-radius: 5px;
+    height: 32px; /* Smaller height */
+}
+
+/* === Checkbox Styling === */
+.form-check-input {
+    margin-right: 5px;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .outerDiv {
+        flex-direction: column;
+    }
+
+    .tableW {
+        display: block;
+    }
+
+    .tableLeft, .TableRight {
+        margin-left: 20px;
+        width: 100%;
+    }
+
+    .formlayout {
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+
+

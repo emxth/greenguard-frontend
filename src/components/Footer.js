@@ -1,7 +1,7 @@
 import React from "react";
 import theme from './theme';
-import logo from './logo2.png'; 
-import { Box, Container, Grid, Typography, IconButton } from "@mui/material";
+import logo from '../logo2.png'; 
+import { Box, Container, Grid, Typography, IconButton, Divider } from "@mui/material";
 import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 import { Element } from "react-scroll";
 
@@ -49,7 +49,7 @@ function Footer() {
                         </Element>
                     </Grid>
                     <Grid item md={12}>
-                        <hr />
+                        <Divider color="white" />
                         <Typography variant="body2" sx={{ opacity: 0.8, mt: 2, textAlign: "center" }}>
                             &#9400; 2021 Green Guard Solutions. All rights reserved. Design and developed by Green Guard Solutions
                         </Typography>

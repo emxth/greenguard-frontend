@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
-import AutoSwipeCards from './HorizontalScrollCards';
-import theme from './theme';
-import { PickupForm } from './publicSchedulePickupForm';
+import AutoSwipeCards from '../utils/HorizontalScrollCards';
+import theme from '../components/theme';
+import { PickupForm } from '../UserManagement/PublicSchedulePickupForm';
 import { Element } from 'react-scroll';
 
 // Home component
