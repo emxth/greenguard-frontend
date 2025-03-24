@@ -63,27 +63,6 @@ export function PickupForm() {
                         }}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="E-wasteType"
-                        label="E-waste Type"
-                        fullWidth
-                        InputProps={{
-                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="Capacity"
-                        label="Capacity"
-                        fullWidth
-                        InputProps={{
-                            sx: { backgroundColor: theme.palette.white.main, borderRadius: 1 },
-                        }}
-                    />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
