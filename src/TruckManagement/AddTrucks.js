@@ -2,7 +2,7 @@ import Navbar from './Components/SideNav';
 import react, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import "../styles/AddTrucks.css";
+import "./styles/AddTrucks.css";
 
 function AddTrucks() {
     //set input values to variables
@@ -41,92 +41,22 @@ function AddTrucks() {
         })
     }
 
-    // //Validate Insurance data
-    // const validateFutureDateWithinOneYear = (date) => {
-    //     const selectedDate = new Date(date);
-    //     const today = new Date();
-    //     today.setHours(0, 0, 0, 0); // Reset time to avoid comparison issues
-
-    //     const oneYearLater = new Date();
-    //     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-
-    //     if (selectedDate <= today) {
-    //         alert("Insurance expiry date must be in the future.");
-    //         return false;
-    //     } else if (selectedDate > oneYearLater) {
-    //         alert("Insurance expiry date cannot be more than 1 year from today.");
-    //         return false;
-    //     }
-    //     return true;
-    // };
-
-    // const handleDateChange = (e, setterFunction) => {
-    //     const value = e.target.value;
-
-    //     if (validateFutureDateWithinOneYear(value)) {
-    //         setterFunction(value);
-    //     }
-    // };
-
-    // //validate truck ID
-    // const validateTruckID = (value) => {
-    //     const regex = /^(?:[A-Za-z]{2}-\d{4}|\d{2,3}-\d{4})$/;
-
-    //     if (!regex.test(value)) {
-    //         alert("Invalid Truck ID format. Use XX-0000, 00-0000, or 000-0000.");
-    //         return false;
-    //     }
-    //     return true;
-    // };
-
-    // const handleTruckIDBlur = (e) => {
-    //     const value = e.target.value;
-    //     if (value && !validateTruckID(value)) {
-    //         setRegNum(""); // Clear the value if invalid
-    //     } else {
-    //         setRegNum(value); // Save value if valid
-    //     }
-    // }
-
-    // //validate capacity
-    // const validateCapacity = (value) => {
-    //     if (value < 1800 || value > 6000) {
-    //         alert("Capacity must be between 1800Kg and 6000Kg.");
-    //         return false;
-    //     }
-    //     return true;
-    // };
-
-    // const handleCapacityBlur = (e) => { 
-    //     let value = parseInt(e.target.value, 10);
-
-    //     if (isNaN(value)) {
-    //         setCapacity(""); // Clear invalid input
-    //         return;
-    //     }
-
-    //     if (!validateCapacity(value)) {
-    //         setCapacity(""); // Clear if out of range
-    //     } else {
-    //         // Round value to nearest 100 for consistency
-    //         let roundedValue = Math.round(value / 100) * 100;
-    //         setCapacity(roundedValue);
-    //     }
-    // };
-
     const [truckIDError, setTruckIDError] = useState("");
     const [capacityError, setCapacityError] = useState("");
     const [inspectionDateError, setInspectionDateError] = useState("");
     const [insuranceDateError, setInsuranceDateError] = useState("");
 
-    // Validate Future Date (Must be within 1 year from today)
+    //Validate inspection and insurance expiry date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = today.toISOString().split("T")[0];
+
+    const oneYearLater = new Date();
+    oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+    const maxDate = oneYearLater.toISOString().split("T")[0];
+
     const validateFutureDateWithinOneYear = (date, setError) => {
         const selectedDate = new Date(date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const oneYearLater = new Date();
-        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
 
         if (selectedDate <= today) {
             setError("Date must be in the future.");
@@ -145,6 +75,33 @@ function AddTrucks() {
         setterFunction(value);
         validateFutureDateWithinOneYear(value, setError);
     };
+
+    // // Validate Future Date (Must be within 1 year from today)
+    // const validateFutureDateWithinOneYear = (date, setError) => {
+    //     const selectedDate = new Date(date);
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0);
+
+    //     const oneYearLater = new Date();
+    //     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+    //     if (selectedDate <= today) {
+    //         setError("Date must be in the future.");
+    //         return false;
+    //     } else if (selectedDate > oneYearLater) {
+    //         setError("Date cannot be more than 1 year from today.");
+    //         return false;
+    //     }
+
+    //     setError(""); // Clear error if valid
+    //     return true;
+    // };
+
+    // const handleDateChange = (e, setterFunction, setError) => {
+    //     const value = e.target.value;
+    //     setterFunction(value);
+    //     validateFutureDateWithinOneYear(value, setError);
+    // };
 
     // Validate Truck ID
     const validateTruckID = (value) => {
@@ -251,6 +208,7 @@ function AddTrucks() {
                                         <div className="mb-3 w-48 leftInnerTab">
                                             <label htmlFor="insureExpiry" className="form-label ">Insurance Expiry</label>
                                             <input type="date" className="form-control dateField" name="insureExpiry" id="insuranceDate"
+                                                min={minDate} max={maxDate}
                                                 onChange={(e) => handleDateChange(e, setInsurDate, setInsuranceDateError)}
                                                 required />
                                             {insuranceDateError && <div className="error-message" style={{ color: 'red' }}>{insuranceDateError}</div>}
@@ -260,6 +218,7 @@ function AddTrucks() {
                                         <div className="mb-3 w-48">
                                             <label htmlFor="InspectExpiry" className="form-label">Inspection Date</label>
                                             <input type="date" className="form-control dateField" name="InspectExpiry" id="inspectionDate"
+                                                min={minDate} max={maxDate}
                                                 onChange={(e) => handleDateChange(e, setInspectDate, setInspectionDateError)}
                                                 required />
                                             {inspectionDateError && <div className="error-message" style={{ color: 'red' }}>{inspectionDateError}</div>}

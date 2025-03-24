@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import "../../styles/NavBar.css";
+import "../styles/NavBar.css";
 
 function NavBar() {
     const location = useLocation(); // Get current URL path
@@ -13,7 +13,7 @@ function NavBar() {
             <div className="nav flex-column nav-pills NavBar">
                 <Link 
                     className={`nav-link ${location.pathname === "/" ? "active" : ""}`}  
-                    to="/"
+                    to="/truck"
                 >
                     DashBoard
                 </Link>

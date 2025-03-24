@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./styles/ReadAllTruck.css";
+import { useParams } from "react-router-dom";
+import "./styles/AllocateTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
 
-function ReadAllTrucks() {
+function AllocateTruck() {
+    const { reqID } = useParams(); // Get RegNumber from URL
     const [trucks, setTrucks] = useState([]); // Stores fetched truck data
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error handling
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [allTrucks, setAllTrucks] = useState([]); // Store all trucks for resetting the table
     const [searchRegNum, setSearchRegNum] = useState("");
+
+    //set fetched request details
+    const [requestID, setRequestID] = useState(null);
+    const [truckCapacity, setTruckCapacity] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://Localhost:8080/truckRequest/getOnetruckRequests/${reqID}`)
+            .then((response) => {
+                setRequestID(response.data.RequestInfo.RequestID);
+                setTruckCapacity(response.data.RequestInfo.TruckCapacity);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError("Error fetching truck request details.");
+                setLoading(false);
+            });
+    }, [reqID]);
 
     useEffect(() => {
         // Fetch truck data from backend
@@ -42,48 +61,46 @@ function ReadAllTrucks() {
     };
 
 
-
-    //Delete code
-    function deleteTruck(regNum) {
-        if (window.confirm(`Are you sure you want to delete truck with Reg Number: ${regNum}?`)) {
-            axios.delete(`http://localhost:8080/truck/delete/${regNum}`)
-                .then(() => alert("Truck deleted successfully!"))
-                .catch((error) => {
-                    console.error("Error deleting truck:", error);
-                    alert("Failed to delete truck.");
-                });
-        }
-    }
-
     if (loading) return <p>Loading trucks...</p>;
     if (error) return <p style={{ color: "red" }}>{error}</p>;
 
-    //Navigate function
-    function NavigateToViewTruck(truckRegNum) {
-        console.log(truckRegNum);
-        navigate(`/truck/${truckRegNum}`);
+    //function to update truck request
+    function AssignTruck(RegNum, driverID){
+        console.log(RegNum);
+        console.log(driverID);
+        //http://Localhost:8080/truckRequest/updateTRequest/:reqID
 
-    }
-
-    //Navigate to truck cost
-    function NavigateToTruckCosts() {
-        navigate(`/truckCost`);
-    }
-
-    function NavigateToFuelCosts() {
-        navigate(`/truckFuelCost`);
+        // Function to update truck details
+        const updatedTruckRequest = {
+            'Truck_RegNumber': RegNum,
+            'driver_id': driverID,
+            'RequestStatus': "Assigned"
+        }
+        console.log(updatedTruckRequest);
+        axios.put(`http://Localhost:8080/truckRequest/updateTRequest/${requestID}`, updatedTruckRequest)
+            .then(() => {
+                alert("Truck Assigned successfully!");
+                // Redirect to homepage after update
+            })
+            .catch((error) => {
+                console.error("Error in assigning truck:", error);
+                alert("Failed to assign truck.");
+            });
     }
 
     return (
         <div className="col1Div">
             <div>
-                <BackBtn/>
+                <BackBtn />
             </div>
             <div className="outerDiv">
                 <div className="innerDivR">
                     <div style={{ padding: "20px" }}>
-                        <h2>Truck Details</h2>
-
+                        <h2>Assign Truck</h2>
+                        <div>
+                            <label className="label-style">Request ID : {requestID}</label><br />
+                            <label className="label-style">Capacity :  {truckCapacity}</label><br />
+                        </div>
                         {/* Search Bar */}
                         <input
                             type="text"
@@ -121,8 +138,7 @@ function ReadAllTrucks() {
                                             <td>{truck.driver_id}</td>
                                             <td>{truck.isActive ? "Active" : "Inactive"}</td>
                                             <td>
-                                                <button onClick={() => NavigateToViewTruck(truck.RegNumber)}>View</button>
-                                                <button style={{ marginLeft: "5px" }} onClick={() => deleteTruck(truck.RegNumber)}>Delete</button>
+                                                <button  onClick={() => AssignTruck(truck.RegNumber, truck.driver_id)}>Assign</button>
                                             </td>
                                         </tr>
                                     ))
@@ -133,9 +149,6 @@ function ReadAllTrucks() {
                                 )}
                             </tbody>
                         </table>
-
-                        {/* <button type="submit" onClick={() => NavigateToTruckCosts()}>Costs</button>
-                        <button type="submit" onClick={() => NavigateToFuelCosts()}>Fuel Costs</button> */}
                     </div>
                 </div>
             </div>
@@ -144,4 +157,4 @@ function ReadAllTrucks() {
     );
 }
 
-export default ReadAllTrucks;
+export default AllocateTruck;
