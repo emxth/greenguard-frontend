@@ -1,5 +1,5 @@
 
-
+import BackBtn from "./components/BackBtn";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,6 @@ function ReadAllTruckRequests() {
     const navigate = useNavigate();
 
     const [allTruckRequest, setAllTruckRequest] = useState([]); // Store all trucks for resetting the table
-    // const [searchRegNum, setSearchRegNum] = useState("");
 
     useEffect(() => {
         // Fetch truck data from backend
@@ -29,21 +28,6 @@ function ReadAllTruckRequests() {
             });
     }, []);
 
-    // const searchTruck = () => {
-    //     if (!searchRegNum.trim()) {
-    //         setTrucks(allTrucks); // Reset table to show all trucks
-    //         return;
-    //     }
-
-    //     const filteredTrucks = allTrucks.filter(truck =>
-    //         truck.RegNumber.toLowerCase().includes(searchRegNum.toLowerCase())
-    //     );
-
-    //     setTrucks(filteredTrucks);
-    // };
-
-
-
     //Delete code
     function DeleteTruckRequest(req_ID) {
         if (window.confirm(`Are you sure you want to delete truck with Reg Number: ${req_ID}?`)) {
@@ -56,29 +40,20 @@ function ReadAllTruckRequests() {
         }
     }
 
-    if (loading) return <p>Loading trucks...</p>;
+    if (loading) return <p>Loading requests...</p>;
     if (error) return <p style={{ color: "red" }}>{error}</p>;
 
     //Navigate function
-    function NavigateToViewRequests(request_ID) {
-        console.log(request_ID);
-        navigate(`/ViewOneRequest/${request_ID}`);
+    function EditTruckRequest(Trequest_ID) {
+        console.log(Trequest_ID);
+        navigate(`/UpdateTruckRequest/${Trequest_ID}`);
     }
-
-    // //Navigate to truck cost
-    // function NavigateToTruckCosts() {
-    //     navigate(`/truckCost`);
-    // }
-
-    // function NavigateToFuelCosts() {
-    //     navigate(`/truckFuelCost`);
-    // }
 
     return (
         <div>
-            {/* <div>
-                <BackBtn/>
-            </div> */}
+            <div>
+                <BackBtn />
+            </div>
             <div className="table-container">
                 <table className="request-table">
                     <thead>
@@ -86,6 +61,7 @@ function ReadAllTruckRequests() {
                             <th>Request ID</th>
                             <th>Truck Number</th>
                             <th>Driver ID</th>
+                            <th>Priority</th>
                             <th>Request Date</th>
                             <th>Truck Capacity</th>
                             <th>Pickup Location</th>
@@ -100,18 +76,20 @@ function ReadAllTruckRequests() {
                                     <td>{requests.RequestID}</td>
                                     <td>{requests.Truck_RegNumber}</td>
                                     <td>{requests.driver_id}</td>
+                                    <td>{requests.Priority}</td>
                                     <td>{requests.Request_Date}</td>
                                     <td>{requests.TruckCapacity}</td>
                                     <td>{requests.PickupLocation}</td>
                                     <td className="status-pending">{requests.RequestStatus}</td>
                                     <td className="action-bar">
+                                        <button type="submit" className="edit-btn" onClick={() => EditTruckRequest(requests.RequestID)}>Edit</button>
                                         <button type="submit" className="delete-btn" onClick={() => DeleteTruckRequest(requests.RequestID)}>Delete</button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8">No costs found.</td>
+                                <td colSpan="8">No requests found.</td>
                             </tr>
                         )}
                     </tbody>

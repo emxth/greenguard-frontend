@@ -123,7 +123,7 @@ function CreateTruckRequests() {
                 </div>
                 <div className="innerDivR">
                     <div class="form-container">
-                        <h2>Create Truck Request</h2>
+                        <h2>Create Pickup Schedule</h2>
                         <form onSubmit={sendData}>
                             <label for="requestID">Request ID:</label>
                             <input type="text" id="requestID" onChange={(e) => setRequestID(e.target.value)}

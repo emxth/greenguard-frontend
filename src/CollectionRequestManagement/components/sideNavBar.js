@@ -19,13 +19,6 @@ function NavBar() {
                 </Link>
 
                 <Link 
-                    className={`nav-link ${location.pathname === "/CreateRequest" ? "active" : ""}`}  
-                    to="/CreateRequest"
-                >
-                    Add Truck request
-                </Link>
-
-                <Link 
                     className={`nav-link ${location.pathname === "/ReadAllTruckRequests" ? "active" : ""}`}  
                     to="/ReadAllTruckRequests"
                 >
@@ -39,12 +32,12 @@ function NavBar() {
                     Pickup Requests
                 </Link>
 
-                {/* <Link 
-                    className={`nav-link ${location.pathname === "/" ? "active" : ""}`}  
-                    to="/"
+                <Link 
+                    className={`nav-link ${location.pathname === "/readSchedules" ? "active" : ""}`}  
+                    to="/readSchedules"
                 >
-                    Fuel Costs
-                </Link> */}
+                    Schedules
+                </Link>
             </div>
         </div>
     );
