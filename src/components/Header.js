@@ -3,11 +3,14 @@ import { Toolbar, Typography, Grid, Button } from "@mui/material";
 import logo from '../logo.svg';
 import theme from "./theme";
 import ProfileMenu from "./ProfileMenuIcon";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+    const navigate = useNavigate();
+
     return (
         <Toolbar>
-            <Grid container alignItems="center" justifyContent="space-between" sx={{ marginRight: 3, marginLeft: 3, marginTop: 2, }}>
+            <Grid container alignItems="center" justifyContent="space-between" sx={{ mr: 3, ml: 3, }}>
                 <Grid item>
                     <img src={logo} alt="My Logo" style={{ height: '100px' }} />
                 </Grid>
@@ -20,7 +23,13 @@ function Header() {
                     </Typography>
                 </Grid>
                 <Grid item display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                    <Button variant="contained" sx={{ height: '35px', mr: '5px', bgcolor: theme.palette.darkgreen.main, }}>LOGIN</Button>
+                    <Button 
+                        variant="contained" 
+                        sx={{ height: '35px', mr: '5px', bgcolor: theme.palette.darkgreen.main, }}
+                        onClick={() => navigate("/login")}
+                    >
+                        LOGIN
+                    </Button>
                     <ProfileMenu />
                 </Grid>
             </Grid>

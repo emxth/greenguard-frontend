@@ -21,7 +21,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
     useEffect(() => {
         if (user) {
             setFormData({
-                userId: user.user_id || "",
+                userId: user._id || "",
                 first_name: user.first_name || "",
                 last_name: user.last_name || "",
                 email: user.email || "",
@@ -149,6 +149,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.password}
                     onChange={handleChange}
+                    disabled
                 />
             </Grid>
             <Grid item xs={12}>

@@ -59,17 +59,20 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
                                 <TableCell>{row.Truck_RegNum}</TableCell>
                                 <TableCell>{row.Maintenance_Date}</TableCell>
                                 <TableCell>{row.maintenance_type}</TableCell>
-                                <TableCell>{row.Cost}</TableCell>
+                                <TableCell>{(row.Cost).toFixed(2)}</TableCell>
                                 <TableCell>{row.Description}</TableCell>
                                 <TableCell>{row.Status}</TableCell>
                                 <TableCell>
-                                    <Button 
-                                        variant="contained" 
-                                        color="error"
-                                        onClick={() => handleApprove(row.Truck_RegNum)}
-                                    >
-                                        Approve
-                                    </Button>
+                                    {row.Status === "Pending" && (
+                                        <Button 
+                                            variant="outlined" 
+                                            color="success"
+                                            size="small"
+                                            onClick={() => handleApprove(row._id)}
+                                        >
+                                            Approve
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         )) : (

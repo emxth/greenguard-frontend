@@ -34,6 +34,7 @@ const PaymentTable = ({ rows, fetchPayments }) => {
             {/* Citizen Payments */}
             <Typography variant="body1" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>Pickup Request Payments</Typography>
 
+            {/* Citizen Payments Table of Content */}
             <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
                 <Table stickyHeader size="small" aria-label="sticky table">
                     <TableHead>
@@ -54,11 +55,12 @@ const PaymentTable = ({ rows, fetchPayments }) => {
                                 <TableCell>{row.user_id}</TableCell>
                                 <TableCell>{row.payment_method}</TableCell>
                                 <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
-                                <TableCell>{row.amount}</TableCell>
+                                <TableCell>{(row.amount).toFixed(2)}</TableCell>
                                 <TableCell>
                                     <Button 
-                                        variant="contained" 
+                                        variant="outlined" 
                                         color="error"
+                                        size="small"
                                         onClick={() => handleDelete(row._id)}
                                     >
                                         Delete
@@ -92,10 +94,6 @@ const PaymentTable = ({ rows, fetchPayments }) => {
 export default PaymentTable;
 
 
-
-
-
-// import { Box, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 // import theme from '../components/theme';
 
 // const PaymentTable = ({ rows, selectedPayment, deletePayment }) => {

@@ -2,7 +2,7 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import axios from "axios";
 import { useState } from "react";
 
-const API_BASE_URL = "http://localhost:8081/truckFuelCost";
+const API_BASE_URL = "http://localhost:8081/FuelCost";
 
 const FuelTable = ({ rows, fetchTruckFuel }) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -57,17 +57,20 @@ const FuelTable = ({ rows, fetchTruckFuel }) => {
                             <TableRow key={row._id} hover>
                                 <TableCell>{row.Truck_RegNum}</TableCell>
                                 <TableCell>{row.Fuel_Date}</TableCell>
-                                <TableCell>{row.FuelCost}</TableCell>
-                                <TableCell>{row.Litres}</TableCell>
+                                <TableCell>{(row.FuelCost).toFixed(2)}</TableCell>
+                                <TableCell>{(row.Litres).toFixed(1)}</TableCell>
                                 <TableCell>{row.Status}</TableCell>
                                 <TableCell>
-                                    <Button 
-                                        variant="contained" 
-                                        color="error"
-                                        onClick={() => handleApprove(row.Truck_RegNum)}
-                                    >
-                                        Approve
-                                    </Button>
+                                    {row.Status === "Pending" && (
+                                        <Button 
+                                            variant="outlined" 
+                                            color="success"
+                                            size="small"
+                                            onClick={() => handleApprove(row._id)}
+                                        >
+                                            Approve
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         )) : (

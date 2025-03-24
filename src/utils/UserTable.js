@@ -40,21 +40,21 @@ const UserTable = () => {
                 <Table stickyHeader size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>User ID</TableCell>
-                            <TableCell>First Name</TableCell>
-                            <TableCell>Last Name</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Phone</TableCell>
-                            <TableCell>Address</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>User ID</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>First Name</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Last Name</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Email</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Phone</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Address</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Role</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {users.length > 0 ? (
                             users.map(user => (
                                 <TableRow key={user._id} hover>
-                                    <TableCell>{user.user_id}</TableCell>
+                                    <TableCell>{user._id}</TableCell>
                                     <TableCell>{user.first_name}</TableCell>
                                     <TableCell>{user.last_name}</TableCell>
                                     <TableCell>{user.email}</TableCell>

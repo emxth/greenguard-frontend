@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FuelTable from "./FuelTable";
 
-const API_BASE_URL = "http://localhost:8081/truckFuelCost";
+const API_BASE_URL = "http://localhost:8081/FuelCost";
 
 const TruckFuel = () => {
     const [fuel, setFuel] = useState([]);
