@@ -1,5 +1,5 @@
 import Navbar from './Components/SideNav';
-import react, { useState } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,14 @@ import "./styles/AddFuel.css";
 function AddFuelCost() {
     const { regNum } = useParams(); // Get RegNumber from URL
     //set input values to variables
-    const [regNumber, setRegNum] = useState(regNum);
+    // const [regNumber, setRegNum] = useState(regNum);
+    const [regNumber] = useState(regNum);
     const [fuelDate, setFuelDate] = useState("");
     const [fuelType, setFuelType] = useState("");
     const [fuelCost, setFuelCost] = useState("");
     const [litres, setLitres] = useState("");
-    const [Status, setStatus] = useState("Pending");
+    // const [Status, setStatus] = useState("Pending");
+    const [Status] = useState("Pending");
 
     const navigate = useNavigate();
 

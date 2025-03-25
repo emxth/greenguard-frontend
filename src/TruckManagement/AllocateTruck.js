@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./styles/AllocateTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";

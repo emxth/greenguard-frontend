@@ -1,5 +1,5 @@
 import Navbar from './Components/SideNav';
-import react, { useState } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./styles/AddTrucks.css";

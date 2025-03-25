@@ -1,5 +1,5 @@
 import Navbar from './Components/SideNav';
-import react, { useState } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -9,11 +9,13 @@ function AddMaintenanceCost() {
     //set input values to variables
     const { regNum } = useParams();
     const [maintenance_Date, setMaintenance_Date] = useState("");
-    const [truckRegNum, setTruckRegNum] = useState(regNum);
+    // const [truckRegNum, setTruckRegNum] = useState(regNum);
+    const [truckRegNum] = useState(regNum);
     const [maintenanceType, setMaintenanceType] = useState("");
     const [truckCost, setTruckCost] = useState("");
     const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("Pending");
+    // const [status, setStatus] = useState("Pending");
+    const [status] = useState("Pending");
     const navigate = useNavigate();
 
     //Make event to happen after button is clicked

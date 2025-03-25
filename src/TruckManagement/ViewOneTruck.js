@@ -51,10 +51,10 @@ function TruckDetails() {
 
     function updateVehicleInfo(e) {
         e.preventDefault();
-        if (btnLabel == 'Edit') {
+        if (btnLabel === 'Edit') {
             setDisabledElements(false);
             setBtnLabel("Update");
-        } else if (btnLabel == 'Update') {
+        } else if (btnLabel === 'Update') {
             updateTruck();
         }
     }

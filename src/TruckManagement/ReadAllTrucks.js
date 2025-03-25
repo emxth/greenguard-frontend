@@ -66,13 +66,13 @@ function ReadAllTrucks() {
     }
 
     //Navigate to truck cost
-    function NavigateToTruckCosts() {
-        navigate(`/truckCost`);
-    }
+    // function NavigateToTruckCosts() {
+    //     navigate(`/truckCost`);
+    // }
 
-    function NavigateToFuelCosts() {
-        navigate(`/truckFuelCost`);
-    }
+    // function NavigateToFuelCosts() {
+    //     navigate(`/truckFuelCost`);
+    // }
 
     return (
         <div className="col1Div">
