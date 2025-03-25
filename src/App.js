@@ -5,7 +5,7 @@ import { Home, About, Services, Pickups, Contact } from './pages/PublicPage';
 import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./components/Footer";
 import Finance from "./pages/Finance";
-import PublicProfile from "./pages/PublicProfile";
+import MyProfile from "./utils/MyProfile";
 import PickupRequests from "./pages/PickupRequests";
 import Admin from "./pages/Admin";
 import Signup from "./components/Signup";
@@ -22,7 +22,6 @@ import ViewTruckCosts from './TruckManagement/ViewTruckCosts';
 import AddFuelCost from "./TruckManagement/AddFuelCost";
 import ViewFuelCost from "./TruckManagement/ViewFuelCost";
 import TruckDashBoard from "./TruckManagement/TruckDashBoard";
-//import ViewCollectTruckRequest from "./TruckManagement/ViewCollectTruckRequest";
 import AllocateTruck from "./TruckManagement/AllocateTruck";
 
 function App() {
@@ -39,20 +38,13 @@ function App() {
                             <Route path="/services" element={<Services />} />
                             <Route path="/pickups" element={<Pickups />} />
                             <Route path="/contact" element={<Contact />} />
-                            <Route path="/publicprofile" element={<PublicProfile />} />
+                            <Route path="/profile" element={<MyProfile />} />
                             <Route path="/publicpickuprequest" element={<PickupRequests />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/login" element={<Login />} />
                               
                             <Route path="/truck" element={<TruckDashBoard />} />
                             <Route path="/addTruck" element={<AddTrucks />} />
-                            <Route path="/about" element={<About />} />
-                            <Route path="/services" element={<Services />} />
-                            <Route path="/pickups" element={<Pickups />} />
-
-                            {/* <Route path="/ViewCollectTruckReq" element={<ViewCollectTruckRequest />} /> */}
-
-                            <Route path="/contact" element={<Contact />} />
                             <Route path="/getAllTruck" element={<ReadAllTrucks />} />
                             <Route path="/truck/:regNum" element={<ViewOneTruck />} />
                             <Route path="/Maintenance/:regNum" element={<AddMaintenanceCost />} />
@@ -69,6 +61,18 @@ function App() {
                             <Route element={<ProtectedRoute roles={["admin"]} />}>
                                 <Route path="/admin" element={<Admin />} />
                             </Route>
+
+                            <Route element={<ProtectedRoute roles={["truck_manager"]} />}>
+                                <Route path="/truck" element={<TruckDashBoard />} />
+                            </Route>
+
+                            {/* <Route element={<ProtectedRoute roles={["truck_manager"]} />}>
+                                <Route path="/truck" element={<Admin />} />
+                            </Route>
+
+                            <Route element={<ProtectedRoute roles={["truck_manager"]} />}>
+                                <Route path="/truck" element={<Admin />} />
+                            </Route> */}
                         </Routes>
                     </Box>
                 </Container>

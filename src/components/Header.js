@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Toolbar, Typography, Grid, Button } from "@mui/material";
 import logo from '../logo.svg';
 import theme from "./theme";
 import ProfileMenu from "./ProfileMenuIcon";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../utils/AuthContext";
 
 function Header() {
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     return (
         <Toolbar>
@@ -23,13 +25,15 @@ function Header() {
                     </Typography>
                 </Grid>
                 <Grid item display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                    <Button 
-                        variant="contained" 
-                        sx={{ height: '35px', mr: '5px', bgcolor: theme.palette.darkgreen.main, }}
-                        onClick={() => navigate("/login")}
-                    >
-                        LOGIN
-                    </Button>
+                    {!user && (  // Show login button only if user is NOT logged in
+                        <Button 
+                            variant="contained" 
+                            sx={{ height: '35px', mr: '5px', bgcolor: theme.palette.darkgreen.main }}
+                            onClick={() => navigate("/login")}
+                        >
+                            LOGIN
+                        </Button>
+                    )}
                     <ProfileMenu />
                 </Grid>
             </Grid>

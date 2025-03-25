@@ -12,7 +12,7 @@ function Navigation() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsSticky(window.scrollY > 200);
+            setIsSticky(window.scrollY > 400);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
@@ -42,6 +42,9 @@ function Navigation() {
                     {/* Role-based pages */}
                     {user?.role === "finance_manager" && <Tab label="Finance" component={Link} to="/finance" />}
                     {user?.role === "admin" && <Tab label="Admin" component={Link} to="/admin" />}
+                    {user?.role === "truck_manager" && <Tab label="Truck" component={Link} to="/truck" />}
+                    {/* {user?.role === "center_manager" && <Tab label="Admin" component={Link} to="/admin" />}
+                    {user?.role === "request_manager" && <Tab label="Admin" component={Link} to="/admin" />} */}
 
                     {/* Publicly accessible pages */}
                     <Tab label="Signup" component={Link} to="/signup" />

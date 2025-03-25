@@ -9,7 +9,9 @@ import { Element } from 'react-scroll';
 export function Home() {
     return (
         <Container>
-            <Box sx={{ bgcolor: '#cfe8fc', height: '300px', }} />
+            <Box 
+                sx={{ 
+                    bgcolor: '#cfe8fc', height: '300px', }} />
             <Typography variant="body1" align="justify" paragraph sx={{ marginTop: 2, marginBottom: 2, }}>
                 At Green Guard Solutions, we are dedicated to revolutionizing e-waste management through sustainable and innovative solutions. Our mission is to reduce environmental impact by efficiently recycling electronic waste and promoting responsible disposal methods. By integrating cutting-edge technology and eco-friendly practices, we ensure that discarded electronics are repurposed, reducing landfill waste. Join us in creating a cleaner, greener future by making informed choices about e-waste disposal and embracing sustainability.
             </Typography>

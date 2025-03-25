@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -8,41 +9,57 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Auto-login if token exists
         const token = localStorage.getItem("token");
         if (token) {
-            const storedUser = JSON.parse(localStorage.getItem("user"));
-            setUser(storedUser);
+            try {
+                const decoded = jwtDecode(token);
+
+                    setUser({
+                    id: decoded.user_id,
+                    role: decoded.role,
+                    email: decoded.email,
+                });
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
         }
     }, []);
 
     const login = async (email, password) => {
         try {
-            const response = await fetch("http://localhost:8081/api/login", {  // Ensure this matches your backend
+            const response = await fetch("http://localhost:8081/api/login", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-    
-            if (!response.ok) {
-                throw new Error("Login failed");
-            }
-    
+
             const data = await response.json();
-            setUser({ email: data.email, role: data.role, token: data.token }); // Store user data properly
-            localStorage.setItem("token", data.token); // Save token for authentication
+            if (response.ok) {
+                localStorage.setItem("token", data.token);
+                const decoded = jwtDecode(data.token);
+                setUser({
+                    id: decoded.user_id,
+                    role: decoded.role,
+                    email: decoded.email,
+                });
+                navigate("/"); // Redirect after login
+            } else {
+                alert(data.error);
+            }
         } catch (error) {
-            console.error("Login error:", error.message);
+            console.error("Login error:", error);
         }
-    };    
+    };   
 
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setUser(null);
-        navigate("/login");
+
+        // Delay navigation slightly for a smoother transition
+        setTimeout(() => {
+            navigate("/");
+        }, 500);  // 500ms delay before redirect
     };
 
     return (
