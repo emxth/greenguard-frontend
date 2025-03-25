@@ -182,14 +182,6 @@
     width: 100%;
 }
 
-/* === Select Box Styles === */
-select.form-control {
-    width: 88%;
-    padding: 6px 10px; /* Same padding as input fields */
-    border-radius: 5px;
-    height: 32px; /* Smaller height */
-}
-
 /* === Checkbox Styling === */
 .form-check-input {
     margin-right: 5px;

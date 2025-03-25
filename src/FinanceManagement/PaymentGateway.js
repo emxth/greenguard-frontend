@@ -1,140 +1,159 @@
-import React, { useState } from "react";
-import theme from '../components/theme';
-import { Box, TextField, Button, MenuItem, Typography, Alert } from "@mui/material";
-import { CardElement, Elements, useStripe, useElements } from "@stripe/react-stripe-js";
+import React, { useContext, useState } from "react";
+import axios from "axios";
+import { Box, Button, Typography, Alert, Divider } from "@mui/material";
+import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import visa from "./visa-icon.png";
+import master from "./master-icon.png";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../utils/AuthContext";
+import CustomSnackbar from "../components/CustomSnackbar";
 
 const stripePromise = loadStripe("pk_test_51R40PJD3pEFmB7RrWqURrx44nAKMzMcqzKJQ0NZx5yKAK3oSuB7UJZ9S8s1ccFphKDqL9FLJFEVx59uqkE4PgrYD000dSDIarf");
 
 const PaymentForm = () => {
+    const { user } = useContext(AuthContext);
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
+    //const [success, setSuccess] = useState(false);
+    const [setSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [cardType, setCardType] = useState(null);
 
-    // State for name, email, and success alert
-    const [name, setName] = useState("");   // State for name
-    const [nameError, setNameError] = useState("");
-    const [email, setEmail] = useState(""); // State for email
-    const [emailError, setEmailError] = useState("");
-    const [success, setSuccess] = useState(false);  // State for success alert
+    // Dummy user and amount
+    const user_id = `${user.id}`;
+    const amount = 350;
 
-    // Validate email
-    const validateEmail = () => {
-        if (!email) {
-            setEmailError("Email is required");
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setEmailError("Invalid email format");
-        } else {
-            setEmailError('');
+    console.log("User ID:", user_id);
+
+    const handleCardChange = (event) => {
+        if (event.complete || event.brand) {
+            setCardType(event.brand);
+        } else if (!event.brand) {
+            setCardType(null);
         }
     };
 
-    // Validate card name
-    const validateName = () => {
-        if (!name) {
-            setNameError("Name is required");
-        } else if (name.length < 3) {
-            setNameError("Name must be at least 3 characters");
-        } else if (!/^[A-Za-z\s]+$/.test(name)) {
-            setNameError("Name can only contain letters and spaces");
-        } else {
-            setNameError("");
-        }
-    };
-
-    // Handle Form Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
-        validateName();
-        validateEmail();
 
-        if (nameError || emailError || !name || !email) return; // Prevent submission if errors exist
+        if (!stripe || !elements) {
+            setErrorMessage("Stripe has not loaded yet. Please try again.");
+            return;
+        }
 
-        if (!stripe || !elements) return;
-        
         const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+            setErrorMessage("Payment details are missing.");
+            return;
+        }
+
         const { paymentMethod, error } = await stripe.createPaymentMethod({
             type: "card",
             card: cardElement,
         });
 
         if (error) {
-            console.error(error);
-        } else {
-            console.log("Payment Method Created:", paymentMethod);
-            setSuccess(true); // Show success alert
-            setTimeout(() => setSuccess(false), 3000); // Hide after 3 sec
+            setErrorMessage(error.message);
+            console.error("Stripe Error:", error);
+            return;
+        }
+
+        // Get last 4 digits and brand
+        const last4Digits = paymentMethod?.card?.last4 || "XXXX";
+        const cardBrand = paymentMethod?.card?.brand || "Unknown";
+        const paymentMethodDescription = `${cardBrand} - **** **** **** ${last4Digits}`;
+
+        // Send payment details to backend
+        try {
+            const response = await axios.post("http://localhost:8081/payment/create", {
+                user_id,
+                payment_method: paymentMethodDescription,
+                amount,
+            });
+
+            console.log("Payment stored successfully:", response.data);
+            
+            if (paymentMethod) {
+                setSuccess(true);
+            
+                // Reset the form
+                elements.getElement(CardElement).clear();
+            
+                setSnackbar({ open: true, message: "Payment Successful! Thank you for your order.", severity: "success" });
+                // Navigate after 1000ms
+                setTimeout(() => {
+                    navigate("/");
+                }, 1000);
+            }
+        } catch (err) {
+            console.error("Error storing payment:", err.response?.data || err.message);
+            setErrorMessage("Failed to process payment. Please try again.");
         }
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: "auto", p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "#ffffff" }}>
-            {/* Success Message */}
-            {success && (
+        <Box sx={{ maxWidth: "40%", mx: "auto", p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "#ffffff" }}>
+            {/* {success && (
                 <Alert severity="success" sx={{ mb: 2 }}>
                     Payment Successful! Thank you for your order.
                 </Alert>
+            )} */}
+            {errorMessage && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {errorMessage}
+                </Alert>
             )}
 
-            <Typography variant="h6">Email</Typography>
-            <TextField
-                fullWidth
-                variant="outlined"
-                margin="dense"
-                placeholder="test@example.com"
-                type="email"
-                required
-                error={!!emailError}
-                helperText={emailError}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={validateEmail}
-            />
-            
-            <Typography variant="h6" sx={{mb: 1, mt: 1}}>Card Information</Typography>
-            <Box sx={{ p: 2, bgcolor: "white", borderRadius: 1, boxShadow: 1 }}>
-                <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
-            </Box>
-            
-            <Typography variant="h6" sx={{ mt: 2 }}>Name on Card</Typography>
-            <TextField
-                    fullWidth
-                    label="Name"
-                    variant="outlined"
-                    margin="dense"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    onBlur={validateName}
-                    error={!!nameError}
-                    helperText={nameError}
-                />
-            
-            <Typography variant="h6" sx={{ mt: 2 }}>Country or Region</Typography>
-            <TextField select fullWidth variant="outlined" margin="dense" defaultValue="Sri Lanka">
-                <MenuItem value="Sri Lanka">Sri Lanka</MenuItem>
-                <MenuItem value="United States">United States</MenuItem>
-                <MenuItem value="Canada">Canada</MenuItem>
-                <MenuItem value="United Kingdom">United Kingdom</MenuItem>
-            </TextField>
+            <Typography variant="h6" mb={1}>Card Type</Typography>
+            <Divider />
+            <img src={visa} alt="Visa" style={{ height: "40px", margin: "10px", opacity: cardType === "visa" ? 1 : 0.3 }} />
+            <img src={master} alt="Mastercard" style={{ height: "40px", margin: "10px", opacity: cardType === "mastercard" ? 1 : 0.3 }} />
 
-            <Typography variant="h6" sx={{ mt: 2, textAlign: "right", fontWeight: "bold", color: theme.palette.black.main }}>Rs. 350.00</Typography>
+            <Typography variant="h6" sx={{mb: 1, mt: 2}}>Payment Information</Typography>
+            <Divider />
             
+            <Typography variant="body1" sx={{mb: 1, mt: 2}}>Card Number</Typography>
+            <Box sx={{ p: 2, bgcolor: "white", borderRadius: 1, boxShadow: 1 }}>
+                <CardElement options={{ style: { base: { fontSize: "16px", } } }} onChange={handleCardChange} />
+            </Box>
+
+            <Typography variant="h6" sx={{mb: 1, mt: 4}}>Your Order</Typography>
+            <Divider />
+            <Typography variant="h6" sx={{ mt: 2, mb: 3, textAlign: "right", fontWeight: "bold" }}>
+                Total Payment: Rs. 350.00
+            </Typography>
+
             <Button
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, py: 1.5, fontSize: "16px", bgcolor: theme.palette.darkgreen.main }}
+                color="success"
+                sx={{ mt: 3, py: 1.5, fontSize: "16px" }}
                 onClick={handleSubmit}
                 disabled={!stripe}
             >
                 Pay
             </Button>
+
+            {/* Snackbar Notification */}
+            <CustomSnackbar
+                open={snackbar.open}
+                message={snackbar.message}
+                severity={snackbar.severity}
+                handleClose={() => setSnackbar({ ...snackbar, open: false })}
+            />
         </Box>
     );
 };
 
 const PaymentPage = () => (
-    <Elements stripe={stripePromise}>
-        <PaymentForm />
-    </Elements>
+    <Box sx={{ mt: 5 }}>
+        <Elements stripe={stripePromise}>
+            <PaymentForm />
+        </Elements>
+    </Box>
 );
 
 export default PaymentPage;

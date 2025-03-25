@@ -25,7 +25,6 @@ const ProfileMenu = () => {
     const handleLogout = () => {
         // Show logout success notification
         setSnackbar({ open: true, message: "Logged out successfully!", severity: "success" });
-        
         setTimeout(() => {
             logout(); // Call logout after 1 second
         }, 1000);

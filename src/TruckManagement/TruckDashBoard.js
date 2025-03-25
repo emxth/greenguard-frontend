@@ -1,7 +1,7 @@
 import Navbar from './Components/SideNav';
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import "./styles/TruckDashboard.css";
+//import "./styles/TruckDashboard.css";
 import { useNavigate } from "react-router-dom";
 
 function TruckDashBoard() {
