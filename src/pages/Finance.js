@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import theme from '../components/theme';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Paper, Toolbar, Divider } from "@mui/material";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Paper, Toolbar, Divider, Button } from "@mui/material";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AssessmentIcon from "@mui/icons-material/Assessment";
@@ -8,6 +8,7 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import Payments from "../FinanceManagement/Payments";
 import TruckMaintanence from "../FinanceManagement/TruckMaintanence";
 import TruckFuel from "../FinanceManagement/Fuel";
+import FinanceDashboard from "../FinanceManagement/FinanceDashboard";
 
 const drawerWidth = 240;
 
@@ -25,7 +26,7 @@ export default function FinanceDrawer() {
 
     // Component Map
     const componentMap = {
-        Dasboard: <FinanceDashboard />,
+        Dasboard: <FinanceDashboardContent />,
         CitizenPayments: <CitizenPayments />,
         TruckExpenses: <TruckExpenses />,
         FinanceReports: <FinanceReports />
@@ -73,14 +74,12 @@ export default function FinanceDrawer() {
 }
 
 // Content for Finance Dashboard
-export function FinanceDashboard() {
+export function FinanceDashboardContent() {
     return (
         <Box>
             <Typography variant="h4" sx={{ color: theme.palette.darkgreen.main }}>Dashboard</Typography>
             <Divider sx={{ mt: 2, mb: 1, }} />
-            <Typography variant="body1" sx={{ mt: 2 }}>
-                Dashboard content goes here.
-            </Typography>
+            <FinanceDashboard />
         </Box>
     );
 }

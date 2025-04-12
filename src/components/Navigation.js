@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { AppBar, Toolbar, Tabs, Tab } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
@@ -7,23 +7,12 @@ import Header from "./Header";
 
 function Navigation() {
     const [value, setValue] = useState(0);
-    const [isSticky, setIsSticky] = useState(false);
     const { user } = useContext(AuthContext);  // Get user role
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsSticky(window.scrollY > 400);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     return (
         <AppBar
-            position={isSticky ? "fixed" : "static"}
-            color="inherit"
-            elevation={isSticky ? 4 : 0}
-            sx={{ transition: "0.3s ease-in-out", top: 0, zIndex: 1100 }}
+            position="static" color="inherit" elevation={0}
+            sx={{ transition: "0.3s ease-in-out", }}
         >
             <Header />
             <Toolbar sx={{ mr: 3, ml: 3 }}>

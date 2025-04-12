@@ -46,7 +46,7 @@ const TruckMaintanenceTable = ({ rows, fetchMaintanences }) => {
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Truck No</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Date</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Type</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Expenses</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Cost</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Description</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Status</TableCell>
                             <TableCell sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Action</TableCell>

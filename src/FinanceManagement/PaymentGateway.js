@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Button, Typography, Alert, Divider } from "@mui/material";
 import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
@@ -17,8 +17,7 @@ const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
-    //const [success, setSuccess] = useState(false);
-    const [setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [cardType, setCardType] = useState(null);
 
@@ -81,12 +80,6 @@ const PaymentForm = () => {
             
                 // Reset the form
                 elements.getElement(CardElement).clear();
-            
-                setSnackbar({ open: true, message: "Payment Successful! Thank you for your order.", severity: "success" });
-                // Navigate after 1000ms
-                setTimeout(() => {
-                    navigate("/");
-                }, 1000);
             }
         } catch (err) {
             console.error("Error storing payment:", err.response?.data || err.message);
@@ -94,13 +87,23 @@ const PaymentForm = () => {
         }
     };
 
+    useEffect(() => {
+        if (success) {
+            setSnackbar({ open: true, message: "Payment Successful! Thank you for your order.", severity: "success" });
+    
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
+        }
+    }, [success]);
+
     return (
         <Box sx={{ maxWidth: "40%", mx: "auto", p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "#ffffff" }}>
-            {/* {success && (
+            {success && (
                 <Alert severity="success" sx={{ mb: 2 }}>
                     Payment Successful! Thank you for your order.
                 </Alert>
-            )} */}
+            )}
             {errorMessage && (
                 <Alert severity="error" sx={{ mb: 2 }}>
                     {errorMessage}
