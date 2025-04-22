@@ -1,12 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { AppBar, Toolbar, Tabs, Tab, Box, Container } from "@mui/material";
-import { Home, About, Services, Pickups, Contact } from './PublicPage';
-import { Link as ScrollLink } from "react-scroll";
-import ScrollToTop from "./ScrollToTop";
-import Header from "./Header";
-import Footer from "./Footer";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Box, Container } from "@mui/material";
+import { Home, About, Services, Pickups, Contact } from './pages/PublicPage';
+import ScrollToTop from "./components/ScrollToTop";
+import Footer from "./components/Footer";
+import Finance from "./pages/Finance";
+import PublicProfile from "./pages/PublicProfile";
+import PickupRequests from "./pages/PickupRequests";
+import Admin from "./pages/Admin";
+import Signup from "./components/Signup";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./utils/AuthContext";
+import Navigation from "./components/Navigation";
 
 import AddTrucks from './TruckManagement/AddTrucks';
 import AddMaintenanceCost from './TruckManagement/AddMaintenanceCost';
@@ -21,34 +27,7 @@ import ViewCollectTruckRequest from "./TruckManagement/ViewCollectTruckRequest";
 import AllocateTruck from "./TruckManagement/AllocateTruck";
 import CalculateMaintainenceCost from "./TruckManagement/CalculateMaintenanceCost";
 
-
-function Navigation() {
-    const [value, setValue] = React.useState(0);
-
-    return (
-        <AppBar position="static" color="none" elevation={0}>
-            <Header />
-
-            <Toolbar sx={{ marginRight: 3, marginLeft: 3, marginBottom: 2, }}>
-                <Tabs
-                    value={value}
-                    onChange={(e, newValue) => setValue(newValue)}
-                    centered
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                >
-                    <Tab label="Home" component={Link} to="/" />
-                    <Tab label="Our Services" component={ScrollLink} to="services" smooth={true} duration={500} />
-                    <Tab label="About Us" component={ScrollLink} to="about" smooth={true} duration={500} />
-                    <Tab label="Schedule Pickups" component={ScrollLink} to="pickups" smooth={true} duration={500} />
-                    <Tab label="Contact us" component={ScrollLink} to="contact" smooth={true} duration={500} />
-                </Tabs>
-            </Toolbar>
-        </AppBar>
-    );
-}
-
-export default function App() {
+function App() {
     return (
         <Router>
             <Navigation />
@@ -79,3 +58,5 @@ export default function App() {
         </Router>
     );
 }
+
+export default App;
