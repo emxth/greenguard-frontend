@@ -35,7 +35,7 @@ function AddFuelCost() {
 
         axios.post("http://localhost:8080/FuelCost/addFuelCost", newFuelCost).then(() => {
             alert("Fuel Cost added");
-            navigate("/")
+            navigate("/truck")
         }).catch((err) => {
             alert(err);
         })

@@ -19,6 +19,7 @@ import ViewFuelCost from "./TruckManagement/ViewFuelCost";
 import TruckDashBoard from "./TruckManagement/TruckDashBoard";
 import ViewCollectTruckRequest from "./TruckManagement/ViewCollectTruckRequest";
 import AllocateTruck from "./TruckManagement/AllocateTruck";
+import CalculateMaintainenceCost from "./TruckManagement/CalculateMaintenanceCost";
 
 
 function Navigation() {
@@ -67,6 +68,7 @@ export default function App() {
                         <Route path="/Maintenance/:regNum" element={<AddMaintenanceCost />} />
                         <Route path="/truckCost" element={<ViewTruckCosts />} />
                         <Route path="/allocateTruck/:reqID" element={<AllocateTruck />} />
+                        <Route path="/CalculateMaintainenceCost" element={<CalculateMaintainenceCost />} />
                         <Route path="/FuelCost/:regNum" element={<AddFuelCost />} />
                         <Route path="/truckFuelCost" element={<ViewFuelCost />} />
                     </Routes>

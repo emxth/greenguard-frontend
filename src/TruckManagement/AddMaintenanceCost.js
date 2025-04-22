@@ -32,7 +32,7 @@ function AddMaintenanceCost() {
 
         axios.post("http://Localhost:8080/Maintenance/addTruckCost", newMaintenanceCost).then(() => {
             alert("Cost added");
-            navigate("/")
+            navigate("/truck")
         }).catch((err) => {
             alert(err);
         })

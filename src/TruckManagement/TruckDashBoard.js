@@ -19,7 +19,7 @@ function TruckDashBoard() {
             });
     }, []);
 
-    function allocateTruck(reqID){
+    function allocateTruck(reqID) {
         console.log(reqID);
         navigate(`/allocateTruck/${reqID}`);
     }
@@ -44,7 +44,13 @@ function TruckDashBoard() {
                                     <label><strong>Pickup Location:</strong> {request.PickupLocation}</label>
                                     <label><strong>Request Status:</strong> {request.RequestStatus} </label>
                                     <label><strong>Priority :</strong> {request.Priority} </label>
-                                    <button  onClick={() => allocateTruck(request.RequestID)} className="allocate-btn">Allocate Truck</button>
+                                    <button
+                                        onClick={() => allocateTruck(request.RequestID)}
+                                        className="allocate-btn"
+                                        disabled={request.RequestStatus === "Assigned"}
+                                    >
+                                        Allocate Truck
+                                    </button>
                                 </div>
                             ))
                         ) : (

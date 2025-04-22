@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles/ReadAllTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 
 function ReadAllTrucks() {
     const [trucks, setTrucks] = useState([]); // Stores fetched truck data
@@ -74,6 +77,38 @@ function ReadAllTrucks() {
         navigate(`/truckFuelCost`);
     }
 
+    function handleGenerateTruckPDF() {
+        const doc = new jsPDF();
+        doc.text("Truck Details Report", 14, 15);
+    
+        const tableColumn = ["Reg Number", "Model", "Capacity", "Insurance Expiry", "Inspection Date", "Collection Center", "Driver ID", "Status"];
+        const tableRows = trucks.map(truck => ([
+            truck.RegNumber,
+            truck.Model,
+            truck.Capacity,
+            truck.Insurance_Expiry,
+            truck.Inspection__date,
+            truck.Collection_center_id,
+            truck.driver_id,
+            truck.isActive ? "Active" : "Inactive"
+        ]));
+    
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+            styles: { fontSize: 10 },
+            headStyles: {
+                fillColor: [63, 81, 181],
+                textColor: [255, 255, 255]
+            },
+            alternateRowStyles: { fillColor: [245, 245, 245] },
+            margin: { top: 20 }
+        });
+    
+        doc.save("Truck_Report.pdf");
+    }
+
     return (
         <div className="col1Div">
             <div>
@@ -137,6 +172,8 @@ function ReadAllTrucks() {
                         {/* <button type="submit" onClick={() => NavigateToTruckCosts()}>Costs</button>
                         <button type="submit" onClick={() => NavigateToFuelCosts()}>Fuel Costs</button> */}
                     </div>
+
+                    <button onClick={handleGenerateTruckPDF}>Generate Report</button>
                 </div>
             </div>
         </div>

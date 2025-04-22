@@ -73,3 +73,9 @@ h1 {
         grid-template-columns: repeat(1, 1fr); /* 1 card per row on small screens */
     }
 }
+
+.allocate-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }

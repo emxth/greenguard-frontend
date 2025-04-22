@@ -35,7 +35,7 @@ function AddTrucks() {
 
         axios.post("http://Localhost:8080/truck/addTruck", newTruck).then(() => {
             alert("Truck added");
-            navigate("/")
+            navigate("/truck");
         }).catch((err) => {
             alert(err);
         })
@@ -75,33 +75,6 @@ function AddTrucks() {
         setterFunction(value);
         validateFutureDateWithinOneYear(value, setError);
     };
-
-    // // Validate Future Date (Must be within 1 year from today)
-    // const validateFutureDateWithinOneYear = (date, setError) => {
-    //     const selectedDate = new Date(date);
-    //     const today = new Date();
-    //     today.setHours(0, 0, 0, 0);
-
-    //     const oneYearLater = new Date();
-    //     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-
-    //     if (selectedDate <= today) {
-    //         setError("Date must be in the future.");
-    //         return false;
-    //     } else if (selectedDate > oneYearLater) {
-    //         setError("Date cannot be more than 1 year from today.");
-    //         return false;
-    //     }
-
-    //     setError(""); // Clear error if valid
-    //     return true;
-    // };
-
-    // const handleDateChange = (e, setterFunction, setError) => {
-    //     const value = e.target.value;
-    //     setterFunction(value);
-    //     validateFutureDateWithinOneYear(value, setError);
-    // };
 
     // Validate Truck ID
     const validateTruckID = (value) => {
