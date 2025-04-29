@@ -60,29 +60,36 @@ const useFetchTotal = (url, amountKey, dateKey, statusKey = null, filterMonth = 
                     const amount = Number(item[amountKey]) || 0;
                     const status = item[statusKey];
 
-                    totalAmount += amount;
+                    const matchMonth = filterMonth === null || itemMonth === filterMonth;
+                    const matchYear = filterYear === null || itemYear === filterYear;
 
-                    if (itemMonth === currentMonth && itemYear === currentYear) {
-                        currentMonthAmount += amount;
-                    }
+                    // Only count approved items for all totals
+                    if (!statusKey || status === "Approved") {
+                        totalAmount += amount;
 
-                    if (itemMonth === lastMonth && itemYear === lastMonthYear) {
-                        previousMonthAmount += amount;
+                        if (itemMonth === currentMonth && itemYear === currentYear) {
+                            currentMonthAmount += amount;
+                        }
+
+                        if (itemMonth === lastMonth && itemYear === lastMonthYear) {
+                            previousMonthAmount += amount;
+                        }
+
+                        if (matchMonth && matchYear) {
+                            monthFilteredAmount += amount;
+                        }
                     }
 
                     if (statusKey && status === "Pending") {
                         pendingApprovals += 1;
-                    }
-
-                    const matchMonth = filterMonth === null || itemMonth === filterMonth;
-                    const matchYear = filterYear === null || itemYear === filterYear;
-
-                    if (matchMonth && matchYear) {
-                        monthFilteredAmount += amount;
-                        if (statusKey && status === "Pending") {
+                    
+                        if (matchMonth && matchYear) {
                             monthFilteredPending += 1;
                         }
                     }
+
+                    // const matchMonth = filterMonth === null || itemMonth === filterMonth;
+                    // const matchYear = filterYear === null || itemYear === filterYear;
 
                 });
 

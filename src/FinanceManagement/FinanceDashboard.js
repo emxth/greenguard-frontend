@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import useFetchTotal from "./Calculations";
-import { FinanceOverview, MonthlyComparison, PendingApprovals } from "./DashboardElements";
+import { FinanceOverview, FuturePrediction, MonthlyComparison, PendingApprovals } from "./DashboardElements";
 import { MonthlyRevenueExpensesChart } from "./MonthlyRevenueExpensesChart";
 import { ExpenseBreakdownChart } from "./ExpenseBreakdownChart";
 import { Box, Checkbox, Divider, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import theme from "../components/theme";
+import MonthlyProfitLossChart from "./MonthlyProfitLossChart";
 
 const FinanceDashboard = () => {
     const [allMonths, setAllMonths] = useState(true);
@@ -52,6 +53,85 @@ const FinanceDashboard = () => {
     const totalPendingApprovals = pendingFuel + pendingMaintenance;
     const filteredPendingApprovals = fuelFilteredPending + maintenanceFilteredPending;
 
+    // Fetch data for get monthly profit/loss
+    const { data: revenueData, } = useFetchTotal("http://localhost:8081/payment/", "amount", "created_at");
+    const { data: fuelExpenses, } = useFetchTotal("http://localhost:8081/FuelCost/getAllFuelCost", "FuelCost", "Fuel_Date", "Status");
+    const { data: maintenanceExpenses, } = useFetchTotal("http://localhost:8081/Maintenance/getAllCosts", "Cost", "Maintenance_Date", "Status");
+
+    // Fetch data for pie chart (expense breakdown chart)
+    const { filteredTotal: fuelCurrentPie } = useFetchTotal("http://localhost:8081/FuelCost/getAllFuelCost", "FuelCost", "Fuel_Date", "Status");
+    const { filteredTotal: maintenanceCurrentPie } = useFetchTotal("http://localhost:8081/Maintenance/getAllCosts", "Cost", "Maintenance_Date");
+      
+    // Convert the different date formats into standard date
+    const parseDate = (dateString) => {
+        if (!dateString) return null;
+        
+        if (typeof dateString === "string") {
+            if (dateString.includes("T")) {
+                // ISO format: 2025-03-25T12:06:22.304Z
+                return new Date(dateString);
+            } else if (dateString.includes("-")) {
+                const parts = dateString.split("-");
+                if (parts[0].length === 4) {
+                    // yyyy-mm-dd
+                    return new Date(dateString);
+                } else {
+                    // dd-mm-yyyy
+                    const [day, month, year] = parts.map(Number);
+                    return new Date(year, month - 1, day);
+                }
+            }
+        }
+        
+        // Fallback
+        return new Date(dateString);
+    };
+
+    // Setup monthly profit/loss data
+    const getMonthlyProfitLoss = () => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthlyData = [];
+    
+        for (let i = 0; i < 12; i++) {
+            let revenue = 0;
+            let expenses = 0;
+    
+            // sum revenue
+            revenueData.forEach((item) => {
+                const date = parseDate(item.created_at);
+                if (date && date.getMonth() === i) {
+                    revenue += Number(item.amount) || 0;
+                }
+            });
+    
+            // sum expenses
+            fuelExpenses.forEach((item) => {
+                const date = parseDate(item.Fuel_Date);
+                if (date && date.getMonth() === i && item.Status === "Approved") {
+                    expenses += Number(item.FuelCost) || 0;
+                }
+            });
+
+            maintenanceExpenses.forEach((item) => {
+                const date = parseDate(item.Maintenance_Date);
+                if (date && date.getMonth() === i && item.Status === "Approved") {
+                    expenses += Number(item.Cost) || 0;
+                }
+            });
+    
+            monthlyData.push({
+                month: months[i],
+                profit: revenue >= expenses ? revenue - expenses : 0,
+                loss: expenses > revenue ? expenses - revenue : 0,
+            });
+        }
+    
+        return monthlyData;
+    };
+    
+    const profitLossData = getMonthlyProfitLoss();
+    
+      
     return (
         <Box>
             <Typography variant="h5" sx={{ color: theme.palette.lightgreen.main, mb: 2, mt: 3, fontWeight: 600 }}>
@@ -143,22 +223,9 @@ const FinanceDashboard = () => {
                         pendingMaintenance={maintenanceFilteredPending}
                         totalPending={filteredPendingApprovals}
                     />
-
-                    {/* <h3>
-                        Filtered Finance Overview (
-                        {effectiveMonth !== null ? `${new Date(0, effectiveMonth).toLocaleString("default", { month: "long" })} / ` : ""}
-                        {effectiveYear !== null ? `${effectiveYear}` : "All Years"}
-                        )
-                    </h3>
-                    <p>Total Revenue: Rs. {filteredRevenue.toFixed(2)}</p>
-                    <p>Total Expenses: Rs. {filteredExpenses.toFixed(2)}</p>
-                    <p>{filteredProfit >= 0 ? `Net Profit: Rs. ${filteredProfit.toFixed(2)}` : `Net Loss: Rs. ${filteredLoss.toFixed(2)}`}</p> */}
-
-                    {/* <h3>Pending Approvals</h3>
-                    <p>Fuel (Pending in selected month): {fuelFilteredPending}</p>
-                    <p>Maintenance (Pending in selected month): {maintenanceFilteredPending}</p>
-                    <p>Total Pending Approvals: {filteredPendingApprovals}</p> */}
                 </>
+
+                // if non filtered
             ) : (
                 <>
                     <FinanceOverview 
@@ -182,7 +249,16 @@ const FinanceDashboard = () => {
                         fuelPrevious={fuelPrevious}
                     />
 
-                    
+                    <Box
+                        sx={{
+                            mb: 3,
+                            width: "100%",
+                            flexWrap: "wrap"
+                        }}
+                    >
+                        {/* Line Chart */}
+                        <MonthlyProfitLossChart data={profitLossData} />
+                    </Box>
 
                     <Box
                         sx={{
@@ -190,9 +266,10 @@ const FinanceDashboard = () => {
                             display: "flex",
                             width: "100%",
                             justifyContent: "space-between",
-                            flexWrap: "wrap" // If on smaller screens you want them to stack
+                            flexWrap: "wrap"
                         }}
                     >
+                        {/* Bar Chart */}
                         <Box sx={{ flex: 1, minWidth: "300px", height: 350 }}>
                             <MonthlyRevenueExpensesChart
                                 currentRevenue={revenueCurrent}
@@ -202,27 +279,23 @@ const FinanceDashboard = () => {
                             />
                         </Box>
 
+                        {/* Pie Chart */}
                         <Box sx={{ flex: 1, minWidth: "300px", height: 350 }}>
                             <ExpenseBreakdownChart
-                                fuel={fuelCurrent}
-                                maintenance={maintenanceCurrent}
+                                fuel={fuelCurrentPie}
+                                maintenance={maintenanceCurrentPie}
                             />
                         </Box>
                     </Box>
 
-                    {/* <p>Total Revenue (Citizen Payments): Rs. {totalRevenue.toFixed(2)}</p>
-                    <p>Total Expenses (Fuel + Maintenance): Rs. {totalExpenses.toFixed(2)}</p>
-                    <p>{netProfit >= 0 ? `Net Profit: Rs. ${netProfit.toFixed(2)}` : `Net Loss: Rs. ${netLoss.toFixed(2)}`}</p> */}
-
-                    {/* <h3>Pending Approvals</h3>
-                    <p>Pending Fuel Approvals: {pendingFuel}</p>
-                    <p>Pending Maintenance Approvals: {pendingMaintenance}</p>
-                    <p>Total Pending Approvals: {totalPendingApprovals}</p> */}
-
-                    {/* <h3>Monthly Comparison</h3>
-                    <p>Revenue → Current: Rs. {revenueCurrent.toFixed(2)} | Previous: Rs. {revenuePrevious.toFixed(2)}</p>
-                    <p>Maintenance → Current: Rs. {maintenanceCurrent.toFixed(2)} | Previous: Rs. {maintenancePrevious.toFixed(2)}</p>
-                    <p>Fuel Expenses → Current: Rs. {fuelCurrent.toFixed(2)} | Previous: Rs. {fuelPrevious.toFixed(2)}</p> */}
+                    <FuturePrediction
+                        revenueCurrent={revenueCurrent}
+                        revenuePrevious={revenuePrevious}
+                        maintenanceCurrent={maintenanceCurrent}
+                        maintenancePrevious={maintenancePrevious}
+                        fuelCurrent={fuelCurrent}
+                        fuelPrevious={fuelPrevious}
+                    />
                 </>
             )}
         </Box>

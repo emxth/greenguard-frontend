@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid, TextField, Button, Typography, Box, Paper, Divider, } from "@mui/material";
 import theme from "./theme";
-import image from "../image/signupImage.jpeg"
+import image from "../images/signupImage.jpeg"
 import { Link } from "react-router-dom";
 
 export default function Signup() {
