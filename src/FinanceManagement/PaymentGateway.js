@@ -20,17 +20,16 @@ const PaymentForm = () => {
     const [success, setSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [cardType, setCardType] = useState(null);
+    const [savedCards, setSavedCards] = useState([]);
+    const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState("");
 
-    // Dummy user and amount
-    const user_id = `${user.id}`;
+    const user_id = user.id;
     const amount = 350;
-
-    console.log("User ID:", user_id);
 
     const handleCardChange = (event) => {
         if (event.complete || event.brand) {
             setCardType(event.brand);
-        } else if (!event.brand) {
+        } else {
             setCardType(null);
         }
     };
@@ -43,49 +42,83 @@ const PaymentForm = () => {
             return;
         }
 
-        const cardElement = elements.getElement(CardElement);
-        if (!cardElement) {
-            setErrorMessage("Payment details are missing.");
-            return;
-        }
-
-        const { paymentMethod, error } = await stripe.createPaymentMethod({
-            type: "card",
-            card: cardElement,
-        });
-
-        if (error) {
-            setErrorMessage(error.message);
-            console.error("Stripe Error:", error);
-            return;
-        }
-
-        // Get last 4 digits and brand
-        const last4Digits = paymentMethod?.card?.last4 || "XXXX";
-        const cardBrand = paymentMethod?.card?.brand || "Unknown";
-        const paymentMethodDescription = `${cardBrand} - **** **** **** ${last4Digits}`;
-
-        // Send payment details to backend
         try {
-            const response = await axios.post("http://localhost:8081/payment/create", {
+            const { data: { customerId } } = await axios.post(`http://localhost:8081/payment/create-customer${user_id}`, {
                 user_id,
-                payment_method: paymentMethodDescription,
+            });
+
+            const { data: { clientSecret } } = await axios.post("http://localhost:8081/payment/create-setup-intent", {
+                user_id,
+            });
+
+            const { setupIntent, error: confirmError } = await stripe.confirmCardSetup(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardElement),
+                },
+            });
+
+            if (confirmError) {
+                setErrorMessage(confirmError.message);
+                return;
+            }
+
+            const savedPaymentMethodId = setupIntent.payment_method;
+
+            const cardElement = elements.getElement(CardElement);
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: "card",
+                card: cardElement,
+            });
+
+            if (error) {
+                setErrorMessage(error.message);
+                return;
+            }
+
+            await axios.post("http://localhost:8081/payment/charge-saved", {
+                user_id,
+                payment_method_id: paymentMethod.id,
                 amount,
             });
 
-            console.log("Payment stored successfully:", response.data);
-            
-            if (paymentMethod) {
-                setSuccess(true);
-            
-                // Reset the form
-                elements.getElement(CardElement).clear();
-            }
+            setSuccess(true);
+            cardElement.clear();
         } catch (err) {
-            console.error("Error storing payment:", err.response?.data || err.message);
-            setErrorMessage("Failed to process payment. Please try again.");
+            console.error("Payment error:", err.response?.data || err.message);
+            setErrorMessage("Payment failed. Try again.");
         }
     };
+
+    const handleChargeSavedCard = async () => {
+        try {
+            const response = await axios.post("http://localhost:8081/payment/charge-saved", {
+                user_id,
+                payment_method_id: selectedPaymentMethodId,
+                amount,
+            });
+
+            console.log("Charge success:", response.data);
+            setSuccess(true);
+        } catch (err) {
+            console.error("Charge failed:", err.response?.data || err.message);
+            setErrorMessage("Failed to charge saved card.");
+        }
+    };
+    
+    // Fetch saved cards on mount
+    useEffect(() => {
+        async function fetchSavedCards() {
+            try {
+                const res = await axios.get(`http://localhost:8081/payment/saved-cards/${user_id}`);
+                setSavedCards(res.data.paymentMethods.data); // Should be an array
+            } catch (err) {
+                console.error("Error fetching saved cards:", err);
+                setSavedCards([]); // fallback to empty array
+            }
+        }
+
+        if (user_id) fetchSavedCards();
+    }, [user_id]);
 
     useEffect(() => {
         if (success) {
@@ -109,6 +142,22 @@ const PaymentForm = () => {
                     {errorMessage}
                 </Alert>
             )}
+
+            <select onChange={(e) => setSelectedPaymentMethodId(e.target.value)}>
+                <option value="">Select saved card</option>
+                {console.log("Saved Cards in map:", savedCards)}
+                {Array.isArray(savedCards) && savedCards.length > 0 ? (
+                    savedCards.map((method) => (
+                        <option key={method.id} value={method.id}>
+                            {method.card.brand.toUpperCase()} **** {method.card.last4}
+                        </option>
+                    ))
+                ) : (
+                    <option disabled>No saved cards</option>
+                )}
+            </select>
+
+            <Divider />
 
             <Typography variant="h6" mb={1}>Card Type</Typography>
             <Divider />
@@ -138,6 +187,16 @@ const PaymentForm = () => {
                 disabled={!stripe}
             >
                 Pay
+            </Button>
+            <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2, py: 1.5, fontSize: "16px" }}
+                onClick={handleChargeSavedCard}
+                disabled={!selectedPaymentMethodId}
+            >
+                Pay with Saved Card
             </Button>
 
             {/* Snackbar Notification */}
