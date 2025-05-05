@@ -12,8 +12,10 @@ import RequestManagerDashboard from "./CollectionRequestManagement/RequestManage
 import ViewPickUpRequests from "./CollectionRequestManagement/ViewPickUpRequests";
 import CreateSchedule from "./CollectionRequestManagement/CreateSchedule";
 import ViewSchedules from "./CollectionRequestManagement/ViewSchedules";
-import ViewRequestAndUpdate from "./CollectionRequestManagement/ViewRequestAndUpdate";
+import EditSchedule from "./CollectionRequestManagement/EditSchedule";
 import EditTruckRequest from "./CollectionRequestManagement/EditTruckRequest";
+
+// import PickupRequest from "./publicSchedulePickupForm";
 
 function Navigation() {
     const [value, setValue] = React.useState(0);
@@ -50,13 +52,13 @@ export default function App() {
                     <Routes>
                         {/* <Route path="/" element={<Home />} /> */}
                         <Route path="/" element={<RequestManagerDashboard />} />
+                        {/* <Route path="/PickupRequest" element={<PickupRequest />} /> */}
                         <Route path="/ReadPickups" element={<ViewPickUpRequests />} />
-                        {/* <Route path="/CreateRequest" element={<CreateTruckRequests />} /> */}
                         <Route path="/CreateTruckRequest/:pickID" element={<CreateTruckRequests />} />
                         <Route path="/ReadAllTruckRequests" element={<ReadAllTruckRequests />} />
                         <Route path="/createSchedule/:truckReqID" element={<CreateSchedule />} />
                         <Route path="/readSchedules" element={<ViewSchedules />} />
-                        <Route path="/ViewRequestAndUpdate/:schedule_ID" element={<ViewRequestAndUpdate />} />
+                        <Route path="/EditSchedule/:ScheduleID" element={<EditSchedule />} />
                         <Route path="/UpdateTruckRequest/:Trequest_ID" element={<EditTruckRequest />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/services" element={<Services />} />

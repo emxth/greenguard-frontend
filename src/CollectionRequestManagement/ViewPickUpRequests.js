@@ -1,3 +1,130 @@
+// import BackBtn from "./components/BackBtn";
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import "./styles/ViewPickUpRequests.css";
+
+// function ViewPickUpRequests() {
+//     const [pickupRequests, setPickUpRequests] = useState([]);
+//     const [allRequest, setAllRequest] = useState([]);
+//     const [loading, setLoading] = useState(true);
+//     const [error, setError] = useState(null);
+//     const [searchName, setSearchName] = useState("");
+
+//     const navigate = useNavigate();
+
+//     useEffect(() => {
+//         axios.get("http://localhost:8070/pickupRequests/")
+//             .then((response) => {
+//                 setPickUpRequests(response.data);
+//                 setAllRequest(response.data);
+//                 setLoading(false);
+//             })
+//             .catch((err) => {
+//                 console.error("Error fetching pickups:", err);
+//                 setError("Failed to load pickups. Please try again.");
+//                 setLoading(false);
+//             });
+//     }, []);
+
+//     const handleSearch = () => {
+//         if (!searchName.trim()) return;
+//         axios.get(`http://localhost:8070/pickupRequests/SearchPickupReq/${searchName}`)
+//             .then((res) => {
+//                 setPickUpRequests(res.data.pickups); // Now expects array
+//             })
+//             .catch((err) => {
+//                 console.error("Search error:", err);
+//                 setPickUpRequests([]); // Empty array if not found
+//             });
+//     };
+
+//     const resetTable = () => {
+//         setPickUpRequests(allRequest);
+//         setSearchName("");
+//     };
+
+//     const Allocatetruck = (pickUpID) => {
+//         console.log(pickUpID);
+//         navigate(`/CreateTruckRequest/${pickUpID}`);
+//     };
+
+//     if (loading) return <p>Loading pickups...</p>;
+//     if (error) return <p style={{ color: "red" }}>{error}</p>;
+
+//     return (
+//         <div>
+//             <h2>Pickup Requests</h2>
+//             <BackBtn />
+
+//             <div className="table-container">
+//                 <div className="search-bar">
+//                     <input
+//                         type="text"
+//                         placeholder="Search by name"
+//                         onChange={(e) => setSearchName(e.target.value)}
+//                         value={searchName}
+//                         className="search-input"
+//                     />
+//                     <button onClick={handleSearch} className="search-btn">Search</button>
+//                     <button onClick={resetTable} className="reset-btn">Reset</button>
+//                 </div>
+
+//                 <table className="request-table">
+//                     <thead>
+//                         <tr>
+//                             <th>PickUp_ID</th>
+//                             <th>Name</th>
+//                             <th>PickupDate</th>
+//                             <th>wasteType</th>
+//                             <th>Capacity</th>
+//                             <th>Pickup Location</th>
+//                             <th>Status</th>
+//                             <th>Actions</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         {pickupRequests.length > 0 ? (
+//                             pickupRequests.map((pickups) => (
+//                                 <tr key={pickups.PickUp_ID}>
+//                                     <td>{pickups.PickUp_ID}</td>
+//                                     <td>{pickups.Name}</td>
+//                                     <td>{pickups.PickupDate}</td>
+//                                     <td>{pickups.wasteType}</td>
+//                                     <td>{pickups.Capacity}</td>
+//                                     <td>{pickups.PickupLocation}</td>
+//                                     <td className="status-pending">{pickups.Status}</td>
+//                                     <td className="action-bar">
+//                                         <button
+//                                             type="button"
+//                                             className="delete-btn"
+//                                             onClick={() => Allocatetruck(pickups.PickUp_ID)}
+//                                             disabled={pickups.Status === "Requested"}
+//                                             style={{
+//                                                 cursor: pickups.Status === "Requested" ? "not-allowed" : "pointer",
+//                                                 backgroundColor: pickups.Status === "Requested" ? "#ccc" : "#e74c3c",
+//                                                 width: "min-content"
+//                                             }}
+//                                         >
+//                                             {pickups.Status === "Requested" ? "Already Requested" : "Allocate truck"}
+//                                         </button>
+//                                     </td>
+//                                 </tr>
+//                             ))
+//                         ) : (
+//                             <tr>
+//                                 <td colSpan="8">No pickup requests found.</td>
+//                             </tr>
+//                         )}
+//                     </tbody>
+//                 </table>
+//             </div>
+//         </div>
+//     );
+// }
+
+// export default ViewPickUpRequests;
+
 
 import BackBtn from "./components/BackBtn";
 import React, { useState, useEffect } from "react";
@@ -6,21 +133,20 @@ import { useNavigate } from "react-router-dom";
 import "./styles/ViewPickUpRequests.css";
 
 function ViewPickUpRequests() {
-    const [pickupRequests, setPickUpRequests] = useState([]); // Stores fetched truck data
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error handling
+    const [pickupRequests, setPickUpRequests] = useState([]);
+    const [allRequest, setAllRequest] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchName, setSearchName] = useState("");
 
     const navigate = useNavigate();
 
-    const [allRequest, setAllRequest] = useState([]); // Store all trucks for resetting the table
-    // const [searchRegNum, setSearchRegNum] = useState("");
-
+    //Fetch all pickup requets from customer records
     useEffect(() => {
-        // Fetch truck data from backend
         axios.get("http://localhost:8070/pickupRequests/")
             .then((response) => {
                 setPickUpRequests(response.data);
-                setAllRequest(response.data); // Set state with fetched data
+                setAllRequest(response.data);
                 setLoading(false);
             })
             .catch((err) => {
@@ -30,28 +156,58 @@ function ViewPickUpRequests() {
             });
     }, []);
 
-    if (loading) return <p>Loading trucks...</p>;
-    if (error) return <p style={{ color: "red" }}>{error}</p>;
+    //Search function by customer name
+    const handleSearch = () => {
+        if (!searchName.trim()) return;
+        axios.get(`http://localhost:8070/pickupRequests/SearchPickupReq/${searchName}`)
+            .then((res) => {
+                setPickUpRequests(res.data.pickups);
+            })
+            .catch((err) => {
+                console.error("Search error:", err);
+                setPickUpRequests([]);
+            });
+    };
 
-    //Navigate function
-    function Allocatetruck(pickUpID) {
+    //reset after search 
+    const resetTable = () => {
+        setPickUpRequests(allRequest);
+        setSearchName("");
+    };
+
+    //Navigate to allocate truck page
+    const Allocatetruck = (pickUpID) => {
         console.log(pickUpID);
         navigate(`/CreateTruckRequest/${pickUpID}`);
-    }
+    };
+
+    if (loading) return <p>Loading pickups...</p>;
+    if (error) return <p style={{ color: "red" }}>{error}</p>;
 
     return (
-        <div>
-            <div>
-                <BackBtn/>
-            </div>
-            <div className="table-container">
-                <table className="request-table">
+        <div className="viewPickupReq-Outline">
+            <BackBtn />
+            <div className="pickup-req-table-container">
+            <h2 className="View-Pick-title ">Pickup Requests</h2>
+                <div className="pickup-req-search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search by name"
+                        onChange={(e) => setSearchName(e.target.value)}
+                        value={searchName}
+                        className="pickup-req-search-input"
+                    />
+                    <button onClick={handleSearch} className="pickup-req-search-btn">Search</button>
+                    <button onClick={resetTable} className="pickup-req-reset-btn">Reset</button>
+                </div>
+
+                <table className="pickup-req-table">
                     <thead>
                         <tr>
                             <th>PickUp_ID</th>
                             <th>Name</th>
-                            <th>PickupDate</th>
-                            <th>wasteType</th>
+                            <th>Pickup Date</th>
+                            <th>Waste Type</th>
                             <th>Capacity</th>
                             <th>Pickup Location</th>
                             <th>Status</th>
@@ -60,31 +216,43 @@ function ViewPickUpRequests() {
                     </thead>
                     <tbody>
                         {pickupRequests.length > 0 ? (
-                            pickupRequests.map((pickups) => (
-                                <tr key={pickups.PickUp_ID}>
-                                    <td>{pickups.PickUp_ID}</td>
-                                    <td>{pickups.Name}</td>
-                                    <td>{pickups.PickupDate}</td>
-                                    <td>{pickups.wasteType}</td>
-                                    <td>{pickups.Capacity}</td>
-                                    <td>{pickups.PickupLocation}</td>
-                                    <td className="status-pending">{pickups.Status}</td>
-                                    <td className="action-bar">
-                                        <button type="submit" className="delete-btn" onClick={() => Allocatetruck(pickups.PickUp_ID)}>Allocate truck</button>
+                            pickupRequests.map((pickup) => (
+                                <tr key={pickup.PickUp_ID}>
+                                    <td>{pickup.PickUp_ID}</td>
+                                    <td>{pickup.Name}</td>
+                                    <td>{pickup.PickupDate}</td>
+                                    <td>{pickup.wasteType}</td>
+                                    <td>{pickup.Capacity}</td>
+                                    <td>{pickup.PickupLocation}</td>
+                                    <td className="pickup-req-status">{pickup.Status}</td>
+                                    <td className="pickup-req-action-bar">
+                                        <button
+                                            type="button"
+                                            className="pickup-req-allocate-btn"
+                                            onClick={() => Allocatetruck(pickup.PickUp_ID)}
+                                            disabled={pickup.Status === "Requested"}
+                                            style={{
+                                                cursor: pickup.Status === "Requested" ? "not-allowed" : "pointer",
+                                                backgroundColor: pickup.Status === "Requested" ? "#ccc" : "#e74c3c",
+                                                width: "100px"
+                                            }}
+                                        >
+                                            {pickup.Status === "Requested" ? "Already Requested" : "Allocate truck"}
+                                        </button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8">No costs found.</td>
+                                <td colSpan="8">No pickup requests found.</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
         </div>
-
     );
 }
 
 export default ViewPickUpRequests;
+

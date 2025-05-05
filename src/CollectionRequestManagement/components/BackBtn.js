@@ -7,8 +7,9 @@ function BackBtn() {
             <button
                 style={{
                     width: "100px",
-                    backgroundColor: "#",
+                    backgroundColor: "Green",
                     color: "white",
+                    fontWeight: "bold",
                     border: "none",
                     padding: "10px 20px",
                     fontSize: "16px",

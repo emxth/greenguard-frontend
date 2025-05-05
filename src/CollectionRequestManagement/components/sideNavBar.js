@@ -19,17 +19,17 @@ function NavBar() {
                 </Link>
 
                 <Link 
-                    className={`nav-link ${location.pathname === "/ReadAllTruckRequests" ? "active" : ""}`}  
-                    to="/ReadAllTruckRequests"
-                >
-                    Truck Requests
-                </Link>
-
-                <Link 
                     className={`nav-link ${location.pathname === "/ReadPickups" ? "active" : ""}`}  
                     to="/ReadPickups"
                 >
                     Pickup Requests
+                </Link>
+                
+                <Link 
+                    className={`nav-link ${location.pathname === "/ReadAllTruckRequests" ? "active" : ""}`}  
+                    to="/ReadAllTruckRequests"
+                >
+                    Truck Requests
                 </Link>
 
                 <Link 

@@ -14,6 +14,7 @@ function CreateTruckRequests() {
     const [pickupLocation, setPickupLocation] = useState("");
     const [RequestStatus, setRequestStatus] = useState("Pending");
 
+    //page navigation
     const navigate = useNavigate();
 
     //Make event to happen after button is clicked
