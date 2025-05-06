@@ -10,6 +10,37 @@
     height: auto;
 }
 
+.CalcMain-btn-danger{
+    background-color: rgb(242, 52, 18);
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-left: 5px;
+    color: white;
+    border-radius: 5px;
+    height: 40px;
+    width: 80px;
+}
+
+.CalcMain-btn-success{
+    background-color:#05b45c;
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 20px;
+    color: white;
+    border-radius: 5px;
+    height: 40px;
+    width: 80px;
+}
+
+.CalcMain-btn-danger:hover{
+    background-color:darkred;
+}
+
+.CalcMain-btn-success:hover{
+    background-color:#00712D;
+}
+
 .maintCalc-form-control {
     padding: 8px;
     border: 1px solid #ccc;

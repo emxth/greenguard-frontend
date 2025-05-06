@@ -223,8 +223,8 @@ function CalculateMaintenanceCost() {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 {emailError && <div className="maintCalc-error">{emailError}</div>}
-                                <button className="btn btn-success me-2" onClick={handleSendEmail}>Send</button>
-                                <button className="btn btn-danger" onClick={() => setShowEmailPopup(false)}>Cancel</button>
+                                <button className="CalcMain-btn-success" onClick={handleSendEmail}>Send</button>
+                                <button className="CalcMain-btn-danger" onClick={() => setShowEmailPopup(false)}>Cancel</button>
                             </div>
                         </div>
                     )}
