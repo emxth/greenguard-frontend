@@ -1,17 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { Home, About, Services, Pickups, Contact } from './pages/PublicPage';
 import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./components/Footer";
 import Finance from "./pages/Finance";
-import MyProfile from "./utils/MyProfile";
+import MyProfile from "./UserManagement/MyProfile";
 import PickupRequests from "./pages/PickupRequests";
 import Admin from "./pages/Admin";
 import Signup from "./components/Signup";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { AuthProvider } from "./utils/AuthContext";
+import { AuthProvider } from "./UserManagement/AuthContext";
 import Navigation from "./components/Navigation";
 
 //Truck Management
@@ -44,7 +44,7 @@ function App() {
         <Router>
             <AuthProvider>
                 <Navigation />
-                <Container>
+                <Box>
                     <Box my={4}>
                         <Routes>
                             {/* Public Routes */}
@@ -112,7 +112,7 @@ function App() {
                             </Route> */}
                         </Routes>
                     </Box>
-                </Container>
+                </Box>
                 <Footer />
                 <ScrollToTop />
             </AuthProvider>
