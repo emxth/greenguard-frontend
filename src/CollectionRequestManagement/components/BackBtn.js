@@ -1,4 +1,4 @@
-// import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function BackBtn() {
 
@@ -6,8 +6,10 @@ function BackBtn() {
         <div>
             <button
                 style={{
-                    backgroundColor: "#",
+                    width: "100px",
+                    backgroundColor: "Green",
                     color: "white",
+                    fontWeight: "bold",
                     border: "none",
                     padding: "10px 20px",
                     fontSize: "16px",
