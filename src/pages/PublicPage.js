@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { PickupForm } from '../UserManagement/PublicSchedulePickupForm';
+import { PickupForm } from '../utils/PublicSchedulePickupForm';
 import { Element } from 'react-scroll';
 import HeroSection from '../components/HeroSection';
 import ServiceCards from '../components/ServiceCards';
