@@ -6,9 +6,10 @@ function BackBtn() {
         <div>
             <button
                 style={{
+                    width: "100px",
                     backgroundColor: "Green",
-                    fontWeight: "bold",
                     color: "white",
+                    fontWeight: "bold",
                     border: "none",
                     padding: "10px 20px",
                     fontSize: "16px",

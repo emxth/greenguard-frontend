@@ -1,5 +1,5 @@
 import Navbar from './Components/SideNav';
-import { useState } from "react";
+import react, { useState } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +8,12 @@ import "./styles/AddFuel.css";
 function AddFuelCost() {
     const { regNum } = useParams(); // Get RegNumber from URL
     //set input values to variables
-    // const [regNumber, setRegNum] = useState(regNum);
-    const [regNumber] = useState(regNum);
+    const [regNumber, setRegNum] = useState(regNum);
     const [fuelDate, setFuelDate] = useState("");
     const [fuelType, setFuelType] = useState("");
     const [fuelCost, setFuelCost] = useState("");
     const [litres, setLitres] = useState("");
-    // const [Status, setStatus] = useState("Pending");
-    const [Status] = useState("Pending");
+    const [Status, setStatus] = useState("Pending");
 
     const navigate = useNavigate();
 
@@ -35,9 +33,9 @@ function AddFuelCost() {
         }
         console.log(newFuelCost);
 
-        axios.post("http://localhost:8080/FuelCost/addFuelCost", newFuelCost).then(() => {
+        axios.post("http://localhost:8081/FuelCost/addFuelCost", newFuelCost).then(() => {
             alert("Fuel Cost added");
-            navigate("/")
+            navigate("/truck")
         }).catch((err) => {
             alert(err);
         })
@@ -96,6 +94,7 @@ function AddFuelCost() {
         return true;
     };
 
+    //Get cost with 2 decimal places
     const handleFuelCostChange = (e) => {
         const value = e.target.value;
 
@@ -128,6 +127,7 @@ function AddFuelCost() {
         return true;
     };
 
+    //Get litres with 2 decimal places
     const handleLitresChange = (e) => {
         const value = e.target.value;
 
@@ -143,54 +143,55 @@ function AddFuelCost() {
     };
 
     return (
-        <div className="container">
-            <div className="left-navbar">
+        <div className="fuel-cost-mainbox">
+            <div className="af-left-navbar">
                 <Navbar />
             </div>
-            <form className="fuel-form" onSubmit={sendData}>
-                <h2 className='topicFuel'>Add Fuel Cost</h2>
-                <div className="fuel-form-group">
-                    <label htmlFor="regNumber" className="fuel-form-label">Truck Number</label>
-                    <input type="text" className="fuel-form-control" name="regNumber" id="regNumber" value={regNum} readOnly required />
-                    <div className="fuel-form-text">Truck ID is filled</div>
+            <form className="fuel-cost-form-wrapper" onSubmit={sendData}>
+                <h2 className="fuel-cost-heading">Add Fuel Cost</h2>
+                <div className="fuel-cost-group">
+                    <label htmlFor="regNumber" className="fuel-cost-label">Truck Number</label>
+                    <input type="text" className="fuel-cost-input" name="regNumber" id="regNumber" value={regNum} readOnly required />
+                    <div className="fuel-cost-hint">Truck ID is filled</div>
                 </div>
-                <div className="fuel-form-group">
-                    <label htmlFor="FuelDate" className="fuel-form-label">Fuel Date</label>
-                    <input type="date" className="fuel-form-control" name="FuelDate" id="fuelDate"
+                <div className="fuel-cost-group">
+                    <label htmlFor="FuelDate" className="fuel-cost-label">Fuel Date</label>
+                    <input type="date" className="fuel-cost-input" name="FuelDate" id="fuelDate"
                         onChange={handleFuelDateChange} required />
-                    {fuelDateError && <div className="error-message">{fuelDateError}</div>}
+                    {fuelDateError && <div className="fuel-cost-error-message">{fuelDateError}</div>}
                 </div>
-                <div className="fuel-form-group">
-                    <label htmlFor="FuelType" className="fuel-form-label">Fuel Type</label>
-                    <select className="fuel-form-control" id="fuelType" name="FuelType"
+                <div className="fuel-cost-group">
+                    <label htmlFor="FuelType" className="fuel-cost-label">Fuel Type</label>
+                    <select className="fuel-cost-input2" id="fuelType" name="FuelType"
                         onChange={(e) => setFuelType(e.target.value)}>
                         <option value="" disabled selected>Select Type</option>
                         <option value="Petrol">Petrol</option>
                         <option value="Diesel">Diesel</option>
                     </select>
                 </div>
-                <div className="fuel-form-group">
-                    <label htmlFor="cost" className="fuel-form-label">Fuel Cost</label>
-                    <input type="text" className="fuel-form-control" name="cost" id="fuelCost"
+                <div className="fuel-cost-group">
+                    <label htmlFor="cost" className="fuel-cost-label">Fuel Cost</label>
+                    <input type="text" className="fuel-cost-input" name="cost" id="fuelCost"
                         onChange={handleFuelCostChange} onBlur={handleFuelCostBlur} required />
-                    {fuelCostError && <div className="error-message">{fuelCostError}</div>}
+                    {fuelCostError && <div className="fuel-cost-error-message">{fuelCostError}</div>}
                 </div>
-                <div className="fuel-form-group">
-                    <label htmlFor="fuelLitres" className="fuel-form-label">Litres</label>
-                    <input type="text" className="fuel-form-control" name="fuelLitres" id="FuelLitres"
+                <div className="fuel-cost-group">
+                    <label htmlFor="fuelLitres" className="fuel-cost-label">Litres</label>
+                    <input type="text" className="fuel-cost-input" name="fuelLitres" id="FuelLitres"
                         onChange={handleLitresChange} onBlur={handleLitresBlur} required />
-                    {litresError && <div className="error-message">{litresError}</div>}
+                    {litresError && <div className="fuel-cost-error-message">{litresError}</div>}
                 </div>
-                <div className="fuel-form-group">
-                    <label htmlFor="status" className="fuel-form-label">Status</label>
-                    <input type="text" className="fuel-form-control" name="status" value={Status} id="status" readOnly />
+                <div className="fuel-cost-group">
+                    <label htmlFor="status" className="fuel-cost-label">Status</label>
+                    <input type="text" className="fuel-cost-input" name="status" value={Status} id="status" readOnly />
                 </div>
-                <div className="fuel-button-group">
-                    <button type="submit" className="fuel-btn fuel-btn-primary">Submit</button>
-                    <button type="button" className="fuel-btn fuel-btn-secondary">Cancel</button>
+                <div className="fuel-cost-button-section">
+                    <button type="submit" className="fuel-cost-button fuel-cost-submit">Submit</button>
+                    <button type="button" className="fuel-cost-button fuel-cost-cancel">Cancel</button>
                 </div>
             </form>
         </div>
+
     );
 }
 

@@ -14,8 +14,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./utils/AuthContext";
 import Navigation from "./components/Navigation";
 
-import AddTrucks from './TruckManagement/AddTrucks';
+//Truck Management
+import AddTrucks from './TruckManagement/AddTrucks.js';
 import AddMaintenanceCost from './TruckManagement/AddMaintenanceCost';
+import NavBar from './TruckManagement/Components/SideNav';
 import ReadAllTrucks from './TruckManagement/ReadAllTrucks';
 import ViewOneTruck from './TruckManagement/ViewOneTruck';
 import ViewTruckCosts from './TruckManagement/ViewTruckCosts';
@@ -23,6 +25,19 @@ import AddFuelCost from "./TruckManagement/AddFuelCost";
 import ViewFuelCost from "./TruckManagement/ViewFuelCost";
 import TruckDashBoard from "./TruckManagement/TruckDashBoard";
 import AllocateTruck from "./TruckManagement/AllocateTruck";
+import CalculateMaintainenceCost from "./TruckManagement/CalculateMaintenanceCost";
+import EditMaintenanceCost from "./TruckManagement/EditMaintenanceCost.js";
+import EditFuelCost from "./TruckManagement/EditFuel.js";
+
+//Collection Request Management
+import CreateTruckRequests from "./CollectionRequestManagement/CreateTruckRequest";
+import ReadAllTruckRequests from "./CollectionRequestManagement/ReadAllTruckRequets";
+import RequestManagerDashboard from "./CollectionRequestManagement/RequestManagerDashboard";
+import ViewPickUpRequests from "./CollectionRequestManagement/ViewPickUpRequests";
+import CreateSchedule from "./CollectionRequestManagement/CreateSchedule";
+import ViewSchedules from "./CollectionRequestManagement/ViewSchedules";
+import EditSchedule from "./CollectionRequestManagement/EditSchedule";
+import EditTruckRequest from "./CollectionRequestManagement/EditTruckRequest";
 
 function App() {
     return (
@@ -42,16 +57,34 @@ function App() {
                             <Route path="/publicpickuprequest" element={<PickupRequests />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/login" element={<Login />} />
-                              
+
+                            {/* Truck Management */}
                             <Route path="/truck" element={<TruckDashBoard />} />
                             <Route path="/addTruck" element={<AddTrucks />} />
+                            <Route path="/EditMaintenanceCost/:costID" element={<EditMaintenanceCost />} />
+                            <Route path="/EditFuelCost/:costID" element={<EditFuelCost />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/services" element={<Services />} />
+                            <Route path="/pickups" element={<Pickups />} />
+                            <Route path="/contact" element={<Contact />} />
                             <Route path="/getAllTruck" element={<ReadAllTrucks />} />
                             <Route path="/truck/:regNum" element={<ViewOneTruck />} />
                             <Route path="/Maintenance/:regNum" element={<AddMaintenanceCost />} />
                             <Route path="/truckCost" element={<ViewTruckCosts />} />
                             <Route path="/allocateTruck/:reqID" element={<AllocateTruck />} />
+                            <Route path="/CalculateMaintainenceCost" element={<CalculateMaintainenceCost />} />
                             <Route path="/FuelCost/:regNum" element={<AddFuelCost />} />
                             <Route path="/truckFuelCost" element={<ViewFuelCost />} />
+                            
+                            {/* Collection Request Manager */}
+                            <Route path="/CollectManagerDashboard" element={<RequestManagerDashboard />} />
+                            <Route path="/ReadPickups" element={<ViewPickUpRequests />} />
+                            <Route path="/CreateTruckRequest/:pickID" element={<CreateTruckRequests />} />
+                            <Route path="/ReadAllTruckRequests" element={<ReadAllTruckRequests />} />
+                            <Route path="/createSchedule/:truckReqID" element={<CreateSchedule />} />
+                            <Route path="/readSchedules" element={<ViewSchedules />} />
+                            <Route path="/EditSchedule/:ScheduleID" element={<EditSchedule />} />
+                            <Route path="/UpdateTruckRequest/:Trequest_ID" element={<EditTruckRequest />} />
 
                             {/* Protected Routes */}
                             <Route element={<ProtectedRoute roles={["finance_manager"]} />}>
@@ -64,6 +97,10 @@ function App() {
 
                             <Route element={<ProtectedRoute roles={["truck_manager"]} />}>
                                 <Route path="/truck" element={<TruckDashBoard />} />
+                            </Route>
+
+                            <Route element={<ProtectedRoute roles={["request_manager"]} />}>
+                                <Route path="/CollectManagerDashboard" element={<RequestManagerDashboard />} />
                             </Route>
 
                             {/* <Route element={<ProtectedRoute roles={["truck_manager"]} />}>

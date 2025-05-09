@@ -45,6 +45,13 @@ function NavBar() {
                 >
                     Fuel Costs
                 </Link>
+
+                <Link 
+                    className={`nav-link ${location.pathname === "/CalculateMaintainenceCost" ? "active" : ""}`}  
+                    to="/CalculateMaintainenceCost"
+                >
+                    Calculate Cost
+                </Link>
             </div>
         </div>
     );

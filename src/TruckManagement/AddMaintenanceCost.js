@@ -1,50 +1,45 @@
 import Navbar from './Components/SideNav';
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styles/AddMaintainanceCost.css";
 
 function AddMaintenanceCost() {
-    //set input values to variables
     const { regNum } = useParams();
     const [maintenance_Date, setMaintenance_Date] = useState("");
-    // const [truckRegNum, setTruckRegNum] = useState(regNum);
     const [truckRegNum] = useState(regNum);
     const [maintenanceType, setMaintenanceType] = useState("");
     const [truckCost, setTruckCost] = useState("");
     const [description, setDescription] = useState("");
-    // const [status, setStatus] = useState("Pending");
     const [status] = useState("Pending");
     const navigate = useNavigate();
 
-    //Make event to happen after button is clicked
+    //Send input data to backend
     function sendData(e) {
         e.preventDefault();
-        console.log("Function called");
-        //Create object to send data to backend
-        const newMaintenanceCost = {
-            'Truck_RegNum': truckRegNum,
-            'Maintenance_Date': maintenance_Date,
-            'maintenance_type': maintenanceType,
-            'Cost': truckCost,
-            'Description': description,
-            'Status': status,
-        }
 
-        axios.post("http://Localhost:8080/Maintenance/addTruckCost", newMaintenanceCost).then(() => {
+        const newMaintenanceCost = {
+            Truck_RegNum: truckRegNum,
+            Maintenance_Date: maintenance_Date,
+            maintenance_type: maintenanceType,
+            Cost: truckCost,
+            Description: description,
+            Status: status,
+        };
+
+        axios.post("http://localhost:8081/Maintenance/addTruckCost", newMaintenanceCost).then(() => {
             alert("Cost added");
-            navigate("/")
+            navigate("/truck");
         }).catch((err) => {
             alert(err);
-        })
+        });
     }
 
     const [maintenanceDateError, setMaintenanceDateError] = useState("");
     const [expenseError, setExpenseError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
 
-    // Maintenance Date Validation
+    //Maintenance date validation
     const validateMaintenanceDate = (date) => {
         const selectedDate = new Date(date);
         const today = new Date();
@@ -62,7 +57,7 @@ function AddMaintenanceCost() {
             return false;
         }
 
-        setMaintenanceDateError(""); // Clear error if valid
+        setMaintenanceDateError("");
         return true;
     };
 
@@ -72,7 +67,7 @@ function AddMaintenanceCost() {
         validateMaintenanceDate(value);
     };
 
-    // Expense Validation
+    //Expense validation
     const validateExpense = (value) => {
         const expenseRegex = /^\d+(\.\d{1,2})?$/;
 
@@ -86,7 +81,7 @@ function AddMaintenanceCost() {
             return false;
         }
 
-        setExpenseError(""); // Clear error if valid
+        setExpenseError("");
         return true;
     };
 
@@ -103,7 +98,7 @@ function AddMaintenanceCost() {
         setTruckCost(e.target.value);
     };
 
-    // Description Validation
+    //Validate description
     const validateDescription = (value) => {
         const trimmedValue = value.trim();
         if (trimmedValue.length < 10) {
@@ -132,63 +127,61 @@ function AddMaintenanceCost() {
     };
 
     return (
-        <div className="container">
-            <div className="left-navbar">
+        <div className="amc-container">
+            <div className="amc-left-navbar">
                 <Navbar />
             </div>
-            <div className="right-form">
-                <form className="form-layout" onSubmit={sendData}>
-                    <h2 className='topic'>Add maintenance cost</h2>
-                    <div className="form-group">
-                        <label htmlFor="regNumber" className="form-label">Truck Number</label>
-                        <input type="text" className="form-control" name="regNumber" id="regNumber" value={regNum} readOnly required />
+            <div className="amc-right-form">
+                <form className="amc-form-layout" onSubmit={sendData}>
+                <h2 className="amc-topic">Add maintenance cost</h2>
+                    <div className="amc-form-group">
+                        <label htmlFor="regNumber" className="amc-form-label">Truck Number</label><br></br>
+                        <input type="text" className="amc-form-control" name="regNumber" id="regNumber" value={regNum} readOnly required />
                         <div className="form-text">Truck ID is filled</div>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="MaintainDate" className="form-label">Maintenance Date</label>
-                        <input type="date" className="form-control1" name="MaintainDate" id="MaintainDate"
+                    <div className="amc-form-group">
+                        <label htmlFor="MaintainDate" className="amc-form-label">Maintenance Date</label><br></br>
+                        <input type="date" className="amc-form-control1" name="MaintainDate" id="MaintainDate"
                             onChange={handleMaintenanceDateChange} required />
                         {maintenanceDateError && <div className="error-message" style={{ color: 'red' }}>{maintenanceDateError}</div>}
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="maintainType" className="form-label">Type</label>
-                        <select className="form-control3" id="maintainType" name="maintainType"
-                            onChange={(e) => setMaintenanceType(e.target.value)}>
-                            <option value="" disabled selected>Maintenance Type</option>
+                    <div className="amc-form-group">
+                        <label htmlFor="maintainType" className="amc-form-label">Type</label><br></br>
+                        <select className="amc-form-control3" id="maintainType" name="maintainType"
+                            onChange={(e) => setMaintenanceType(e.target.value)} required>
+                            <option value="" disabled selected>Maintenance Type</option><br></br>
                             <option value="Interior">Interior</option>
                             <option value="Exterior">Exterior</option>
                         </select>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="cost" className="form-label">Total Expenses</label>
-                        <input type="text" className="form-control" name="cost" id="truckCost"
+                    <div className="amc-form-group">
+                        <label htmlFor="cost" className="amc-form-label">Total Expenses</label><br></br>
+                        <input type="text" className="amc-form-control" name="cost" id="truckCost"
                             onChange={handleExpenseChange}
                             onBlur={handleExpenseBlur}
                             required />
                         {expenseError && <div className="error-message" style={{ color: 'red' }}>{expenseError}</div>}
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="descriptCost" className="form-label">Description</label>
-                        <textarea className="form-control2" name="descriptCost" id="description"
+                    <div className="amc-form-group">
+                        <label htmlFor="descriptCost" className="amc-form-label">Description</label><br></br>
+                        <textarea className="amc-form-control2" name="descriptCost" id="description"
                             onChange={handleDescriptionChange}
-                            onBlur={handleDescriptionBlur}
+                           
                             required />
                         {descriptionError && <div className="error-message" style={{ color: 'red' }}>{descriptionError}</div>}
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="status" className="form-label">Status</label>
-                        <input type="text" className="form-control" name="status" value={status} id="status" readOnly />
+                    <div className="amc-form-group">
+                        <label htmlFor="status" className="amc-form-label">Status</label><br></br>
+                        <input type="text" className="amc-form-control" name="status" value={status} id="status" readOnly />
                     </div>
-                    <div className="button-group">
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                        <button type="button" className="btn btn-secondary">Cancel</button>
+                    <div className="amc-button-group">
+                        <button type="submit" className="amc-btn amc-btn-primary">Submit</button>
+                        <button type="button" className="amc-btn amc-btn-secondary">Cancel</button>
                     </div>
                 </form>
             </div>
         </div>
-
     );
 }
-
 
 export default AddMaintenanceCost;

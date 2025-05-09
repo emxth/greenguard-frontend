@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//import "./styles/ReadAllTruck.css";
+import "./styles/ReadAllTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 function ReadAllTrucks() {
-    const [trucks, setTrucks] = useState([]); // Stores fetched truck data
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error handling
-    const navigate = useNavigate();
-
-    const [allTrucks, setAllTrucks] = useState([]); // Store all trucks for resetting the table
+    const [trucks, setTrucks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [allTrucks, setAllTrucks] = useState([]);
     const [searchRegNum, setSearchRegNum] = useState("");
 
+    const navigate = useNavigate();
+
+    //Get all truck details
     useEffect(() => {
-        // Fetch truck data from backend
-        axios.get("http://localhost:8080/truck/")
+        axios.get("http://localhost:8081/truck/")
             .then((response) => {
                 setTrucks(response.data);
-                setAllTrucks(response.data); // Set state with fetched data
+                setAllTrucks(response.data);
                 setLoading(false);
             })
             .catch((err) => {
@@ -28,119 +30,192 @@ function ReadAllTrucks() {
             });
     }, []);
 
+    //Search function for truck by RegNumber
     const searchTruck = () => {
         if (!searchRegNum.trim()) {
-            setTrucks(allTrucks); // Reset table to show all trucks
+            setTrucks(allTrucks);
             return;
         }
 
         const filteredTrucks = allTrucks.filter(truck =>
             truck.RegNumber.toLowerCase().includes(searchRegNum.toLowerCase())
         );
-
         setTrucks(filteredTrucks);
     };
 
-
-
-    //Delete code
-    function deleteTruck(regNum) {
+    //Delete function
+    const deleteTruck = (regNum) => {
         if (window.confirm(`Are you sure you want to delete truck with Reg Number: ${regNum}?`)) {
-            axios.delete(`http://localhost:8080/truck/delete/${regNum}`)
-                .then(() => alert("Truck deleted successfully!"))
+            axios.delete(`http://localhost:8081/truck/delete/${regNum}`)
+                .then(() => {
+                    alert("Truck deleted successfully!")
+                    setTrucks((prev) => prev.filter(trucks => trucks.RegNumber !== regNum));
+                })
                 .catch((error) => {
                     console.error("Error deleting truck:", error);
                     alert("Failed to delete truck.");
                 });
         }
-    }
+    };
+
+    const NavigateToViewTruck = (regNum) => {
+        navigate(`/truck/${regNum}`);
+    };
+
+    //Generate all trucks report
+    const handleGenerateTruckPDF = () => {
+        const doc = new jsPDF();
+        doc.text("Truck Details Report", 14, 15);
+        const tableColumn = ["Reg Number", "Model", "Capacity", "Insurance Expiry", "Inspection Date", "Collection Center", "Driver ID", "Status"];
+        const tableRows = trucks.map(truck => ([
+            truck.RegNumber,
+            truck.Model,
+            truck.Capacity,
+            truck.Insurance_Expiry,
+            truck.Inspection__date,
+            truck.Collection_center_id,
+            truck.driver_id,
+            truck.isActive ? "Active" : "Inactive"
+        ]));
+
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+            styles: { fontSize: 10 },
+            headStyles: {
+                fillColor: [63, 81, 181],
+                textColor: [255, 255, 255]
+            },
+            alternateRowStyles: { fillColor: [245, 245, 245] },
+            margin: { top: 20 }
+        });
+
+        doc.save("Truck_Report.pdf");
+    };
+
+    //Generate active truck report
+    const handleGenerateActiveTruckPDF = () => {
+        const doc = new jsPDF();
+        doc.text("Active Truck Report", 14, 15);
+
+        const tableColumn = [
+            "Reg Number", "Model", "Capacity", "Insurance Expiry",
+            "Inspection Date", "Collection Center", "Driver ID", "Status"
+        ];
+
+        const activeTrucks = trucks.filter(truck => truck.isActive);
+
+        const tableRows = activeTrucks.map(truck => ([
+            truck.RegNumber,
+            truck.Model,
+            truck.Capacity,
+            truck.Insurance_Expiry,
+            truck.Inspection__date,
+            truck.Collection_center_id,
+            truck.driver_id,
+            "Active"
+        ]));
+
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+            styles: {
+                fontSize: 10,
+                cellPadding: 4,
+                halign: 'left',
+                valign: 'middle',
+                textColor: [33, 33, 33],
+                lineColor: [200, 200, 200],
+                lineWidth: 0.1,
+            },
+            headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: [255, 255, 255],
+                fontSize: 11,
+                fontStyle: 'bold',
+                halign: 'center',
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],
+            },
+            margin: { top: 20, left: 14, right: 14 },
+            didDrawPage: function (data) {
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                doc.text("Generated by E-Waste System", data.settings.margin.left, doc.internal.pageSize.height - 10);
+            },
+        });
+
+        doc.save("Active_Truck_Report.pdf");
+    };
 
     if (loading) return <p>Loading trucks...</p>;
-    if (error) return <p style={{ color: "red" }}>{error}</p>;
-
-    //Navigate function
-    function NavigateToViewTruck(truckRegNum) {
-        console.log(truckRegNum);
-        navigate(`/truck/${truckRegNum}`);
-
-    }
-
-    //Navigate to truck cost
-    // function NavigateToTruckCosts() {
-    //     navigate(`/truckCost`);
-    // }
-
-    // function NavigateToFuelCosts() {
-    //     navigate(`/truckFuelCost`);
-    // }
+    if (error) return <p className="readTrucks-error">{error}</p>;
 
     return (
-        <div className="col1Div">
-            <div>
-                <BackBtn/>
-            </div>
-            <div className="outerDiv">
-                <div className="innerDivR">
-                    <div style={{ padding: "20px" }}>
-                        <h2>Truck Details</h2>
+        <div className="readTrucks-container">
+            <BackBtn />
+            <div className="readTrucks-wrapper">
+                <div className="readTrucks-content">
+                    <h2 className="readTrucks-header">Truck Details</h2>
 
-                        {/* Search Bar */}
-                        <input
-                            type="text"
-                            placeholder="Enter Truck Reg Number"
-                            value={searchRegNum}
-                            onChange={(e) => setSearchRegNum(e.target.value)}
-                        />
-                        <button onClick={searchTruck}>Search</button>
-                        <button onClick={() => setTrucks(allTrucks)} style={{ marginLeft: "5px" }}>Reset</button>
-                        <br></br><br></br>
-                        <table border="1" cellPadding="10" style={{ width: "100%", textAlign: "left" }}>
-                            <thead>
-                                <tr>
-                                    <th>Reg Number</th>
-                                    <th>Model</th>
-                                    <th>Capacity</th>
-                                    <th>Insurance Expiry</th>
-                                    <th>Inspection Date</th>
-                                    <th>Collection Center</th>
-                                    <th>Driver ID</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {trucks.length > 0 ? (
-                                    trucks.map((truck) => (
-                                        <tr key={truck.RegNumber}>
-                                            <td>{truck.RegNumber}</td>
-                                            <td>{truck.Model}</td>
-                                            <td>{truck.Capacity}</td>
-                                            <td>{truck.Insurance_Expiry}</td>
-                                            <td>{truck.Inspection__date}</td>
-                                            <td>{truck.Collection_center_id}</td>
-                                            <td>{truck.driver_id}</td>
-                                            <td>{truck.isActive ? "Active" : "Inactive"}</td>
-                                            <td>
-                                                <button onClick={() => NavigateToViewTruck(truck.RegNumber)}>View</button>
-                                                <button style={{ marginLeft: "5px" }} onClick={() => deleteTruck(truck.RegNumber)}>Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="8">No trucks found.</td>
+                    <input
+                        className="readTrucks-input"
+                        type="text"
+                        placeholder="Enter Truck Reg Number"
+                        value={searchRegNum}
+                        onChange={(e) => setSearchRegNum(e.target.value)}
+                    />
+                    <button className="readTrucks-searchBtn" onClick={searchTruck}>Search</button>
+                    <button className="readTrucks-resetBtn" onClick={() => setTrucks(allTrucks)}>Reset</button>
+
+                    <table className="readTrucks-table">
+                        <thead>
+                            <tr>
+                                <th className="readTrucks-th">Reg Number</th>
+                                <th className="readTrucks-th">Model</th>
+                                <th className="readTrucks-th">Capacity</th>
+                                <th className="readTrucks-th">Insurance Expiry</th>
+                                <th className="readTrucks-th">Inspection Date</th>
+                                <th className="readTrucks-th">Collection Center</th>
+                                <th className="readTrucks-th">Driver ID</th>
+                                <th className="readTrucks-th">Status</th>
+                                <th className="readTrucks-th">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {trucks.length > 0 ? (
+                                trucks.map((truck) => (
+                                    <tr key={truck.RegNumber}>
+                                        <td>{truck.RegNumber}</td>
+                                        <td>{truck.Model}</td>
+                                        <td>{truck.Capacity}</td>
+                                        <td>{truck.Insurance_Expiry}</td>
+                                        <td>{truck.Inspection__date}</td>
+                                        <td>{truck.Collection_center_id}</td>
+                                        <td>{truck.driver_id}</td>
+                                        <td className="readTrucks-status">{truck.isActive ? "Active" : "Inactive"}</td>
+                                        <td>
+                                            <button onClick={() => NavigateToViewTruck(truck.RegNumber)} className="readTrucks-viewBtn">View</button>
+                                            <button onClick={() => deleteTruck(truck.RegNumber)} className="readTrucks-deleteBtn">Delete</button>
+                                        </td>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No trucks found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
 
-                        {/* <button type="submit" onClick={() => NavigateToTruckCosts()}>Costs</button>
-                        <button type="submit" onClick={() => NavigateToFuelCosts()}>Fuel Costs</button> */}
-                    </div>
+                    <button className="readTrucks-generateBtn" onClick={handleGenerateTruckPDF}>Generate Report</button>
+                    <button className="readTrucks-generateBtnAlt" onClick={handleGenerateActiveTruckPDF}>Generate Active Truck Report</button>
                 </div>
             </div>
         </div>
-
     );
 }
 
