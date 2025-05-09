@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { Box, Button, Typography, Alert, Divider } from "@mui/material";
+import { Box, Button, Typography, Alert, Divider, Grid, Card, CardContent } from "@mui/material";
 import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import visa from "./visa-icon.png";
 import master from "./master-icon.png";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../utils/AuthContext";
+import AuthContext from "../UserManagement/AuthContext";
 import CustomSnackbar from "../components/CustomSnackbar";
+import { CheckCircle } from "@mui/icons-material";
 
 const stripePromise = loadStripe("pk_test_51R40PJD3pEFmB7RrWqURrx44nAKMzMcqzKJQ0NZx5yKAK3oSuB7UJZ9S8s1ccFphKDqL9FLJFEVx59uqkE4PgrYD000dSDIarf");
 
@@ -83,6 +84,8 @@ const PaymentForm = () => {
 
             setSuccess(true);
             cardElement.clear();
+            setSelectedPaymentMethodId("");
+            await fetchSavedCards(); // refresh saved cards after new one is saved
         } catch (err) {
             console.error("Payment error:", err.response?.data || err.message);
             setErrorMessage("Payment failed. Try again.");
@@ -99,11 +102,26 @@ const PaymentForm = () => {
 
             console.log("Charge success:", response.data);
             setSuccess(true);
+            setSelectedPaymentMethodId("");
         } catch (err) {
             console.error("Charge failed:", err.response?.data || err.message);
             setErrorMessage("Failed to charge saved card.");
         }
     };
+
+    const fetchSavedCards = useCallback(async () => {
+        try {
+            const res = await axios.get(`http://localhost:8081/payment/saved-cards/${user_id}`);
+            setSavedCards(res.data.paymentMethods.data);
+        } catch (err) {
+            console.error("Error fetching saved cards:", err);
+            setSavedCards([]);
+        }
+    }, [user_id]);
+    
+    useEffect(() => {
+        if (user_id) fetchSavedCards();
+    }, [user_id, fetchSavedCards]);
     
     // Fetch saved cards on mount
     useEffect(() => {
@@ -128,7 +146,7 @@ const PaymentForm = () => {
                 navigate("/");
             }, 1000);
         }
-    }, [success]);
+    }, [success, navigate]);
 
     return (
         <Box sx={{ maxWidth: "40%", mx: "auto", p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "#ffffff" }}>
@@ -143,23 +161,8 @@ const PaymentForm = () => {
                 </Alert>
             )}
 
-            <select onChange={(e) => setSelectedPaymentMethodId(e.target.value)}>
-                <option value="">Select saved card</option>
-                {console.log("Saved Cards in map:", savedCards)}
-                {Array.isArray(savedCards) && savedCards.length > 0 ? (
-                    savedCards.map((method) => (
-                        <option key={method.id} value={method.id}>
-                            {method.card.brand.toUpperCase()} **** {method.card.last4}
-                        </option>
-                    ))
-                ) : (
-                    <option disabled>No saved cards</option>
-                )}
-            </select>
-
-            <Divider />
-
             <Typography variant="h6" mb={1}>Card Type</Typography>
+            
             <Divider />
             <img src={visa} alt="Visa" style={{ height: "40px", margin: "10px", opacity: cardType === "visa" ? 1 : 0.3 }} />
             <img src={master} alt="Mastercard" style={{ height: "40px", margin: "10px", opacity: cardType === "mastercard" ? 1 : 0.3 }} />
@@ -172,12 +175,71 @@ const PaymentForm = () => {
                 <CardElement options={{ style: { base: { fontSize: "16px", } } }} onChange={handleCardChange} />
             </Box>
 
+            {/* Load saved cards */}
+            {Array.isArray(savedCards) && savedCards.length > 0 ? (
+                <>
+                    <Typography variant="h6" sx={{ mb: 1, mt: 4 }}>Saved Cards</Typography>
+                    <Divider />
+                    <Grid container spacing={2} sx={{ mt: 2 }}>
+                        {savedCards.map((method) => {
+                            const isSelected = selectedPaymentMethodId === method.id;
+                            const brand = method.card.brand.toUpperCase();
+                            const last4 = method.card.last4;
+
+                            return (
+                                <Grid item xs={12} sm={4} key={method.id}>
+                                    <Card
+                                        onClick={() => setSelectedPaymentMethodId(method.id)}
+                                        sx={{
+                                            boxShadow: 2,
+                                            borderRadius: 2,
+                                            textAlign: "center",
+                                            position: "relative",
+                                            cursor: "pointer",
+                                            border: isSelected ? "2px solid green" : "1px solid #ccc",
+                                            "&:hover": { boxShadow: 4 },
+                                        }}
+                                    >
+                                        {isSelected && (
+                                            <CheckCircle
+                                                sx={{
+                                                    color: "green",
+                                                    fontSize: 30,
+                                                    position: "absolute",
+                                                    right: 8,
+                                                    top: 8,
+                                                }}
+                                            />
+                                        )}
+                                        <CardContent>
+                                            <img
+                                                src={brand === "VISA" ? visa : master}
+                                                alt={brand}
+                                                style={{ height: "40px" }}
+                                            />
+                                            <Typography variant="body1" sx={{ mt: 1, fontWeight: 600 }}>
+                                                **** **** **** {last4}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                </>
+            ) : (
+                <>
+                </>
+            )}
+            
             <Typography variant="h6" sx={{mb: 1, mt: 4}}>Your Order</Typography>
             <Divider />
+
             <Typography variant="h6" sx={{ mt: 2, mb: 3, textAlign: "right", fontWeight: "bold" }}>
                 Total Payment: Rs. 350.00
             </Typography>
 
+            {/* Button Pay */}
             <Button
                 fullWidth
                 variant="contained"
@@ -188,6 +250,8 @@ const PaymentForm = () => {
             >
                 Pay
             </Button>
+
+            {/* Button to Pay with Saved Card */}
             <Button
                 fullWidth
                 variant="contained"

@@ -141,10 +141,11 @@ export function PickupForm() {
                     <Dialog fullScreen open={openPayment} onClose={() => setOpenPayment(false)}>
                         <DialogTitle display={'flex'} justifyContent={'space-between'}>
                             Pickup Request Payment
-
                             <Button size='small' variant="contained" color='error' onClick={() => setOpenPayment(false)}>Close</Button>
+
                         </DialogTitle>
-                        <Divider variant="middle" color="grey" sx={{ mb: 4 }} />
+                        <Divider variant="middle" color="grey" />
+
                         <DialogContent>
                             <Payment /> {/* Load Payment Gateway Component */}
                         </DialogContent>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import theme from '../components/theme';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Paper, Toolbar, Divider, Button } from "@mui/material";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Paper, Toolbar, Divider, Button, Container } from "@mui/material";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AssessmentIcon from "@mui/icons-material/Assessment";
@@ -36,7 +36,7 @@ export default function FinanceDrawer() {
     };
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", mt: 5, mb: 5 }}>
+        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", mt: 5, mb: 5 }}>
             {/* Drawer & Content Wrapper */}
             <Paper elevation={3} sx={{ width: "100%", display: "flex", borderRadius: 2, overflow: "hidden", }}>
                 
@@ -72,7 +72,7 @@ export default function FinanceDrawer() {
                 </Box>
 
             </Paper>
-        </Box>
+        </Container>
     );
 }
 

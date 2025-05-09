@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { AppBar, Toolbar, Tabs, Tab } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
-import AuthContext from "../utils/AuthContext";  // Import AuthContext
+import AuthContext from "../UserManagement/AuthContext";  // Import AuthContext
 import Header from "./Header";
 
 function Navigation() {
@@ -34,9 +34,6 @@ function Navigation() {
                     {user?.role === "truck_manager" && <Tab label="Truck" component={Link} to="/truck" />}
                     {/* {user?.role === "center_manager" && <Tab label="Admin" component={Link} to="/admin" />}
                     {user?.role === "request_manager" && <Tab label="Admin" component={Link} to="/admin" />} */}
-
-                    {/* Publicly accessible pages */}
-                    <Tab label="Signup" component={Link} to="/signup" />
                 </Tabs>
             </Toolbar>
         </AppBar>

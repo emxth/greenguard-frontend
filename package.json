@@ -20,12 +20,12 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.507.0",
     "mui": "^0.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
     "react-scripts": "5.0.1",
-    "react-scroll": "^1.9.3",
     "recharts": "^2.15.2",
     "web-vitals": "^2.1.4"
   },
