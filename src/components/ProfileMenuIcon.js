@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Avatar, Divider, Grid, IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../utils/AuthContext";
+import AuthContext from "../UserManagement/AuthContext";
 import CustomSnackbar from "./CustomSnackbar";
 
 const ProfileMenu = () => {

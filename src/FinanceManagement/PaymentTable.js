@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Snackbar, Alert } from "@mui/material";
+import { Box, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Snackbar, Alert, TextField } from "@mui/material";
 import axios from "axios";
 import theme from '../components/theme';
 import { useState } from "react";
@@ -8,6 +8,29 @@ const API_BASE_URL = "http://localhost:8081/payment";
 const PaymentTable = ({ rows, fetchPayments }) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // Sort rows by latest first
+    const sortedRows = [...rows].sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+
+    // Filter from sorted rows
+    const filteredRows = sortedRows.filter((row) => {
+    const keyword = searchTerm.toLowerCase();
+    return (
+        row._id.toLowerCase().includes(keyword) ||
+        row.user_id.toLowerCase().includes(keyword) ||
+        row.payment_method.toLowerCase().includes(keyword) ||
+        new Date(row.created_at).toLocaleString().toLowerCase().includes(keyword) ||
+        (row.amount).toString().includes(keyword)
+    );
+    });
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     const handleDelete = async (payId) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this payment?");
@@ -31,11 +54,24 @@ const PaymentTable = ({ rows, fetchPayments }) => {
             <Typography variant="h4" sx={{ color: theme.palette.darkgreen.main }}>Citizen Payments</Typography>
             <Divider sx={{ mt: 2, mb: 1 }} />
 
-            {/* Citizen Payments */}
-            <Typography variant="body1" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>Pickup Request Payments</Typography>
+            <Box sx={{ mt: 4, mb: 2, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                {/* Citizen Payments */}
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Pickup Request Payments</Typography>
+
+                {/* Search bar */}
+                <TextField 
+                    id="filled-basic" 
+                    label="Search" 
+                    variant="outlined"
+                    size="small"
+                    color="success"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </Box>
 
             {/* Citizen Payments Table of Content */}
-            <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+            <TableContainer component={Paper} sx={{ maxHeight: "70vh" }}>
                 <Table stickyHeader size="small" aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -49,7 +85,7 @@ const PaymentTable = ({ rows, fetchPayments }) => {
                     </TableHead>
 
                     <TableBody>
-                        {rows.length > 0 ? rows.map(row => (
+                        {filteredRows.length > 0 ? filteredRows.map(row => (
                             <TableRow key={row._id} hover>
                                 <TableCell>{row._id}</TableCell>
                                 <TableCell>{row.user_id}</TableCell>
@@ -69,7 +105,7 @@ const PaymentTable = ({ rows, fetchPayments }) => {
                             </TableRow>
                         )) : (
                             <TableRow>
-                                <TableCell colSpan={6}>No Data</TableCell>
+                                <TableCell colSpan={6} align="center">No Data</TableCell>
                             </TableRow>
                         )}
                     </TableBody>

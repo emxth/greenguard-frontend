@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import AuthContext from "../utils/AuthContext";
+import AuthContext from "./AuthContext";
 import PublicProfile from "../pages/PublicProfile";
 
 const MyProfile = () => {

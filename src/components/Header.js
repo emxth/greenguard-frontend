@@ -4,7 +4,7 @@ import logo from '../logo.svg';
 import theme from "./theme";
 import ProfileMenu from "./ProfileMenuIcon";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../utils/AuthContext";
+import AuthContext from "../UserManagement/AuthContext";
 
 function Header() {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ function Header() {
                 </Grid>
                 <Grid item sx={{ textAlign: "center" }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.darkgreen.main }}>
-                        Green Guard Solutions
+                        GreenGuard Solutions
                     </Typography>
                     <Typography variant="h6" sx={{ color: theme.palette.darkgreen.main, }}>
                         The Sustainable E-Waste Management System
@@ -28,7 +28,9 @@ function Header() {
                     {!user && (  // Show login button only if user is NOT logged in
                         <Button 
                             variant="contained" 
-                            sx={{ height: '35px', mr: '5px', bgcolor: theme.palette.darkgreen.main }}
+                            color="success"
+                            size="small"
+                            sx={{ mr: '5px', }}
                             onClick={() => navigate("/login")}
                         >
                             LOGIN
