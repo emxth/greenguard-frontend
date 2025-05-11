@@ -63,10 +63,6 @@ function App() {
                             <Route path="/addTruck" element={<AddTrucks />} />
                             <Route path="/EditMaintenanceCost/:costID" element={<EditMaintenanceCost />} />
                             <Route path="/EditFuelCost/:costID" element={<EditFuelCost />} />
-                            <Route path="/about" element={<About />} />
-                            <Route path="/services" element={<Services />} />
-                            <Route path="/pickups" element={<Pickups />} />
-                            <Route path="/contact" element={<Contact />} />
                             <Route path="/getAllTruck" element={<ReadAllTrucks />} />
                             <Route path="/truck/:regNum" element={<ViewOneTruck />} />
                             <Route path="/Maintenance/:regNum" element={<AddMaintenanceCost />} />

@@ -15,6 +15,7 @@ const generatePassword = (firstName) => {
 };
 
 const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
+    const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
         userId: "",
         first_name: "",
@@ -26,10 +27,10 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
         password: "",
     });
 
-    const [snackbar, setSnackbar] = useState({ 
-        open: false, 
-        message: "", 
-        severity: "success" 
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success"
     });
 
     // Set form data if editing
@@ -79,16 +80,44 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
 
     // Handle form submission (create and update)
     const handleSave = async () => {
+        const errors = {};
+
+        if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            errors.email = 'Valid email is required';
+        }
+        if (!formData.role) {
+            errors.role = 'Role is required';
+        }
+        if (!formData.first_name.trim()) {
+            errors.first_name = 'First name is required';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.first_name)) {
+            errors.first_name = 'Only letters and spaces allowed';
+        }
+        if (!formData.last_name.trim()) {
+            errors.last_name = 'Last name is required';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.first_name)) {
+            errors.last_name = 'Only letters and spaces allowed';
+        }
+        if (!formData.phone.match(/^\d{10}$/)) {
+            errors.phone = 'Enter a valid 10-digit phone number';
+        }
+        if (!formData.address.trim()) {
+            errors.address = 'Address is required';
+        }
+
+        setFormErrors(errors);
+
         try {
             if (user) {
                 // Update user
                 await axios.put(`${API_BASE_URL}/updateuser/${user._id}`, formData);
                 setSnackbar({ open: true, message: "User updated successfully!", severity: "success" });
-                
+                alert("User updated successfully!");
+
             } else {
                 // Create new user
                 await axios.post(`${API_BASE_URL}/createuser`, formData);
-    
+
                 // Send password hint and update link (optional - can be delayed until OTP verified)
                 await axios.post(`${API_BASE_URL}/send-password-notification`, {
                     email: formData.email,
@@ -97,10 +126,11 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
 
                     reset_link: `http://localhost:3000/profile`
                 });
-    
+
                 setSnackbar({ open: true, message: "User created. Email sent.", severity: "success" });
+                alert("User created successfully! Email sent with password hint.");
             }
-    
+
             fetchUsers();
             resetUser();
         } catch (error) {
@@ -116,10 +146,10 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
             try {
                 await axios.delete(`${API_BASE_URL}/deleteuser/${user._id}`);
                 alert("User deleted successfully!");
-                setSnackbar({ 
-                    open: true, 
-                    message: "User deleted successfully!", 
-                    severity: "success" 
+                setSnackbar({
+                    open: true,
+                    message: "User deleted successfully!",
+                    severity: "success"
                 });
                 fetchUsers();
                 resetUser();
@@ -127,10 +157,10 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
             } catch (error) {
                 console.error("Error deleting user:", error);
                 alert("Error deleting user!");
-                setSnackbar({ 
-                    open: true, 
-                    message: "Error deleting user!", 
-                    severity: "error" 
+                setSnackbar({
+                    open: true,
+                    message: "Error deleting user!",
+                    severity: "error"
                 });
             }
         }
@@ -138,7 +168,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
 
     const handleSnackbarClose = () => {
         setSnackbar(prev => ({ ...prev, open: false }));
-      };
+    };
 
     return (
         <Grid container spacing={3} xs={10} sx={{ margin: "auto", p: 3, borderRadius: 4, boxShadow: 2 }}>
@@ -163,10 +193,13 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.email}
                     onChange={handleChange}
+                    error={!!formErrors.email}
+                    helperText={formErrors.email}
                 />
             </Grid>
+
             <Grid item xs={6}>
-                <FormControl fullWidth required>
+                <FormControl fullWidth required error={!!formErrors.role}>
                     <InputLabel id="role-label">Role</InputLabel>
                     <Select
                         labelId="role-label"
@@ -183,8 +216,12 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                         <MenuItem value="finance_manager">Finance Manager</MenuItem>
                         <MenuItem value="center_manager">Center Manager</MenuItem>
                     </Select>
+                    {formErrors.role && (
+                        <p style={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px' }}>{formErrors.role}</p>
+                    )}
                 </FormControl>
             </Grid>
+
             <Grid item xs={6}>
                 <TextField
                     required
@@ -193,8 +230,11 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.first_name}
                     onChange={handleChange}
+                    error={!!formErrors.first_name}
+                    helperText={formErrors.first_name}
                 />
             </Grid>
+
             <Grid item xs={6}>
                 <TextField
                     required
@@ -203,8 +243,11 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.last_name}
                     onChange={handleChange}
+                    error={!!formErrors.last_name}
+                    helperText={formErrors.last_name}
                 />
             </Grid>
+
             <Grid item xs={6}>
                 <TextField
                     required
@@ -213,8 +256,11 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.phone}
                     onChange={handleChange}
+                    error={!!formErrors.phone}
+                    helperText={formErrors.phone}
                 />
             </Grid>
+
             <Grid item xs={6}>
                 <TextField
                     required
@@ -226,6 +272,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     disabled
                 />
             </Grid>
+
             <Grid item xs={12}>
                 <TextField
                     required
@@ -234,6 +281,8 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                     fullWidth
                     value={formData.address}
                     onChange={handleChange}
+                    error={!!formErrors.address}
+                    helperText={formErrors.address}
                 />
             </Grid>
 
@@ -257,7 +306,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                 </Button>
             </Grid>
 
-            {/* Calling CustomSnackbar component to show messages */}
+            {/* Snackbar */}
             <CustomSnackbar
                 open={snackbar.open}
                 message={snackbar.message}
@@ -265,6 +314,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                 handleClose={handleSnackbarClose}
             />
         </Grid>
+
     );
 };
 

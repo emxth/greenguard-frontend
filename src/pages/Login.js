@@ -71,6 +71,9 @@ const Login = () => {
                             <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
                                 GreenGuard Sign In
                             </Typography>
+                            <Typography variant="h6" gutterBottom mb={3}>
+                                Welcome back again
+                            </Typography>
 
                             {error && (
                                 <Typography color="error" variant="body2" sx={{ mb: 2 }}>
@@ -153,6 +156,9 @@ const Login = () => {
                         </>
                     ) : (
                         <>
+                            <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
+                                GreenGuard Sign Up
+                            </Typography>
                             <Signup />
                             <Typography variant="body2" sx={{ mt: 2 }}>
                                 Already have an account?

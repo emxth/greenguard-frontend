@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { Box, Button, Typography, Alert, Divider, Grid, Card, CardContent } from "@mui/material";
+import { Box, Button, Typography, Alert, Divider, Grid, Card, CardContent, Backdrop, CircularProgress } from "@mui/material";
 import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import visa from "./visa-icon.png";
@@ -12,7 +12,7 @@ import { CheckCircle } from "@mui/icons-material";
 
 const stripePromise = loadStripe("pk_test_51R40PJD3pEFmB7RrWqURrx44nAKMzMcqzKJQ0NZx5yKAK3oSuB7UJZ9S8s1ccFphKDqL9FLJFEVx59uqkE4PgrYD000dSDIarf");
 
-const PaymentForm = () => {
+const PaymentForm = ({ pickupRequest }) => {
     const { user } = useContext(AuthContext);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const stripe = useStripe();
@@ -23,10 +23,13 @@ const PaymentForm = () => {
     const [cardType, setCardType] = useState(null);
     const [savedCards, setSavedCards] = useState([]);
     const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const user_id = user.id;
-    const amount = 350;
+    const user_email = user.email;
+    const amount = pickupRequest?.Capacity * 100 || 350; // dynamic pricing
 
+    // Function to handle card type change
     const handleCardChange = (event) => {
         if (event.complete || event.brand) {
             setCardType(event.brand);
@@ -35,6 +38,7 @@ const PaymentForm = () => {
         }
     };
 
+    // Function to handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -44,6 +48,8 @@ const PaymentForm = () => {
         }
 
         try {
+            setLoading(true);
+
             const { data: { customerId } } = await axios.post(`http://localhost:8081/payment/create-customer${user_id}`, {
                 user_id,
             });
@@ -82,18 +88,28 @@ const PaymentForm = () => {
                 amount,
             });
 
+            // Send pickup request only after successful payment
+            await axios.post("http://localhost:8081/requestPickup/addPickUpRequest", pickupRequest);
+
             setSuccess(true);
             cardElement.clear();
             setSelectedPaymentMethodId("");
             await fetchSavedCards(); // refresh saved cards after new one is saved
+
         } catch (err) {
             console.error("Payment error:", err.response?.data || err.message);
             setErrorMessage("Payment failed. Try again.");
+
+        } finally {
+            setLoading(false);
         }
     };
 
+    // Function to handle saved card payment
     const handleChargeSavedCard = async () => {
         try {
+            setLoading(true);
+
             const response = await axios.post("http://localhost:8081/payment/charge-saved", {
                 user_id,
                 payment_method_id: selectedPaymentMethodId,
@@ -101,14 +117,28 @@ const PaymentForm = () => {
             });
 
             console.log("Charge success:", response.data);
+
+            await axios.post("http://localhost:8081/requestPickup/addPickUpRequest", pickupRequest);
+
+            await axios.post("http://localhost:8081/payment/send-receipt", {
+                email: user_email,
+                userId: user_id,
+                amount,
+                date: new Date(),
+                method: cardType || 'Card',
+            });
+
             setSuccess(true);
             setSelectedPaymentMethodId("");
         } catch (err) {
             console.error("Charge failed:", err.response?.data || err.message);
             setErrorMessage("Failed to charge saved card.");
+        } finally {
+            setLoading(false);
         }
     };
 
+    // Fetch saved cards
     const fetchSavedCards = useCallback(async () => {
         try {
             const res = await axios.get(`http://localhost:8081/payment/saved-cards/${user_id}`);
@@ -118,11 +148,12 @@ const PaymentForm = () => {
             setSavedCards([]);
         }
     }, [user_id]);
-    
+
+    // Fetch saved cards when user_id changes
     useEffect(() => {
         if (user_id) fetchSavedCards();
     }, [user_id, fetchSavedCards]);
-    
+
     // Fetch saved cards on mount
     useEffect(() => {
         async function fetchSavedCards() {
@@ -138,10 +169,11 @@ const PaymentForm = () => {
         if (user_id) fetchSavedCards();
     }, [user_id]);
 
+    // Show success message and redirect after successful payment
     useEffect(() => {
         if (success) {
-            setSnackbar({ open: true, message: "Payment Successful! Thank you for your order.", severity: "success" });
-    
+            setSnackbar({ open: true, message: "Payment and Pickup request created Successfully! Thank you for your order.", severity: "success" });
+
             setTimeout(() => {
                 navigate("/");
             }, 1000);
@@ -162,15 +194,15 @@ const PaymentForm = () => {
             )}
 
             <Typography variant="h6" mb={1}>Card Type</Typography>
-            
+
             <Divider />
             <img src={visa} alt="Visa" style={{ height: "40px", margin: "10px", opacity: cardType === "visa" ? 1 : 0.3 }} />
             <img src={master} alt="Mastercard" style={{ height: "40px", margin: "10px", opacity: cardType === "mastercard" ? 1 : 0.3 }} />
 
-            <Typography variant="h6" sx={{mb: 1, mt: 2}}>Payment Information</Typography>
+            <Typography variant="h6" sx={{ mb: 1, mt: 2 }}>Payment Information</Typography>
             <Divider />
-            
-            <Typography variant="body1" sx={{mb: 1, mt: 2}}>Card Number</Typography>
+
+            <Typography variant="body1" sx={{ mb: 1, mt: 2 }}>Card Number</Typography>
             <Box sx={{ p: 2, bgcolor: "white", borderRadius: 1, boxShadow: 1 }}>
                 <CardElement options={{ style: { base: { fontSize: "16px", } } }} onChange={handleCardChange} />
             </Box>
@@ -231,12 +263,12 @@ const PaymentForm = () => {
                 <>
                 </>
             )}
-            
-            <Typography variant="h6" sx={{mb: 1, mt: 4}}>Your Order</Typography>
+
+            <Typography variant="h6" sx={{ mb: 1, mt: 4 }}>Your Order</Typography>
             <Divider />
 
             <Typography variant="h6" sx={{ mt: 2, mb: 3, textAlign: "right", fontWeight: "bold" }}>
-                Total Payment: Rs. 350.00
+                Total Payment: Rs. {amount.toFixed(2)}
             </Typography>
 
             {/* Button Pay */}
@@ -270,14 +302,19 @@ const PaymentForm = () => {
                 severity={snackbar.severity}
                 handleClose={() => setSnackbar({ ...snackbar, open: false })}
             />
+
+            {/* MUI Backdrop Loader */}
+            <Backdrop open={loading} sx={{ zIndex: 9999, color: "#fff" }}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Box>
     );
 };
 
-const PaymentPage = () => (
+const PaymentPage = ({ pickupRequest }) => (
     <Box sx={{ mt: 5 }}>
         <Elements stripe={stripePromise}>
-            <PaymentForm />
+            <PaymentForm pickupRequest={pickupRequest} />
         </Elements>
     </Box>
 );
