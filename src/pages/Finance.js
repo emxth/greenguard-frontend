@@ -9,7 +9,7 @@ import TruckMaintanence from "../FinanceManagement/TruckMaintanence";
 import TruckFuel from "../FinanceManagement/Fuel";
 import FinanceDashboard from "../FinanceManagement/FinanceDashboard";
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 // Drawer
 export default function FinanceDrawer() {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Container, Grid, TextField, Typography, MenuItem, Box, Dialog, DialogTitle, DialogContent, Divider } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import theme from '../components/theme';
 import AuthContext from '../UserManagement/AuthContext';
 import PaymentPage from '../FinanceManagement/PaymentGateway';
@@ -21,7 +20,6 @@ export function PickupForm() {
     const [pickupRequest, setPickupRequest] = useState(null);
 
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
     useEffect(() => {

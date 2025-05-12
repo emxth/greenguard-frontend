@@ -107,14 +107,22 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
 
         setFormErrors(errors);
 
+        // Stop if there are validation errors
+        if (Object.keys(errors).length > 0) return;
+
         try {
             if (user) {
+
                 // Update user
-                await axios.put(`${API_BASE_URL}/updateuser/${user._id}`, formData);
+                const response = await axios.put(`${API_BASE_URL}/updateuser/${user._id}`, formData);
                 setSnackbar({ open: true, message: "User updated successfully!", severity: "success" });
-                alert("User updated successfully!");
+
+                if (response.data.status === "User updated") {
+                    // resetUser();
+                }
 
             } else {
+
                 // Create new user
                 await axios.post(`${API_BASE_URL}/createuser`, formData);
 
@@ -132,7 +140,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
             }
 
             fetchUsers();
-            resetUser();
+            // resetUser();
         } catch (error) {
             console.error("Error saving user:", error);
             setSnackbar({ open: true, message: "Error saving user!", severity: "error" });
@@ -156,7 +164,6 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                 Navigate("/");
             } catch (error) {
                 console.error("Error deleting user:", error);
-                alert("Error deleting user!");
                 setSnackbar({
                     open: true,
                     message: "Error deleting user!",

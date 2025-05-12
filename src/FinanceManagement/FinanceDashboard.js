@@ -150,7 +150,7 @@ const FinanceDashboard = () => {
         const borderColor = [200, 200, 200];
         let y = 50;
 
-        // Add logo (optional)
+        // Add logo
         await new Promise((resolve) => {
             const logoImg = new Image();
             logoImg.onload = () => {

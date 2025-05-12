@@ -6,7 +6,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./components/Footer";
 import Finance from "./pages/Finance";
 import MyProfile from "./UserManagement/MyProfile";
-import PickupRequests from "./pages/PickupRequests";
+import PickupRequests from "./Utils/PickupRequests";
 import Admin from "./pages/Admin";
 import Signup from "./components/Signup";
 import Login from "./pages/Login";

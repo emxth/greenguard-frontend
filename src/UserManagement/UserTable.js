@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField } from "@mui/material";
 import axios from "axios";
 import UserUpdateForm from "./UserUpdateForm"; // Import the form component
 
@@ -8,6 +8,25 @@ const API_BASE_URL = "http://localhost:8081/user";
 const UserTable = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null); // Store user data for editing
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredRows = users.filter((user) => {
+        const keyword = searchTerm.toLowerCase();
+        return (
+            user._id.toLowerCase().includes(keyword) ||
+            user.first_name.toLowerCase().includes(keyword) ||
+            user.last_name.toLowerCase().includes(keyword) ||
+            user.email.toLowerCase().includes(keyword) ||
+            user.phone.toString().includes(keyword) ||
+            user.address.toLowerCase().includes(keyword) ||
+            user.role.toLowerCase().includes(keyword)
+        );
+    });
+
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     // Fetch users from the backend
     const fetchUsers = async () => {
@@ -31,10 +50,18 @@ const UserTable = () => {
 
     return (
         <Box>
+            <TextField
+                label="Search users"
+                variant="outlined"
+                size="small"
+                color="success"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                sx={{ mb: 2, width: "30%" }}
+            />
+
             {/* User Update Form - Only Show if Editing */}
             {selectedUser && <UserUpdateForm user={selectedUser} resetUser={() => setSelectedUser(null)} fetchUsers={fetchUsers} />}
-
-            <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>User List</Typography>
 
             <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                 <Table stickyHeader size="small">
@@ -51,8 +78,8 @@ const UserTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.length > 0 ? (
-                            users.map(user => (
+                        {filteredRows.length > 0 ? (
+                            filteredRows.map(user => (
                                 <TableRow key={user._id} hover>
                                     <TableCell>{user._id}</TableCell>
                                     <TableCell>{user.first_name}</TableCell>
@@ -60,13 +87,13 @@ const UserTable = () => {
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.phone}</TableCell>
                                     <TableCell>{user.address}</TableCell>
-                                    <TableCell>{user.role}</TableCell>
+                                    <TableCell sx={{ color: user.role !== "citizen" ? "red" : "black" }}>{user.role}</TableCell>
                                     <TableCell>
-                                        <Button 
-                                            variant="outlined" 
+                                        <Button
+                                            variant="outlined"
                                             color="success"
                                             size="small"
-                                            onClick={() => handleEditClick(user)} // Pass user data
+                                            onClick={() => handleEditClick(user)}
                                         >
                                             Edit
                                         </Button>
@@ -75,7 +102,7 @@ const UserTable = () => {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={7}>No Data</TableCell>
+                                <TableCell colSpan={8}>No Data</TableCell>
                             </TableRow>
                         )}
                     </TableBody>

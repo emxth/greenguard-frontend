@@ -61,7 +61,7 @@ const PaymentTable = ({ rows, fetchPayments }) => {
                 {/* Search bar */}
                 <TextField 
                     id="filled-basic" 
-                    label="Search" 
+                    label="Search payments" 
                     variant="outlined"
                     size="small"
                     color="success"
