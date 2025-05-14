@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles/AllocateTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
+import { Container } from "@mui/material";
 
 function AllocateTruck() {
     const { reqID } = useParams();
@@ -84,6 +85,7 @@ function AllocateTruck() {
     if (error) return <p className="allocate-truck-error-text">{error}</p>;
 
     return (
+        <Container>
         <div className="allocate-truck-container">
             <BackBtn />
             <div className="allocate-truck-outer">
@@ -153,6 +155,7 @@ function AllocateTruck() {
                 </div>
             </div>
         </div>
+        </Container>
     );
 }
 

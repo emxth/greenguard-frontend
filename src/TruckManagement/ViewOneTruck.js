@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Components/SideNav";
 import "./styles/ViewOneTruck.css";
+import { Container } from "@mui/material";
 
 function TruckDetails() {
     const { regNum } = useParams();
@@ -158,6 +159,7 @@ function TruckDetails() {
     };
 
     return (
+        <Container>
         <div className="truckDetail-col1Div">
             <div className="truckDetail-outerDiv">
                 <div className="truckDetail-innerDiv1">
@@ -238,6 +240,7 @@ function TruckDetails() {
 
 
         </div>
+        </Container>
 
     );
 }

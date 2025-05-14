@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./styles/AddFuel.css";
+import { Container } from '@mui/material';
 
 function AddFuelCost() {
     const { regNum } = useParams(); // Get RegNumber from URL
@@ -143,6 +144,7 @@ function AddFuelCost() {
     };
 
     return (
+        <Container>
         <div className="fuel-cost-mainbox">
             <div className="af-left-navbar">
                 <Navbar />
@@ -191,6 +193,7 @@ function AddFuelCost() {
                 </div>
             </form>
         </div>
+        </Container>
 
     );
 }

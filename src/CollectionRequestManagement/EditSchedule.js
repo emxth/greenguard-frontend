@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./styles/EditSchedule.css";
+import { Container } from '@mui/material';
 
 function EditSchedule() {
     const { ScheduleID } = useParams();
@@ -133,81 +134,83 @@ function EditSchedule() {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div className="edit-schedule-col1Div">
-            <div className="edit-schedule-outerDiv">
-                <div className="edit-schedule-innerDiv1">
-                    <Navbar />
-                </div>
-                <div className="edit-schedule-innerDivR">
-                    <div className="edit-schedule-form-container">
-                        <h2 className="edit-schedule-heading">Update Schedule</h2>
-                        <form onSubmit={UpdateRequestInfo} className="edit-schedule-form">
-                            <label htmlFor="scheduleID" className="edit-schedule-label">Schedule ID:</label>
-                            <input type="text" id="scheduleID" value={ScheduleID} disabled className="edit-schedule-input" />
+        <Container>
+            <div className="edit-schedule-col1Div">
+                <div className="edit-schedule-outerDiv">
+                    <div className="edit-schedule-innerDiv1">
+                        <Navbar />
+                    </div>
+                    <div className="edit-schedule-innerDivR">
+                        <div className="edit-schedule-form-container">
+                            <h2 className="edit-schedule-heading">Update Schedule</h2>
+                            <form onSubmit={UpdateRequestInfo} className="edit-schedule-form">
+                                <label htmlFor="scheduleID" className="edit-schedule-label">Schedule ID:</label>
+                                <input type="text" id="scheduleID" value={ScheduleID} disabled className="edit-schedule-input" />
 
-                            <label htmlFor="pickupID" className="edit-schedule-label">Pickup ID:</label>
-                            <input type="text" id="pickupID" value={pickUpID} disabled className="edit-schedule-input" />
+                                <label htmlFor="pickupID" className="edit-schedule-label">Pickup ID:</label>
+                                <input type="text" id="pickupID" value={pickUpID} disabled className="edit-schedule-input" />
 
-                            <label htmlFor="truckRegNumber" className="edit-schedule-label">Truck Reg Number:</label>
-                            <input type="text" id="truckRegNumber" value={truck_RegNumber} disabled className="edit-schedule-input" />
+                                <label htmlFor="truckRegNumber" className="edit-schedule-label">Truck Reg Number:</label>
+                                <input type="text" id="truckRegNumber" value={truck_RegNumber} disabled className="edit-schedule-input" />
 
-                            <label htmlFor="driverID" className="edit-schedule-label">Driver ID:</label>
-                            <input type="text" id="driverID" value={driverId} readOnly className="edit-schedule-input" />
+                                <label htmlFor="driverID" className="edit-schedule-label">Driver ID:</label>
+                                <input type="text" id="driverID" value={driverId} readOnly className="edit-schedule-input" />
 
-                            <label htmlFor="scheduleDate" className="edit-schedule-label">Schedule Date:</label>
-                            <input
-                                type="date"
-                                id="scheduleDate"
-                                name="scheduleDate"
-                                value={scheduleDate}
-                                onChange={handleChange}
-                                required
-                                className="edit-schedule-input"
-                            />
-                            {errors.scheduleDate && <p className="edit-schedule-error">{errors.scheduleDate}</p>}
+                                <label htmlFor="scheduleDate" className="edit-schedule-label">Schedule Date:</label>
+                                <input
+                                    type="date"
+                                    id="scheduleDate"
+                                    name="scheduleDate"
+                                    value={scheduleDate}
+                                    onChange={handleChange}
+                                    required
+                                    className="edit-schedule-input"
+                                />
+                                {errors.scheduleDate && <p className="edit-schedule-error">{errors.scheduleDate}</p>}
 
-                            <label htmlFor="scheduleTime" className="edit-schedule-label">Schedule Time:</label>
-                            <input
-                                type="time"
-                                id="scheduleTime"
-                                name="scheduleTime"
-                                value={scheduleTime}
-                                onChange={handleChange}
-                                required
-                                className="edit-schedule-input"
-                            />
-                            {errors.scheduleTime && <p className="edit-schedule-error">{errors.scheduleTime}</p>}
+                                <label htmlFor="scheduleTime" className="edit-schedule-label">Schedule Time:</label>
+                                <input
+                                    type="time"
+                                    id="scheduleTime"
+                                    name="scheduleTime"
+                                    value={scheduleTime}
+                                    onChange={handleChange}
+                                    required
+                                    className="edit-schedule-input"
+                                />
+                                {errors.scheduleTime && <p className="edit-schedule-error">{errors.scheduleTime}</p>}
 
-                            <label htmlFor="comment" className="edit-schedule-label">Comment:</label>
-                            <textarea
-                                id="comment"
-                                name="comment"
-                                value={comments}
-                                onChange={handleChange}
-                                required
-                                className="edit-schedule-textarea"
-                            ></textarea>
+                                <label htmlFor="comment" className="edit-schedule-label">Comment:</label>
+                                <textarea
+                                    id="comment"
+                                    name="comment"
+                                    value={comments}
+                                    onChange={handleChange}
+                                    required
+                                    className="edit-schedule-textarea"
+                                ></textarea>
 
-                            <label htmlFor="scheduleStatus" className="edit-schedule-label">Schedule Status:</label>
-                            <select
-                                id="scheduleStatus"
-                                name="scheduleStatus"
-                                value={scheduleStatus}
-                                onChange={handleChange}
-                                required
-                                className="edit-schedule-select"
-                            >
-                                <option value="Processing">Processing</option>
-                                <option value="Ready for pickup">Ready for pickup</option>
-                            </select>
+                                <label htmlFor="scheduleStatus" className="edit-schedule-label">Schedule Status:</label>
+                                <select
+                                    id="scheduleStatus"
+                                    name="scheduleStatus"
+                                    value={scheduleStatus}
+                                    onChange={handleChange}
+                                    required
+                                    className="edit-schedule-select"
+                                >
+                                    <option value="Processing">Processing</option>
+                                    <option value="Ready for pickup">Ready for pickup</option>
+                                </select>
 
-                            <button type="submit" className="edit-schedule-submit-button">Submit</button>
-                        </form>
-                        {errors.fetch && <p className="edit-schedule-error">{errors.fetch}</p>}
+                                <button type="submit" className="edit-schedule-submit-button">Submit</button>
+                            </form>
+                            {errors.fetch && <p className="edit-schedule-error">{errors.fetch}</p>}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

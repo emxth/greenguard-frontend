@@ -5,6 +5,7 @@ import "./styles/ReadAllTruck.css";
 import BackBtn from "../TruckManagement/Components/BackBtn";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Container } from "@mui/material";
 
 function ReadAllTrucks() {
     const [trucks, setTrucks] = useState([]);
@@ -155,6 +156,7 @@ function ReadAllTrucks() {
     if (error) return <p className="readTrucks-error">{error}</p>;
 
     return (
+        <Container>
         <div className="readTrucks-container">
             <BackBtn />
             <div className="readTrucks-wrapper">
@@ -216,6 +218,7 @@ function ReadAllTrucks() {
                 </div>
             </div>
         </div>
+        </Container>
     );
 }
 

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./styles/viewShedules.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Container } from "@mui/material";
 
 function ViewSchedules() {
     const [pickUpSchedules, setSchedules] = useState([]);
@@ -47,7 +48,7 @@ function ViewSchedules() {
     const resetTable = () => {
         setSchedules(allSchedules);
         setSearchDate("");
-    };  
+    };
 
     //Delete specific record
     function DeleteSchedule(schedule_ID) {
@@ -112,70 +113,72 @@ function ViewSchedules() {
     };
 
     return (
-        <div className="view-schedules-Outline">
-            <BackBtn />
-            <h2 className="view-schedules-title">View Schedules</h2>
+        <Container>
+            <div className="view-schedules-Outline">
+                <BackBtn />
+                <h2 className="view-schedules-title">View Schedules</h2>
 
-            <div className="view-schedules-table-container">
-                <div className="view-schedules-search-bar">
-                    <input
-                        type="date"
-                        value={searchDate}
-                        onChange={(e) => setSearchDate(e.target.value)}
-                        className="view-schedules-search-input"
-                    />
-                    <button onClick={handleSearch} className="view-schedules-search-btn">Search</button>
-                    <button onClick={resetTable} className="view-schedules-reset-btn">Reset</button>
+                <div className="view-schedules-table-container">
+                    <div className="view-schedules-search-bar">
+                        <input
+                            type="date"
+                            value={searchDate}
+                            onChange={(e) => setSearchDate(e.target.value)}
+                            className="view-schedules-search-input"
+                        />
+                        <button onClick={handleSearch} className="view-schedules-search-btn">Search</button>
+                        <button onClick={resetTable} className="view-schedules-reset-btn">Reset</button>
+                    </div>
+
+                    <table className="view-schedules-request-table">
+                        <thead>
+                            <tr>
+                                <th>Schedule ID</th>
+                                <th>PickUp ID</th>
+                                <th>Truck Number</th>
+                                <th>Driver ID</th>
+                                <th>Schedule Date</th>
+                                <th>Time</th>
+                                <th>Comments</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {pickUpSchedules.length > 0 ? (
+                                pickUpSchedules.map((schedule) => (
+                                    <tr key={schedule.Schedule_ID}>
+                                        <td>{schedule.Schedule_ID}</td>
+                                        <td>{schedule.PickUp_ID}</td>
+                                        <td>{schedule.Truck_RegNumber}</td>
+                                        <td>{schedule.driver_id}</td>
+                                        <td>{schedule.ScheduleDate}</td>
+                                        <td>{schedule.ScheduleTime}</td>
+                                        <td>{schedule.Comments}</td>
+                                        <td className="view-schedules-status-pending">{schedule.ScheduleStatus}</td>
+                                        <td className="view-schedules-action-bar">
+                                            <button className="view-schedules-edit-btn" onClick={() => UpdateSchedule(schedule.Schedule_ID)}>Edit</button>
+                                            <button className="view-schedules-delete-btn" onClick={() => DeleteSchedule(schedule.Schedule_ID)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No schedules found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
-                <table className="view-schedules-request-table">
-                    <thead>
-                        <tr>
-                            <th>Schedule ID</th>
-                            <th>PickUp ID</th>
-                            <th>Truck Number</th>
-                            <th>Driver ID</th>
-                            <th>Schedule Date</th>
-                            <th>Time</th>
-                            <th>Comments</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pickUpSchedules.length > 0 ? (
-                            pickUpSchedules.map((schedule) => (
-                                <tr key={schedule.Schedule_ID}>
-                                    <td>{schedule.Schedule_ID}</td>
-                                    <td>{schedule.PickUp_ID}</td>
-                                    <td>{schedule.Truck_RegNumber}</td>
-                                    <td>{schedule.driver_id}</td>
-                                    <td>{schedule.ScheduleDate}</td>
-                                    <td>{schedule.ScheduleTime}</td>
-                                    <td>{schedule.Comments}</td>
-                                    <td className="view-schedules-status-pending">{schedule.ScheduleStatus}</td>
-                                    <td className="view-schedules-action-bar">
-                                        <button className="view-schedules-edit-btn" onClick={() => UpdateSchedule(schedule.Schedule_ID)}>Edit</button>
-                                        <button className="view-schedules-delete-btn" onClick={() => DeleteSchedule(schedule.Schedule_ID)}>Delete</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="9">No schedules found.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                <div className="view-schedules-report-btns">
+                    <button className="view-schedules-report-btn" onClick={handleGenerateAll}>Generate overall Report</button>
+                    <button className="view-schedules-report-btn" onClick={handleGeneratePastMonth} style={{ marginLeft: "20px" }}>
+                        Generate for past 1 month
+                    </button>
+                </div>
             </div>
-
-            <div className="view-schedules-report-btns">
-                <button className="view-schedules-report-btn" onClick={handleGenerateAll}>Generate overall Report</button>
-                <button className="view-schedules-report-btn" onClick={handleGeneratePastMonth} style={{ marginLeft: "20px" }}>
-                    Generate for past 1 month
-                </button>
-            </div>
-        </div>
+        </Container>
     );
 }
 

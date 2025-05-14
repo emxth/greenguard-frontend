@@ -10,8 +10,8 @@ const API_BASE_URL = "http://localhost:8081/user";
 // Helper to generate password
 const generatePassword = (firstName) => {
     const namePart = firstName.toLowerCase().slice(0, 4);
-    const randomDigits = Math.floor(1000 + Math.random() * 9000); // 4 digits
-    return (namePart + randomDigits).slice(0, 8); // Ensure max 8 characters
+    console.log("Generated password:", namePart);
+    return (namePart);
 };
 
 const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
@@ -130,7 +130,7 @@ const UserUpdateForm = ({ user, resetUser, fetchUsers }) => {
                 await axios.post(`${API_BASE_URL}/send-password-notification`, {
                     email: formData.email,
                     last_name: formData.last_name,
-                    password_hint: "first_name" + formData.password.slice(-4), // e.g. "first_name1234"
+                    password_hint: "first four digits of your first_name in lowercase",
 
                     reset_link: `http://localhost:3000/profile`
                 });

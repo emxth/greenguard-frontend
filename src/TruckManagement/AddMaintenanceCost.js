@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles/AddMaintainanceCost.css";
+import { Container } from '@mui/material';
 
 function AddMaintenanceCost() {
     const { regNum } = useParams();
@@ -127,6 +128,7 @@ function AddMaintenanceCost() {
     };
 
     return (
+        <Container>
         <div className="amc-container">
             <div className="amc-left-navbar">
                 <Navbar />
@@ -181,6 +183,7 @@ function AddMaintenanceCost() {
                 </form>
             </div>
         </div>
+        </Container>
     );
 }
 

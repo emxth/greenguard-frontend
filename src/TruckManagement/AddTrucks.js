@@ -3,6 +3,7 @@ import react, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "../TruckManagement/styles/AddTrucks.css";
+import { Container } from '@mui/material';
 
 function AddTrucks() {
     const [regNumber, setRegNum] = useState("");
@@ -137,6 +138,7 @@ function AddTrucks() {
     };
 
     return (
+        <Container>
         <div className="addTruck-col1Div">
             <div className="addTruck-outerDiv">
                 <div className="addTruck-innerDiv1">
@@ -225,6 +227,7 @@ function AddTrucks() {
                 </div>
             </div>
         </div>
+        </Container>
     );
 }
 

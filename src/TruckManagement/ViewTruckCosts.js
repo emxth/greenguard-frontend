@@ -5,6 +5,7 @@ import BackBtn from "../TruckManagement/Components/BackBtn";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import "./styles/MaintenanceCost.css";
+import { Container } from "@mui/material";
 
 function ViewTruckCosts() {
     const [truckCost, setTruckCost] = useState([]);
@@ -206,6 +207,7 @@ function ViewTruckCosts() {
     if (error) return <p className="truckCostError">{error}</p>;
 
     return (
+        <Container>
         <div className="truckCostContainer">
             <BackBtn />
             <h2 className="truckCostTitle">Maintenance Cost Details</h2>
@@ -270,6 +272,7 @@ function ViewTruckCosts() {
                 Generate Report for Specific Truck
             </button>
         </div>
+        </Container>
     );
 }
 

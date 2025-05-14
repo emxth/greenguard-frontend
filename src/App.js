@@ -14,7 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./UserManagement/AuthContext";
 import Navigation from "./components/Navigation";
 
-//Truck Management
+// Truck Management
 import AddTrucks from './TruckManagement/AddTrucks.js';
 import AddMaintenanceCost from './TruckManagement/AddMaintenanceCost';
 import NavBar from './TruckManagement/Components/SideNav';
@@ -29,7 +29,7 @@ import CalculateMaintainenceCost from "./TruckManagement/CalculateMaintenanceCos
 import EditMaintenanceCost from "./TruckManagement/EditMaintenanceCost.js";
 import EditFuelCost from "./TruckManagement/EditFuel.js";
 
-//Collection Request Management
+// Collection Request Management
 import CreateTruckRequests from "./CollectionRequestManagement/CreateTruckRequest";
 import ReadAllTruckRequests from "./CollectionRequestManagement/ReadAllTruckRequets";
 import RequestManagerDashboard from "./CollectionRequestManagement/RequestManagerDashboard";
@@ -38,6 +38,15 @@ import CreateSchedule from "./CollectionRequestManagement/CreateSchedule";
 import ViewSchedules from "./CollectionRequestManagement/ViewSchedules";
 import EditSchedule from "./CollectionRequestManagement/EditSchedule";
 import EditTruckRequest from "./CollectionRequestManagement/EditTruckRequest";
+
+// Center Management
+import Centers from './CenterManagement/pages/Home';
+import CreateRecyclingEntry from './CenterManagement/pages/CreateRecyclingEntry';
+import ShowRecyclingEntry from './CenterManagement/pages/ShowRecyclingEntry';
+import EditRecyclingEntry from './CenterManagement/pages/EditRecyclingEntry';
+import DeleteRecyclingEntry from './CenterManagement/pages/DeleteRecyclingEntry';
+import Navbar from './CenterManagement/components/home/Navbar';
+import CenterAdmin from './CenterManagement/pages/admin';
 
 function App() {
     return (
@@ -71,7 +80,7 @@ function App() {
                             <Route path="/CalculateMaintainenceCost" element={<CalculateMaintainenceCost />} />
                             <Route path="/FuelCost/:regNum" element={<AddFuelCost />} />
                             <Route path="/truckFuelCost" element={<ViewFuelCost />} />
-                            
+
                             {/* Collection Request Manager */}
                             <Route path="/CollectManagerDashboard" element={<RequestManagerDashboard />} />
                             <Route path="/ReadPickups" element={<ViewPickUpRequests />} />
@@ -81,6 +90,14 @@ function App() {
                             <Route path="/readSchedules" element={<ViewSchedules />} />
                             <Route path="/EditSchedule/:ScheduleID" element={<EditSchedule />} />
                             <Route path="/UpdateTruckRequest/:Trequest_ID" element={<EditTruckRequest />} />
+
+                            {/* Center Management */}
+                            <Route path='/center' element={<Centers />} />
+                            <Route path='/recycling/create' element={<CreateRecyclingEntry />} />
+                            <Route path='/recycling/admin' element={<CenterAdmin />} />
+                            <Route path='/recycling/details/:id' element={<ShowRecyclingEntry />} />
+                            <Route path='/recycling/edit/:id' element={<EditRecyclingEntry />} />
+                            <Route path='/recycling/delete/:id' element={<DeleteRecyclingEntry />} />
 
                             {/* Protected Routes */}
                             <Route element={<ProtectedRoute roles={["finance_manager"]} />}>
@@ -97,6 +114,10 @@ function App() {
 
                             <Route element={<ProtectedRoute roles={["request_manager"]} />}>
                                 <Route path="/CollectManagerDashboard" element={<RequestManagerDashboard />} />
+                            </Route>
+
+                            <Route element={<ProtectedRoute roles={["center_manager"]} />}>
+                                <Route path="/center" element={<Centers />} />
                             </Route>
 
                             {/* <Route element={<ProtectedRoute roles={["truck_manager"]} />}>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./styles/CreateTruckRequest.css";
+import { Container } from '@mui/material';
 
 function CreateTruckRequests() {
     const { pickID } = useParams();
@@ -93,12 +94,12 @@ function CreateTruckRequests() {
 
     function sendData(e) {
         e.preventDefault();
-    
+
         if (dateError || capacityError) {
             alert("Please fix the validation errors before submitting.");
             return;
         }
-    
+
         const newTruckRequest = {
             RequestID: requestID,
             Truck_RegNumber: truck_RegNumber,
@@ -110,7 +111,7 @@ function CreateTruckRequests() {
             Priority: priority,
             RequestStatus: "Requested" // Truck request status
         };
-    
+
         // First: Create truck request
         axios.post("http://localhost:8081/requestTruck/addtruckRequest", newTruckRequest)
             .then(() => {
@@ -118,14 +119,14 @@ function CreateTruckRequests() {
                 axios.put(`http://localhost:8081/pickupRequests/updatePickupRequest/${pickUpID}`, {
                     Status: "Requested"
                 })
-                .then(() => {
-                    alert("Truck request created and pickup status updated.");
-                    navigate("/CollectManagerDashboard");
-                })
-                .catch((err) => {
-                    alert("Truck created, but failed to update pickup status.");
-                    console.error(err);
-                });
+                    .then(() => {
+                        alert("Truck request created and pickup status updated.");
+                        navigate("/CollectManagerDashboard");
+                    })
+                    .catch((err) => {
+                        alert("Truck created, but failed to update pickup status.");
+                        console.error(err);
+                    });
             })
             .catch((err) => {
                 alert("Error creating truck request.");
@@ -134,69 +135,71 @@ function CreateTruckRequests() {
     }
 
     return (
-        <div className="create-truck-col1Div">
-            <div className="create-truck-outerDiv">
-                <div className="create-truck-innerDiv1">
-                    <Navbar />
-                </div>
-                <div className="create-truck-innerDivR">
-                    <div className="create-truck-form-container">
-                        <h2 className="create-truck-header">Create Truck Request</h2>
-                        <form className="create-truck-form create-truck-input-container " onSubmit={sendData}>
-                            <label htmlFor="requestID" className="create-truck-label">Request ID:</label>
-                            <input  type="text" id="requestID" value={requestID || ""} required disabled />
-                            <div className="create-truck-hint-message">Check Request ID</div>
+        <Container>
+            <div className="create-truck-col1Div">
+                <div className="create-truck-outerDiv">
+                    <div className="create-truck-innerDiv1">
+                        <Navbar />
+                    </div>
+                    <div className="create-truck-innerDivR">
+                        <div className="create-truck-form-container">
+                            <h2 className="create-truck-header">Create Truck Request</h2>
+                            <form className="create-truck-form create-truck-input-container " onSubmit={sendData}>
+                                <label htmlFor="requestID" className="create-truck-label">Request ID:</label>
+                                <input type="text" id="requestID" value={requestID || ""} required disabled />
+                                <div className="create-truck-hint-message">Check Request ID</div>
 
-                            <label htmlFor="pickUpId" className="create-truck-label">Pickup ID:</label>
-                            <input type="text" id="pickUpId" value={pickUpID || ""} required disabled />
+                                <label htmlFor="pickUpId" className="create-truck-label">Pickup ID:</label>
+                                <input type="text" id="pickUpId" value={pickUpID || ""} required disabled />
 
-                            <label htmlFor="requestDate" className="create-truck-label">Request Date:</label>
-                            <input type="date" id="requestDate" name="requestDate" value={pickupDate}
-                                onChange={(e) => setPickupDate(e.target.value)}
-                                onBlur={(e) => validateDate(e.target.value)}
-                                min={getTodayDate()} max={getMaxDate()}
-                                required />
-                            {dateError && <div className="create-truck-error-message">{dateError}</div>}
-
-                            <label htmlFor="wasteWeight" className="create-truck-label">E-Waste weight:</label>
-                            <input  type="text" id="wasteWeight" value={ewasteCapacity || ""} required disabled />
-                            <div className="create-truck-hint-message">Check weight</div>
-
-                            <label htmlFor="truckCapacity" className="create-truck-label">Truck Capacity (in Kg):</label>
-                            <div className="create-truck-input-container">
-                                <input type="number" id="truckCapacity" name="truckCapacity" value={capacity} min="1800" max="6000" step="100"
-                                    onChange={(e) => setCapacity(e.target.value)}
-                                    onBlur={(e) => validateCapacity(e.target.value)}
+                                <label htmlFor="requestDate" className="create-truck-label">Request Date:</label>
+                                <input type="date" id="requestDate" name="requestDate" value={pickupDate}
+                                    onChange={(e) => setPickupDate(e.target.value)}
+                                    onBlur={(e) => validateDate(e.target.value)}
+                                    min={getTodayDate()} max={getMaxDate()}
                                     required />
-                                <span className="create-truck-unit-label">Kg</span>
-                            </div>
-                            <div className="create-truck-hint-message">Capacity must be between 1800 - 6000Kg</div>
-                            {capacityError && <div className="create-truck-error-message">{capacityError}</div>}
+                                {dateError && <div className="create-truck-error-message">{dateError}</div>}
 
-                            <label htmlFor="wasteType" className="create-truck-label">Waste Type:</label>
-                            <input type="text" id="wasteType" name="wasteType" value={wastetype} readOnly />
+                                <label htmlFor="wasteWeight" className="create-truck-label">E-Waste weight:</label>
+                                <input type="text" id="wasteWeight" value={ewasteCapacity || ""} required disabled />
+                                <div className="create-truck-hint-message">Check weight</div>
 
-                            <label htmlFor="pickupLocation" className="create-truck-label">Pickup Location:</label>
-                            <textarea id="pickupLocation" name="pickupLocation" value={pickupLoc}
-                                onChange={(e) => setPickupLoc(e.target.value)}
-                                required readOnly></textarea>
+                                <label htmlFor="truckCapacity" className="create-truck-label">Truck Capacity (in Kg):</label>
+                                <div className="create-truck-input-container">
+                                    <input type="number" id="truckCapacity" name="truckCapacity" value={capacity} min="1800" max="6000" step="100"
+                                        onChange={(e) => setCapacity(e.target.value)}
+                                        onBlur={(e) => validateCapacity(e.target.value)}
+                                        required />
+                                    <span className="create-truck-unit-label">Kg</span>
+                                </div>
+                                <div className="create-truck-hint-message">Capacity must be between 1800 - 6000Kg</div>
+                                {capacityError && <div className="create-truck-error-message">{capacityError}</div>}
 
-                            <label htmlFor="priority" className="create-truck-label">Select Priority *:</label>
-                            <select id="priority" className="create-truck-select-div" onChange={(e) => setPriority(e.target.value)} required>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                            </select>
+                                <label htmlFor="wasteType" className="create-truck-label">Waste Type:</label>
+                                <input type="text" id="wasteType" name="wasteType" value={wastetype} readOnly />
 
-                            <label htmlFor="status" className="create-truck-label">Status:</label>
-                            <input type="text" id="status" value={RequestStatus} name="status" disabled />
+                                <label htmlFor="pickupLocation" className="create-truck-label">Pickup Location:</label>
+                                <textarea id="pickupLocation" name="pickupLocation" value={pickupLoc}
+                                    onChange={(e) => setPickupLoc(e.target.value)}
+                                    required readOnly></textarea>
 
-                            <button type="submit" className="create-truck-submit-button">Submit</button>
-                        </form>
+                                <label htmlFor="priority" className="create-truck-label">Select Priority *:</label>
+                                <select id="priority" className="create-truck-select-div" onChange={(e) => setPriority(e.target.value)} required>
+                                    <option value="High">High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select>
+
+                                <label htmlFor="status" className="create-truck-label">Status:</label>
+                                <input type="text" id="status" value={RequestStatus} name="status" disabled />
+
+                                <button type="submit" className="create-truck-submit-button">Submit</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

@@ -29,11 +29,11 @@ function Navigation() {
                     <Tab label="Contact us" component={ScrollLink} to="contact" smooth duration={300} />
                     
                     {/* Role-based pages */}
-                    {user?.role === "finance_manager" && <Tab label="Finance" component={Link} to="/finance" />}
-                    {user?.role === "admin" && <Tab label="Admin" component={Link} to="/admin" />}
-                    {user?.role === "truck_manager" && <Tab label="Truck" component={Link} to="/truck" />}
-                    {/* {user?.role === "center_manager" && <Tab label="Admin" component={Link} to="/admin" />}
-                    {user?.role === "request_manager" && <Tab label="Admin" component={Link} to="/admin" />} */}
+                    {user?.role === "finance_manager" && <Tab label="Finance Management" component={Link} to="/finance" />}
+                    {user?.role === "admin" && <Tab label="User Management" component={Link} to="/admin" />}
+                    {user?.role === "truck_manager" && <Tab label="Truck Management" component={Link} to="/truck" />}
+                    {user?.role === "center_manager" && <Tab label="Center Management" component={Link} to="/center" />}
+                    {user?.role === "request_manager" && <Tab label="Requests Management" component={Link} to="/CollectManagerDashboard" />}
                 </Tabs>
             </Toolbar>
         </AppBar>

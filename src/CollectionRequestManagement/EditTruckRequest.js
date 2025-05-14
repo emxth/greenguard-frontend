@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./styles/EditTruckRequest.css";
+import { Container } from '@mui/material';
 
 function EditTruckRequest() {
     const { Trequest_ID } = useParams();
@@ -104,53 +105,55 @@ function EditTruckRequest() {
     }
 
     return (
-        <div className="edit-truck-container">
-            <div className="edit-truck-wrapper">
-                <div className="edit-truck-sidebar">
-                    <Navbar />
-                </div>
-                <div className="edit-truck-content">
-                    <div className="edit-truck-form-wrapper">
-                        <h2 className="edit-truck-title">Update Truck Request</h2>
-                        <form className="edit-truck-form" onSubmit={UpdateRequestInfo}>
-                            <label className="edit-truck-label" htmlFor="requestID">Request ID:</label>
-                            <input className="edit-truck-input" type="text" id="requestID" value={Trequest_ID} required disabled />
-                            <div className="edit-truck-hint">Check Request ID</div>
+        <Container>
+            <div className="edit-truck-container">
+                <div className="edit-truck-wrapper">
+                    <div className="edit-truck-sidebar">
+                        <Navbar />
+                    </div>
+                    <div className="edit-truck-content">
+                        <div className="edit-truck-form-wrapper">
+                            <h2 className="edit-truck-title">Update Truck Request</h2>
+                            <form className="edit-truck-form" onSubmit={UpdateRequestInfo}>
+                                <label className="edit-truck-label" htmlFor="requestID">Request ID:</label>
+                                <input className="edit-truck-input" type="text" id="requestID" value={Trequest_ID} required disabled />
+                                <div className="edit-truck-hint">Check Request ID</div>
 
-                            <label className="edit-truck-label" htmlFor="pickUpId">Pickup ID:</label>
-                            <input className="edit-truck-input" type="text" id="pickUpId" value={pickUp_ID} required disabled />
+                                <label className="edit-truck-label" htmlFor="pickUpId">Pickup ID:</label>
+                                <input className="edit-truck-input" type="text" id="pickUpId" value={pickUp_ID} required disabled />
 
-                            <label className="edit-truck-label" htmlFor="requestDate">Request Date:</label>
-                            <input className="edit-truck-input" type="date" id="requestDate" onChange={handleChange} value={request_Date} name="requestDate" required />
-                            {errors.requestDate && <p className="edit-truck-error">{errors.requestDate}</p>}
+                                <label className="edit-truck-label" htmlFor="requestDate">Request Date:</label>
+                                <input className="edit-truck-input" type="date" id="requestDate" onChange={handleChange} value={request_Date} name="requestDate" required />
+                                {errors.requestDate && <p className="edit-truck-error">{errors.requestDate}</p>}
 
-                            <label className="edit-truck-label" htmlFor="truckCapacity">Truck Capacity (in Kg):</label>
-                            <div className="edit-truck-input-container">
-                                <input className="edit-truck-input" type="number" id="truckCapacity" onChange={handleChange} name="truckCapacity" value={truckCapacity} min="1800" max="6000" step="100" required />
-                                <span className="edit-truck-unit">Kg</span>
-                            </div>
-                            {errors.truckCapacity && <p className="edit-truck-error">{errors.truckCapacity}</p>}
-                            <div className="edit-truck-hint">Capacity must be between 1800 - 6000Kg</div>
+                                <label className="edit-truck-label" htmlFor="truckCapacity">Truck Capacity (in Kg):</label>
+                                <div className="edit-truck-input-container">
+                                    <input className="edit-truck-input" type="number" id="truckCapacity" onChange={handleChange} name="truckCapacity" value={truckCapacity} min="1800" max="6000" step="100" required />
+                                    <span className="edit-truck-unit">Kg</span>
+                                </div>
+                                {errors.truckCapacity && <p className="edit-truck-error">{errors.truckCapacity}</p>}
+                                <div className="edit-truck-hint">Capacity must be between 1800 - 6000Kg</div>
 
-                            <label className="edit-truck-label" htmlFor="pickupLocation">Pickup Location:</label>
-                            <textarea className="edit-truck-textarea" id="pickupLocation" name="pickupLocation" value={pickupLocation} readOnly required></textarea>
+                                <label className="edit-truck-label" htmlFor="pickupLocation">Pickup Location:</label>
+                                <textarea className="edit-truck-textarea" id="pickupLocation" name="pickupLocation" value={pickupLocation} readOnly required></textarea>
 
-                            <label className="edit-truck-label" htmlFor="priority">Select Priority *:</label>
-                            <select id="priority" name="Priority" className="edit-truck-select" onChange={handleChange} value={priority} required>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                            </select>
+                                <label className="edit-truck-label" htmlFor="priority">Select Priority *:</label>
+                                <select id="priority" name="Priority" className="edit-truck-select" onChange={handleChange} value={priority} required>
+                                    <option value="High">High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select>
 
-                            <label className="edit-truck-label" htmlFor="status">Status:</label>
-                            <input className="edit-truck-input" type="text" id="status" name="status" value={requestStatus} disabled />
+                                <label className="edit-truck-label" htmlFor="status">Status:</label>
+                                <input className="edit-truck-input" type="text" id="status" name="status" value={requestStatus} disabled />
 
-                            <button className="edit-truck-button" type="submit">Update</button>
-                        </form>
+                                <button className="edit-truck-button" type="submit">Update</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

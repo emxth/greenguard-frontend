@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles/ReadAllTruckRequests.css";
+import { Container } from "@mui/material";
 
 function ReadAllTruckRequests() {
     const [truckrequests, setTruckrequests] = useState([]);
@@ -28,7 +29,7 @@ function ReadAllTruckRequests() {
                 setError("Failed to load trucks. Please try again.");
                 setLoading(false);
             });
-    }, []); 
+    }, []);
 
     //Search function (Seacrh by Request ID)
     const handleSearch = () => {
@@ -113,70 +114,72 @@ function ReadAllTruckRequests() {
     if (error) return <p style={{ color: "red" }}>{error}</p>;
 
     return (
-        <div className="ReadAllTruck-Outline">
-            <BackBtn />
-            <h2 className="read-trucksReq-title">All Truck Requests</h2>
-            <div className="read-req-table-container">
-                <div className="read-req-search-bar">
-                    <input
-                        type="text"
-                        placeholder="Search by Request ID"
-                        onChange={(e) => setSearchReqID(e.target.value)}
-                        value={searchReqID}
-                        className="read-req-search-input"
-                    />
-                    <button onClick={handleSearch} className="read-req-search-btn">Search</button>
-                    <button onClick={resetTable} className="read-req-reset-btn">Reset</button>
+        <Container>
+            <div className="ReadAllTruck-Outline">
+                <BackBtn />
+                <h2 className="read-trucksReq-title">All Truck Requests</h2>
+                <div className="read-req-table-container">
+                    <div className="read-req-search-bar">
+                        <input
+                            type="text"
+                            placeholder="Search by Request ID"
+                            onChange={(e) => setSearchReqID(e.target.value)}
+                            value={searchReqID}
+                            className="read-req-search-input"
+                        />
+                        <button onClick={handleSearch} className="read-req-search-btn">Search</button>
+                        <button onClick={resetTable} className="read-req-reset-btn">Reset</button>
+                    </div>
+
+                    <table className="read-req-table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Truck Number</th>
+                                <th>Driver ID</th>
+                                <th>Priority</th>
+                                <th>Request Date</th>
+                                <th>Truck Capacity</th>
+                                <th>Pickup Location</th>
+                                <th>Request Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {truckrequests.length > 0 ? (
+                                truckrequests.map((requests) => (
+                                    <tr key={requests.RequestID}>
+                                        <td>{requests.RequestID}</td>
+                                        <td>{requests.Truck_RegNumber}</td>
+                                        <td>{requests.driver_id}</td>
+                                        <td>{requests.Priority}</td>
+                                        <td>{requests.Request_Date}</td>
+                                        <td>{requests.TruckCapacity}</td>
+                                        <td>{requests.PickupLocation}</td>
+                                        <td className="read-req-status">{requests.RequestStatus}</td>
+                                        <td className="read-req-action-bar">
+                                            <button className="read-req-edit-btn" onClick={() => EditTruckRequest(requests.RequestID)}>Edit</button>
+                                            <button className="read-req-delete-btn" onClick={() => DeleteTruckRequest(requests.RequestID)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No truck requests found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
-                <table className="read-req-table">
-                    <thead>
-                        <tr>
-                            <th>Request ID</th>
-                            <th>Truck Number</th>
-                            <th>Driver ID</th>
-                            <th>Priority</th>
-                            <th>Request Date</th>
-                            <th>Truck Capacity</th>
-                            <th>Pickup Location</th>
-                            <th>Request Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {truckrequests.length > 0 ? (
-                            truckrequests.map((requests) => (
-                                <tr key={requests.RequestID}>
-                                    <td>{requests.RequestID}</td>
-                                    <td>{requests.Truck_RegNumber}</td>
-                                    <td>{requests.driver_id}</td>
-                                    <td>{requests.Priority}</td>
-                                    <td>{requests.Request_Date}</td>
-                                    <td>{requests.TruckCapacity}</td>
-                                    <td>{requests.PickupLocation}</td>
-                                    <td className="read-req-status">{requests.RequestStatus}</td>
-                                    <td className="read-req-action-bar">
-                                        <button className="read-req-edit-btn" onClick={() => EditTruckRequest(requests.RequestID)}>Edit</button>
-                                        <button className="read-req-delete-btn" onClick={() => DeleteTruckRequest(requests.RequestID)}>Delete</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="9">No truck requests found.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                <button className="read-req-report-btn" onClick={handleGenerateAssignedReport}>
+                    Generate Assigned Truck Report
+                </button>
+                <button className="read-req-report-btn" onClick={handleGenerateRequestedReport} style={{ marginLeft: "20px" }}>
+                    Generate Requested Truck Report
+                </button>
             </div>
-
-            <button className="read-req-report-btn" onClick={handleGenerateAssignedReport}>
-                Generate Assigned Truck Report
-            </button>
-            <button className="read-req-report-btn" onClick={handleGenerateRequestedReport} style={{ marginLeft: "20px" }}>
-                Generate Requested Truck Report
-            </button>
-        </div>
+        </Container>
     );
 }
 

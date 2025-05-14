@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./styles/ViewFuelCost.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Container } from "@mui/material";
 
 function ViewFuelCost() {
     const [truckFuelCosts, setTruckFuelCosts] = useState([]);
@@ -249,6 +250,7 @@ function ViewFuelCost() {
     }
 
     return (
+        <Container>
         <div className="fuelContainer">
             <div className="fuelHeaderSection">
                 <BackBtn />
@@ -315,6 +317,7 @@ function ViewFuelCost() {
                 Generate Report for Specific Truck
             </button>
         </div>
+        </Container>
     );
 }
 

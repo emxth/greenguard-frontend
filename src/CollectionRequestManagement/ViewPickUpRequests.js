@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles/ViewPickUpRequests.css";
 import BackBtn from "./components/BackBtn";
+import { Container } from "@mui/material";
 
 function ViewPickUpRequests() {
     const [pickupRequests, setPickUpRequests] = useState([]);
@@ -57,72 +58,74 @@ function ViewPickUpRequests() {
     if (error) return <p style={{ color: "red" }}>{error}</p>;
 
     return (
-        <div className="viewPickupReq-Outline">
-            <BackBtn />
-            <div className="pickup-req-table-container">
-            <h2 className="View-Pick-title ">Pickup Requests</h2>
-                <div className="pickup-req-search-bar">
-                    <input
-                        type="text"
-                        placeholder="Search by name"
-                        onChange={(e) => setSearchName(e.target.value)}
-                        value={searchName}
-                        className="pickup-req-search-input"
-                    />
-                    <button onClick={handleSearch} className="pickup-req-search-btn">Search</button>
-                    <button onClick={resetTable} className="pickup-req-reset-btn">Reset</button>
-                </div>
+        <Container>
+            <div className="viewPickupReq-Outline">
+                <BackBtn />
+                <div className="pickup-req-table-container">
+                    <h2 className="View-Pick-title ">Pickup Requests</h2>
+                    <div className="pickup-req-search-bar">
+                        <input
+                            type="text"
+                            placeholder="Search by name"
+                            onChange={(e) => setSearchName(e.target.value)}
+                            value={searchName}
+                            className="pickup-req-search-input"
+                        />
+                        <button onClick={handleSearch} className="pickup-req-search-btn">Search</button>
+                        <button onClick={resetTable} className="pickup-req-reset-btn">Reset</button>
+                    </div>
 
-                <table className="pickup-req-table">
-                    <thead>
-                        <tr>
-                            <th>PickUp_ID</th>
-                            <th>Name</th>
-                            <th>Pickup Date</th>
-                            <th>Waste Type</th>
-                            <th>Capacity</th>
-                            <th>Pickup Location</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pickupRequests.length > 0 ? (
-                            pickupRequests.map((pickup) => (
-                                <tr key={pickup.PickUp_ID}>
-                                    <td>{pickup.PickUp_ID}</td>
-                                    <td>{pickup.Name}</td>
-                                    <td>{pickup.PickupDate}</td>
-                                    <td>{pickup.wasteType}</td>
-                                    <td>{pickup.Capacity}</td>
-                                    <td>{pickup.PickupLocation}</td>
-                                    <td className="pickup-req-status">{pickup.Status}</td>
-                                    <td className="pickup-req-action-bar">
-                                        <button
-                                            type="button"
-                                            className="pickup-req-allocate-btn"
-                                            onClick={() => Allocatetruck(pickup.PickUp_ID)}
-                                            disabled={pickup.Status === "Requested"}
-                                            style={{
-                                                cursor: pickup.Status === "Requested" ? "not-allowed" : "pointer",
-                                                backgroundColor: pickup.Status === "Requested" ? "#ccc" : "#e74c3c",
-                                                width: "100px"
-                                            }}
-                                        >
-                                            {pickup.Status === "Requested" ? "Already Requested" : "Allocate truck"}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
+                    <table className="pickup-req-table">
+                        <thead>
                             <tr>
-                                <td colSpan="8">No pickup requests found.</td>
+                                <th>PickUp_ID</th>
+                                <th>Name</th>
+                                <th>Pickup Date</th>
+                                <th>Waste Type</th>
+                                <th>Capacity</th>
+                                <th>Pickup Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {pickupRequests.length > 0 ? (
+                                pickupRequests.map((pickup) => (
+                                    <tr key={pickup.PickUp_ID}>
+                                        <td>{pickup.PickUp_ID}</td>
+                                        <td>{pickup.Name}</td>
+                                        <td>{pickup.PickupDate}</td>
+                                        <td>{pickup.wasteType}</td>
+                                        <td>{pickup.Capacity}</td>
+                                        <td>{pickup.PickupLocation}</td>
+                                        <td className="pickup-req-status">{pickup.Status}</td>
+                                        <td className="pickup-req-action-bar">
+                                            <button
+                                                type="button"
+                                                className="pickup-req-allocate-btn"
+                                                onClick={() => Allocatetruck(pickup.PickUp_ID)}
+                                                disabled={pickup.Status === "Requested"}
+                                                style={{
+                                                    cursor: pickup.Status === "Requested" ? "not-allowed" : "pointer",
+                                                    backgroundColor: pickup.Status === "Requested" ? "#ccc" : "#e74c3c",
+                                                    width: "100px"
+                                                }}
+                                            >
+                                                {pickup.Status === "Requested" ? "Already Requested" : "Allocate truck"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8">No pickup requests found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./styles/RequestManagerDashboard.css";
 import RequestSchedulePieChart from './components/scheduleChart';
+import { Container } from '@mui/material';
 
 function RequestManagerDashboard() {
     const [assignedRequests, setAssignedRequests] = useState([]);
@@ -32,45 +33,47 @@ function RequestManagerDashboard() {
     }
 
     return (
-        <div className="request-mgr-main-container">
-            <div className="request-mgr-wrapper">
-                <div className="request-mgr-sidebar">
-                    <Navbar />
-                </div>
-                <div className="request-mgr-content">
-                    <h1 className="request-mgr-title">Collection Request Manager</h1>
+        <Container>
+            <div className="request-mgr-main-container">
+                <div className="request-mgr-wrapper">
+                    <div className="request-mgr-sidebar">
+                        <Navbar />
+                    </div>
+                    <div className="request-mgr-content">
+                        <h1 className="request-mgr-title">Collection Request Manager</h1>
 
-                    <RequestSchedulePieChart
-                        requestCount={pickupRequests.length}
-                        scheduleCount={schedules.length}
-                    />
+                        <RequestSchedulePieChart
+                            requestCount={pickupRequests.length}
+                            scheduleCount={schedules.length}
+                        />
 
-                    <h2 className="request-mgr-subtitle">Truck Assigned Requests</h2>
+                        <h2 className="request-mgr-subtitle">Truck Assigned Requests</h2>
 
-                    <div className="request-mgr-cards-container">
-                        {assignedRequests.length > 0 ? (
-                            assignedRequests.map((requestAssigned, index) => (
-                                <div key={index} className="request-mgr-card">
-                                    <p><strong>Truck Request ID:</strong> {requestAssigned.RequestID}</p>
-                                    <p><strong>PickUp ID:</strong> {requestAssigned.PickUp_ID}</p>
-                                    <p><strong>Truck Number:</strong> {requestAssigned.Truck_RegNumber}</p>
-                                    <p><strong>Driver:</strong> {requestAssigned.driver_id}</p>
-                                    <p><strong>Status:</strong> {requestAssigned.RequestStatus}</p>
-                                    <button
-                                        className="request-mgr-card-btn"
-                                        onClick={() => handleCreateSchedule(requestAssigned.RequestID)}
-                                    >
-                                        Create Schedule
-                                    </button>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="request-mgr-no-requests">No assigned truck requests found.</p>
-                        )}
+                        <div className="request-mgr-cards-container">
+                            {assignedRequests.length > 0 ? (
+                                assignedRequests.map((requestAssigned, index) => (
+                                    <div key={index} className="request-mgr-card">
+                                        <p><strong>Truck Request ID:</strong> {requestAssigned.RequestID}</p>
+                                        <p><strong>PickUp ID:</strong> {requestAssigned.PickUp_ID}</p>
+                                        <p><strong>Truck Number:</strong> {requestAssigned.Truck_RegNumber}</p>
+                                        <p><strong>Driver:</strong> {requestAssigned.driver_id}</p>
+                                        <p><strong>Status:</strong> {requestAssigned.RequestStatus}</p>
+                                        <button
+                                            className="request-mgr-card-btn"
+                                            onClick={() => handleCreateSchedule(requestAssigned.RequestID)}
+                                        >
+                                            Create Schedule
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="request-mgr-no-requests">No assigned truck requests found.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

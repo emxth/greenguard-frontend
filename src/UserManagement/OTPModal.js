@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, Button, Typography } from "@mui/material";
 import axios from "axios";
+import AuthContext from "./AuthContext";
 
 const OTPModal = ({ open, onClose, email, onVerified }) => {
     const [otp, setOtp] = useState("");
+    const { user } = useContext(AuthContext);
+
+    // Fallback: use email from props or from context
+    // const email = propEmail || (user && user.email);
 
     const handleVerify = async () => {
         try {
-            const res = await axios.post("http://localhost:8081/user/verify-otp", { email, otp, purpose: "reset" });
+            const res = await axios.post("http://localhost:8081/user/verify-otp", {
+                email: email || user?.email,
+                otp,
+                purpose: "reset"
+            });
+
             if (res.data.success) {
                 onVerified();
                 onClose();
             } else {
-                alert("Invalid OTP");
+                alert(res.data.message || "Invalid OTP");
             }
-        } catch {
-            alert("Verification failed");
+        } catch (err) {
+            alert(err.response?.data?.message || "Verification failed");
+            console.error("Verification error:", err.response?.data);
         }
     };
 

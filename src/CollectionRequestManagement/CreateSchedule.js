@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./styles/CreateSchedule.css";
+import { Container } from '@mui/material';
 
 function CreateSchedule() {
     const { truckReqID } = useParams();
@@ -109,7 +110,7 @@ function CreateSchedule() {
         const hour12 = hourNum % 12 || 12;
         return `${hour12}:${minute} ${ampm}`;
     };
-    
+
     //Send input data to backend 
     const sendData = async (e) => {
         e.preventDefault();
@@ -160,86 +161,88 @@ function CreateSchedule() {
     };
 
     return (
-        <div className="Csched-outerDiv">
-            <div className="Csched-innerDiv1">
-                <Navbar />
-            </div>
-            <div className="Csched-innerDivR">
-                <div className="cs-form-container">
-                    <div className="cs-title">Create Schedule</div>
-                    <form onSubmit={sendData} className="cs-form">
-                        <label className="cs-label">Schedule ID:</label>
-                        <input className="cs-input" type="text" value={scheduleID} disabled />
-                        <div className="cs-hint-message">Check Schedule ID</div>
+        <Container>
+            <div className="Csched-outerDiv">
+                <div className="Csched-innerDiv1">
+                    <Navbar />
+                </div>
+                <div className="Csched-innerDivR">
+                    <div className="cs-form-container">
+                        <div className="cs-title">Create Schedule</div>
+                        <form onSubmit={sendData} className="cs-form">
+                            <label className="cs-label">Schedule ID:</label>
+                            <input className="cs-input" type="text" value={scheduleID} disabled />
+                            <div className="cs-hint-message">Check Schedule ID</div>
 
-                        <label className="cs-label">Pickup ID:</label>
-                        <input className="cs-input" type="text" value={pickUpID} disabled />
+                            <label className="cs-label">Pickup ID:</label>
+                            <input className="cs-input" type="text" value={pickUpID} disabled />
 
-                        <label className="cs-label">Truck Reg Number:</label>
-                        <input className="cs-input" type="text" value={truck_RegNumber} disabled />
+                            <label className="cs-label">Truck Reg Number:</label>
+                            <input className="cs-input" type="text" value={truck_RegNumber} disabled />
 
-                        <label className="cs-label">Driver ID:</label>
-                        <input className="cs-input" type="text" value={driverId} readOnly />
+                            <label className="cs-label">Driver ID:</label>
+                            <input className="cs-input" type="text" value={driverId} readOnly />
 
-                        <label className="cs-label">Time:</label>
-                        <input
-                            className="cs-input"
-                            type="time"
-                            onChange={handleTimeChange}
-                            required
-                        />
-                        {errors.scheduleTime && <div className="cs-error-message">{errors.scheduleTime}</div>}
-
-                        <label className="cs-label">Schedule Date:</label>
-                        <input
-                            className="cs-input"
-                            type="date"
-                            value={scheduleDate}
-                            onChange={handleScheduleDateChange}
-                            required
-                        />
-                        {errors.scheduleDate && <div className="cs-error-message">{errors.scheduleDate}</div>}
-
-                        <label className="cs-label">Comment:</label>
-                        <textarea
-                            className="cs-textarea"
-                            onChange={(e) => setComments(e.target.value)}
-                            required
-                        ></textarea>
-
-                        <label className="cs-label">Schedule Status:</label>
-                        <select
-                            className="cs-select"
-                            value={scheduleStatus}
-                            onChange={(e) => setScheduleStatus(e.target.value)}
-                            required
-                        >
-                            <option value="Processing">Processing</option>
-                            <option value="Ready for pickup">Ready for pickup</option>
-                        </select>
-
-                        <div className="cs-checkbox-container">
+                            <label className="cs-label">Time:</label>
                             <input
-                                type="checkbox"
-                                checked={sendSMS}
-                                onChange={(e) => setSendSMS(e.target.checked)}
+                                className="cs-input"
+                                type="time"
+                                onChange={handleTimeChange}
+                                required
                             />
-                            <span>&nbsp;&nbsp;</span>
-                            <span className="cs-label">Send SMS to customer</span>
-                        </div>
+                            {errors.scheduleTime && <div className="cs-error-message">{errors.scheduleTime}</div>}
 
-                        {sendSMS && (
-                            <div className="cs-sms-input">
-                                <label className="cs-label">Recipient Phone</label>
-                                <input className="cs-input" type="text" value={'+94' + pickupTell} disabled />
+                            <label className="cs-label">Schedule Date:</label>
+                            <input
+                                className="cs-input"
+                                type="date"
+                                value={scheduleDate}
+                                onChange={handleScheduleDateChange}
+                                required
+                            />
+                            {errors.scheduleDate && <div className="cs-error-message">{errors.scheduleDate}</div>}
+
+                            <label className="cs-label">Comment:</label>
+                            <textarea
+                                className="cs-textarea"
+                                onChange={(e) => setComments(e.target.value)}
+                                required
+                            ></textarea>
+
+                            <label className="cs-label">Schedule Status:</label>
+                            <select
+                                className="cs-select"
+                                value={scheduleStatus}
+                                onChange={(e) => setScheduleStatus(e.target.value)}
+                                required
+                            >
+                                <option value="Processing">Processing</option>
+                                <option value="Ready for pickup">Ready for pickup</option>
+                            </select>
+
+                            <div className="cs-checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    checked={sendSMS}
+                                    onChange={(e) => setSendSMS(e.target.checked)}
+                                />
+                                <span>&nbsp;&nbsp;</span>
+                                <span className="cs-label">Send SMS to customer</span>
                             </div>
-                        )}
 
-                        <button className="cs-button" type="submit">Submit</button>
-                    </form>
+                            {sendSMS && (
+                                <div className="cs-sms-input">
+                                    <label className="cs-label">Recipient Phone</label>
+                                    <input className="cs-input" type="text" value={'+94' + pickupTell} disabled />
+                                </div>
+                            )}
+
+                            <button className="cs-button" type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 

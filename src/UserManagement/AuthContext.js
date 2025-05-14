@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
+    // Store logged user data in localStorage
     const login = async (email, password) => {
         try {
             const response = await fetch("http://localhost:8081/api/login", {

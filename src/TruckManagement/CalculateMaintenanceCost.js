@@ -2,6 +2,7 @@ import Navbar from './Components/SideNav';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/CalculateMaintenance.css";
+import { Container } from '@mui/material';
 
 function CalculateMaintenanceCost() {
     const [trucks, setTrucks] = useState([]);
@@ -127,6 +128,7 @@ function CalculateMaintenanceCost() {
     };
 
     return (
+        <Container>
         <div className="maintCalc-col1Div">
             <div className="maintCalc-outerDiv">
                 <div className="maintCalc-innerDiv1">
@@ -231,6 +233,7 @@ function CalculateMaintenanceCost() {
                 </div>
             </div>
         </div>
+        </Container>
     );
 }
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles/EditMaintenanceCost.css";
+import { Container } from '@mui/material';
 
 function EditMaintenanceCost() {
     const { costID } = useParams();
@@ -155,6 +156,7 @@ function EditMaintenanceCost() {
     };
 
     return (
+        <Container>
         <div className="emc-container">
             <div className="emc-left-navbar">
                 <Navbar />
@@ -213,6 +215,7 @@ function EditMaintenanceCost() {
                 </form>
             </div>
         </div>
+        </Container>
     );
 }
 
