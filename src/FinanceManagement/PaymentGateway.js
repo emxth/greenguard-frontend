@@ -91,6 +91,14 @@ const PaymentForm = ({ pickupRequest }) => {
             // Send pickup request only after successful payment
             await axios.post("http://localhost:8081/requestPickup/addPickUpRequest", pickupRequest);
 
+            await axios.post("http://localhost:8081/payment/send-receipt", {
+                email: user_email,
+                userId: user_id,
+                amount,
+                date: new Date(),
+                method: cardType || 'Card',
+            });
+
             setSuccess(true);
             cardElement.clear();
             setSelectedPaymentMethodId("");
